@@ -6,888 +6,465 @@
 <title>3D Camera Planner - 机位规划工具</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/BokehPass.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --bg: #0f1117; --panel: #1a1d27; --border: #2a2d3a;
-  --text: #e2e8f0; --text2: #94a3b8; --accent: #3b82f6;
-  --accent2: #60a5fa; --green: #22c55e; --red: #ef4444;
-  --orange: #f59e0b; --purple: #a855f7;
-}
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-#topbar { height: 48px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 16px; gap: 12px; flex-shrink: 0; z-index: 10; }
-#topbar .logo { font-size: 15px; font-weight: 700; color: var(--accent2); letter-spacing: 0.5px; }
-#topbar .sep { width: 1px; height: 24px; background: var(--border); }
-#topbar .info { font-size: 12px; color: var(--text2); }
-.mode-tabs { display: flex; gap: 4px; margin-left: auto; }
-.mode-tab { padding: 6px 14px; font-size: 12px; border-radius: 6px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text2); transition: all .15s; }
-.mode-tab:hover { border-color: var(--accent); color: var(--text); }
-.mode-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-#main { flex: 1; display: flex; overflow: hidden; }
-#viewport { flex: 1; position: relative; background: #0a0c12; }
-#viewport canvas { display: block; width: 100%; height: 100%; }
-#sidebar { width: 280px; background: var(--panel); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
-.sidebar-section { padding: 14px; border-bottom: 1px solid var(--border); }
-.sidebar-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 10px; }
-.cam-list { display: flex; flex-direction: column; gap: 4px; }
-.cam-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: all .15s; }
-.cam-item:hover { background: rgba(255,255,255,0.04); }
-.cam-item.selected { background: rgba(59,130,246,0.12); border-color: var(--accent); }
-.cam-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.cam-name { font-size: 13px; flex: 1; }
-.cam-focal { font-size: 11px; color: var(--text2); }
-.cam-del { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; font-size: 14px; color: var(--text2); opacity: 0; transition: .15s; }
-.cam-item:hover .cam-del { opacity: 1; }
-.cam-del:hover { background: var(--red); color: #fff; }
-.btn { padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text); font-size: 12px; cursor: pointer; transition: .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn:hover { border-color: var(--accent); background: rgba(59,130,246,0.08); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.primary:hover { background: #2563eb; }
-.btn-row { display: flex; gap: 6px; }
-.btn-row .btn { flex: 1; }
-.param-group { margin-bottom: 10px; }
-.param-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; display: flex; justify-content: space-between; }
-.param-label span { color: var(--accent2); font-weight: 600; }
-input[type="range"] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 2px; outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
-select { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; outline: none; cursor: pointer; }
-select:focus { border-color: var(--accent); }
-.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
-.toggle-row label { font-size: 12px; color: var(--text2); }
-.toggle { width: 36px; height: 20px; border-radius: 10px; background: var(--border); cursor: pointer; position: relative; transition: .2s; }
-.toggle.on { background: var(--accent); }
-.toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .2s; }
-.toggle.on::after { left: 18px; }
-#viewfinder-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 5; }
-.vf-info { position: absolute; bottom: 12px; left: 12px; display: flex; gap: 16px; font-size: 12px; font-family: 'SF Mono', 'Consolas', monospace; }
-.vf-info-item { background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px; backdrop-filter: blur(4px); }
-.vf-info-item .val { color: var(--accent2); font-weight: 600; }
-.vf-cam-name { position: absolute; top: 12px; left: 12px; font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; backdrop-filter: blur(4px); }
-.vf-rec { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 6px; font-size: 12px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; }
-.vf-rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: blink 1s infinite; }
-@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-.grid-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
-.safe-frame { position: absolute; border: 1px solid rgba(255,255,255,0.2); }
-.hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 13px; color: var(--text2); background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 8px; pointer-events: none; z-index: 20; }
-.add-mode-hint { background: rgba(59,130,246,0.15); border: 1px solid var(--accent); color: var(--accent2); }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f1117;--panel:#1a1d27;--border:#2a2d3a;--text:#e2e8f0;--text2:#94a3b8;--accent:#3b82f6;--accent2:#60a5fa;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--purple:#a855f7}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;display:flex;flex-direction:column}
+#topbar{height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;z-index:10}
+.logo{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:.5px;flex-shrink:0}
+.sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.info{font-size:12px;color:var(--text2);white-space:nowrap}
+.mode-tabs{display:flex;gap:3px;margin-left:auto;flex-shrink:0}
+.mode-tab{padding:5px 10px;font-size:11px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .15s;white-space:nowrap}
+.mode-tab:hover{border-color:var(--accent);color:var(--text)}
+.mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+#main{flex:1;display:flex;overflow:hidden}
+#left-panel{width:210px;background:var(--panel);border-right:1px solid var(--border);display:none;flex-direction:column;flex-shrink:0;overflow:hidden}
+#left-panel.open{display:flex}
+#viewport{flex:1;position:relative;background:#0a0c12}
+#viewport canvas{display:block;width:100%;height:100%}
+#sidebar{width:270px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden}
+.sidebar-section{padding:10px 12px;border-bottom:1px solid var(--border)}
+.sidebar-section h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.cam-list{display:flex;flex-direction:column;gap:3px}
+.cam-item{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-size:12px}
+.cam-item:hover{background:rgba(255,255,255,.04)}
+.cam-item.selected{background:rgba(59,130,246,.12);border-color:var(--accent)}
+.cam-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cam-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cam-focal{font-size:10px;color:var(--text2)}
+.cam-del{width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:4px;cursor:pointer;font-size:13px;color:var(--text2);opacity:0;transition:.15s}
+.cam-item:hover .cam-del{opacity:1}
+.cam-del:hover{background:var(--red);color:#fff}
+.btn{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#2563eb}
+.btn.small{padding:4px 8px;font-size:10px}
+.param-group{margin-bottom:8px}
+.param-label{font-size:10px;color:var(--text2);margin-bottom:3px;display:flex;justify-content:space-between}
+.param-label span{color:var(--accent2);font-weight:600}
+input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:var(--border);border-radius:2px;outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
+select{width:100%;padding:5px 6px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px;outline:none;cursor:pointer}
+select:focus{border-color:var(--accent)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:3px 0}
+.toggle-row label{font-size:11px;color:var(--text2)}
+.toggle{width:32px;height:18px;border-radius:9px;background:var(--border);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.toggle.on{background:var(--accent)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on::after{left:16px}
+#viewfinder-overlay{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5}
+.vf-letterbox-top,.vf-letterbox-bottom{position:absolute;left:0;right:0;background:#000;z-index:6}
+.vf-letterbox-top{top:0}.vf-letterbox-bottom{bottom:0}
+.vf-info{position:absolute;bottom:12px;left:12px;display:flex;gap:10px;font-size:11px;font-family:'SF Mono','Consolas',monospace;z-index:7}
+.vf-info-item{background:rgba(0,0,0,.7);padding:3px 7px;border-radius:4px}
+.vf-info-item .val{color:var(--accent2);font-weight:600}
+.vf-cam-name{position:absolute;top:12px;left:12px;font-size:13px;font-weight:600;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;z-index:7}
+.vf-rec{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;font-size:11px;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;z-index:7}
+.vf-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.vf-timecode{position:absolute;bottom:12px;right:12px;font-size:12px;font-family:'SF Mono','Consolas',monospace;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;color:var(--green);z-index:7}
+.vf-focus-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:1px solid rgba(255,255,255,.25);border-radius:50%;z-index:7}
+.vf-focus-ring::before,.vf-focus-ring::after{content:'';position:absolute;background:rgba(255,255,255,.25)}
+.vf-focus-ring::before{width:1px;height:16px;left:50%;top:50%;transform:translate(-50%,-50%)}
+.vf-focus-ring::after{width:16px;height:1px;left:50%;top:50%;transform:translate(-50%,-50%)}
+.grid-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:6}
+.safe-frame{position:absolute;border:1px solid rgba(255,255,255,.2);z-index:6}
+.hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:var(--text2);background:rgba(0,0,0,.8);padding:8px 16px;border-radius:8px;pointer-events:none;z-index:20}
+.add-mode-hint{background:rgba(59,130,246,.15);border:1px solid var(--accent);color:var(--accent2)}
+.path-mode-hint{background:rgba(168,85,247,.15);border:1px solid var(--purple);color:var(--purple)}
+.lib-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.lib-tab{flex:1;padding:6px;font-size:10px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);transition:.15s}
+.lib-tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px}
+.lib-item{padding:8px 4px;border-radius:6px;border:1px solid var(--border);cursor:pointer;text-align:center;font-size:10px;color:var(--text2);transition:.15s}
+.lib-item:hover{border-color:var(--accent);color:var(--text);background:rgba(59,130,246,.06)}
+.lib-item-icon{font-size:18px;margin-bottom:2px}.lib-item-name{display:block}
+#path-panel{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:none;align-items:center;gap:12px;z-index:15;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#path-panel.open{display:flex}
+.path-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s}
+.path-btn:hover{border-color:var(--accent);background:rgba(59,130,246,.1)}
+.path-time{font-size:11px;color:var(--text2);font-family:'SF Mono','Consolas',monospace;min-width:80px;text-align:center}
+#export-modal,#template-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center}
+#export-modal.open,#template-modal.open{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;width:400px;max-height:80vh;overflow-y:auto;position:relative}
+.modal-box h2{font-size:14px;margin-bottom:12px}
+.modal-option{padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px;transition:.15s}
+.modal-option:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
+.modal-option h4{font-size:12px;margin-bottom:4px}.modal-option p{font-size:11px;color:var(--text2)}
+.modal-close{position:absolute;top:12px;right:16px;font-size:18px;cursor:pointer;color:var(--text2)}.modal-close:hover{color:var(--text)}
+.template-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.template-card{padding:16px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:.15s}
+.template-card:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
+.template-card.active{border-color:var(--accent);background:rgba(59,130,246,.12)}
+.template-icon{font-size:28px;margin-bottom:6px}.template-name{font-size:12px;font-weight:600}.template-desc{font-size:10px;color:var(--text2);margin-top:4px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+kbd{background:var(--bg);padding:1px 4px;border-radius:3px;border:1px solid var(--border);font-size:10px}
 </style>
 </head>
 <body>
 <div id="topbar">
-  <div class="logo">CAM PLANNER</div>
-  <div class="sep"></div>
+  <div class="logo">CAM PLANNER</div><div class="sep"></div>
   <div class="info" id="scene-info">Studio Scene | 32m x 24m</div>
   <div class="mode-tabs">
-    <div class="mode-tab active" data-mode="navigate" onclick="setMode('navigate')">自由浏览</div>
-    <div class="mode-tab" data-mode="add" onclick="setMode('add')">+ 添加机位</div>
+    <div class="mode-tab active" data-mode="navigate" onclick="setMode('navigate')">浏览</div>
+    <div class="mode-tab" data-mode="add" onclick="setMode('add')">+ 机位</div>
+    <div class="mode-tab" data-mode="path" onclick="setMode('path')">路径</div>
   </div>
   <div class="sep"></div>
-  <div class="mode-tab" id="vf-tab" onclick="toggleViewfinder()" style="margin-left:0">取景器</div>
+  <div class="mode-tab" id="vf-tab" onclick="toggleViewfinder()">取景器</div>
+  <div class="mode-tab" id="lib-tab" onclick="toggleLibPanel()">物体库</div>
+  <div class="sep"></div>
+  <div class="btn small" onclick="undo()" title="Ctrl+Z">↩</div>
+  <div class="btn small" onclick="redo()" title="Ctrl+Y">↪</div>
+  <div class="sep"></div>
+  <div class="btn small" onclick="openTemplateModal()">场景</div>
+  <div class="btn small" onclick="openExportModal()">导出</div>
 </div>
 <div id="main">
+  <div id="left-panel">
+    <div class="lib-tabs">
+      <div class="lib-tab active" data-lib="people" onclick="switchLibTab('people')">人物</div>
+      <div class="lib-tab" data-lib="furniture" onclick="switchLibTab('furniture')">家具</div>
+      <div class="lib-tab" data-lib="lighting" onclick="switchLibTab('lighting')">灯光</div>
+      <div class="lib-tab" data-lib="props" onclick="switchLibTab('props')">道具</div>
+    </div>
+    <div id="lib-content" style="flex:1;overflow-y:auto"></div>
+    <div style="padding:8px;border-top:1px solid var(--border)"><div class="btn small" style="width:100%" onclick="deleteSelectedObject()">删除选中 (Del)</div></div>
+  </div>
   <div id="viewport">
     <div id="viewfinder-overlay" style="display:none">
+      <div class="vf-letterbox-top" id="vf-lb-top"></div>
+      <div class="vf-letterbox-bottom" id="vf-lb-bottom"></div>
       <div class="vf-cam-name" id="vf-cam-name">CAM-01</div>
       <div class="vf-rec"><div class="vf-rec-dot"></div>LIVE</div>
       <canvas id="grid-canvas" class="grid-overlay"></canvas>
       <div class="safe-frame" id="action-safe" style="top:5%;left:5%;right:5%;bottom:5%"></div>
       <div class="safe-frame" id="title-safe" style="top:10%;left:10%;right:10%;bottom:10%;border-style:dashed"></div>
+      <div class="vf-focus-ring" id="vf-focus-ring"></div>
       <div class="vf-info">
         <div class="vf-info-item"><span class="val" id="vf-focal">50</span>mm</div>
         <div class="vf-info-item">f/<span class="val" id="vf-fstop">2.8</span></div>
         <div class="vf-info-item">FOV <span class="val" id="vf-fov">46.8</span>&deg;</div>
         <div class="vf-info-item" id="vf-sensor-info">36x24mm</div>
       </div>
+      <div class="vf-timecode" id="vf-timecode">00:00:00:00</div>
     </div>
     <div class="hint" id="hint-text" style="display:none"></div>
   </div>
   <div id="sidebar">
     <div class="sidebar-section">
-      <h3>机位列表</h3>
+      <h3>机位列表 <span style="font-size:9px;color:var(--text2)">双击取景器</span></h3>
       <div class="cam-list" id="cam-list"></div>
-      <div style="margin-top:10px">
-        <button class="btn primary" style="width:100%" onclick="setMode('add')">+ 添加机位</button>
-      </div>
+      <div style="margin-top:8px"><button class="btn primary" style="width:100%" onclick="setMode('add')">+ 添加机位</button></div>
     </div>
     <div class="sidebar-section" id="params-section" style="display:none">
       <h3>镜头参数</h3>
-      <div class="param-group">
-        <div class="param-label">传感器预设</div>
+      <div class="param-group"><div class="param-label">传感器预设</div>
         <select id="sensor-select" onchange="onSensorChange()">
-          <option value="36,24">全画幅 36×24mm</option>
-          <option value="27.99,23.04">ARRI Alexa 35 (4:3)</option>
-          <option value="40.96,21.6">RED V-Raptor 8K VV</option>
-          <option value="35.7,18.8">Sony FX6 Full Frame</option>
-          <option value="26.2,13.8">Canon C70 Super 35</option>
-          <option value="23.1,12.95">BMPCC 6K Super 35</option>
+          <option value="36,24">全画幅 36x24mm</option><option value="27.99,23.04">ARRI Alexa 35 (4:3)</option>
+          <option value="40.96,21.6">RED V-Raptor 8K VV</option><option value="35.7,18.8">Sony FX6 Full Frame</option>
+          <option value="26.2,13.8">Canon C70 Super 35</option><option value="23.1,12.95">BMPCC 6K Super 35</option>
           <option value="13.2,8.8">MFT 微型4/3</option>
-        </select>
-      </div>
-      <div class="param-group">
-        <div class="param-label">焦距 <span id="focal-val">50mm</span></div>
-        <input type="range" id="focal-range" min="8" max="300" value="50" step="1" oninput="onFocalChange(this.value)">
-      </div>
-      <div class="param-group">
-        <div class="param-label">光圈 (f-stop) <span id="fstop-val">f/2.8</span></div>
-        <input type="range" id="fstop-range" min="1.4" max="22" value="2.8" step="0.1" oninput="onFStopChange(this.value)">
-      </div>
-      <div class="param-group">
-        <div class="param-label">机位高度 <span id="height-val">1.6m</span></div>
-        <input type="range" id="height-range" min="0.2" max="8" value="1.6" step="0.1" oninput="onHeightChange(this.value)">
-      </div>
-      <div class="param-group">
-        <div class="param-label">水平旋转 <span id="yaw-val">0&deg;</span></div>
-        <input type="range" id="yaw-range" min="-180" max="180" value="0" step="1" oninput="onYawChange(this.value)">
-      </div>
-      <div class="param-group">
-        <div class="param-label">俯仰角 <span id="pitch-val">0&deg;</span></div>
-        <input type="range" id="pitch-range" min="-45" max="45" value="0" step="1" oninput="onPitchChange(this.value)">
-      </div>
+        </select></div>
+      <div class="param-group"><div class="param-label">焦距 <span id="focal-val">50mm</span></div><input type="range" id="focal-range" min="8" max="300" value="50" step="1" oninput="onFocalChange(this.value)"></div>
+      <div class="param-group"><div class="param-label">光圈 <span id="fstop-val">f/2.8</span></div><input type="range" id="fstop-range" min="1.4" max="22" value="2.8" step="0.1" oninput="onFStopChange(this.value)"></div>
+      <div class="param-group"><div class="param-label">对焦距离 <span id="focus-val">5.0m</span></div><input type="range" id="focus-range" min="0.3" max="50" value="5" step="0.1" oninput="onFocusChange(this.value)"></div>
+      <div class="param-group"><div class="param-label">高度 <span id="height-val">1.6m</span></div><input type="range" id="height-range" min="0.2" max="8" value="1.6" step="0.1" oninput="onHeightChange(this.value)"></div>
+      <div class="param-group"><div class="param-label">水平旋转 <span id="yaw-val">0&deg;</span></div><input type="range" id="yaw-range" min="-180" max="180" value="0" step="1" oninput="onYawChange(this.value)"></div>
+      <div class="param-group"><div class="param-label">俯仰角 <span id="pitch-val">0&deg;</span></div><input type="range" id="pitch-range" min="-45" max="45" value="0" step="1" oninput="onPitchChange(this.value)"></div>
     </div>
-    <div class="sidebar-section" id="overlay-section">
+    <div class="sidebar-section">
       <h3>取景器叠加</h3>
       <div class="toggle-row"><label>三分线</label><div class="toggle on" id="tog-grid" onclick="toggleOverlay('grid')"></div></div>
       <div class="toggle-row"><label>Action Safe</label><div class="toggle on" id="tog-action" onclick="toggleOverlay('action')"></div></div>
       <div class="toggle-row"><label>Title Safe</label><div class="toggle on" id="tog-title" onclick="toggleOverlay('title')"></div></div>
       <div class="toggle-row"><label>水平仪</label><div class="toggle" id="tog-level" onclick="toggleOverlay('level')"></div></div>
+      <div class="toggle-row"><label>景深虚化</label><div class="toggle" id="tog-dof" onclick="toggleOverlay('dof')"></div></div>
+      <div class="toggle-row"><label>Letterbox</label><div class="toggle on" id="tog-letterbox" onclick="toggleOverlay('letterbox')"></div></div>
     </div>
     <div class="sidebar-section">
       <h3>场景</h3>
       <div class="toggle-row"><label>网格地面</label><div class="toggle on" id="tog-floor" onclick="toggleScene('floor')"></div></div>
       <div class="toggle-row"><label>环境物体</label><div class="toggle on" id="tog-objects" onclick="toggleScene('objects')"></div></div>
       <div class="toggle-row"><label>机位标记</label><div class="toggle on" id="tog-markers" onclick="toggleScene('markers')"></div></div>
+      <div class="toggle-row"><label>路径线</label><div class="toggle on" id="tog-pathline" onclick="toggleScene('pathline')"></div></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>灯光控制</h3>
+      <div class="param-group"><div class="param-label">主灯 <span id="key-val">0.8</span></div><input type="range" id="key-range" min="0" max="3" value="0.8" step="0.1" oninput="onLightChange('key',this.value)"></div>
+      <div class="param-group"><div class="param-label">辅灯 <span id="fill-val">0.3</span></div><input type="range" id="fill-range" min="0" max="3" value="0.3" step="0.1" oninput="onLightChange('fill',this.value)"></div>
+      <div class="param-group"><div class="param-label">环境光 <span id="ambient-val">0.4</span></div><input type="range" id="ambient-range" min="0" max="2" value="0.4" step="0.1" oninput="onLightChange('ambient',this.value)"></div>
+      <div class="param-group"><div class="param-label">曝光 <span id="exposure-val">1.0</span></div><input type="range" id="exposure-range" min="0.1" max="3" value="1.0" step="0.1" oninput="onLightChange('exposure',this.value)"></div>
     </div>
     <div class="sidebar-section" style="border-bottom:none">
       <h3>快捷键</h3>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <div><kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">1-9</kbd> 切换机位</div>
-        <div><kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">V</kbd> 取景器开关</div>
-        <div><kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">A</kbd> 添加机位</div>
-        <div><kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">Esc</kbd> 取消/返回浏览</div>
-        <div><kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">Del</kbd> 删除当前机位</div>
+      <div style="font-size:10px;color:var(--text2);line-height:1.9">
+        <div><kbd>1-9</kbd> 机位 <kbd>V</kbd> 取景器 <kbd>A</kbd> 添加</div>
+        <div><kbd>P</kbd> 路径 <kbd>L</kbd> 物体库 <kbd>E</kbd> 导出</div>
+        <div><kbd>Ctrl+Z</kbd> 撤销 <kbd>Ctrl+Y</kbd> 重做</div>
+        <div><kbd>Esc</kbd> 返回 <kbd>Del</kbd> 删除</div>
       </div>
     </div>
   </div>
 </div>
-
+<div id="path-panel">
+  <div class="path-btn" onclick="pathFirst()" title="起点">&#x23EE;</div>
+  <div class="path-btn" id="path-play-btn" onclick="pathPlayPause()">&#x25B6;</div>
+  <div class="path-time" id="path-time">00:00 / 00:05</div>
+  <div class="path-btn" onclick="pathLast()" title="末尾">&#x23ED;</div>
+  <div class="sep" style="height:20px"></div>
+  <div style="font-size:10px;color:var(--text2)">速度</div>
+  <select id="path-speed" style="width:60px;padding:3px" onchange="state.pathSpeed=parseFloat(this.value)">
+    <option value="0.25">0.25x</option><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option>
+  </select>
+  <div class="sep" style="height:20px"></div>
+  <div style="font-size:10px;color:var(--text2)">时长 <span id="path-dur-val">5s</span></div>
+  <input type="range" id="path-duration" min="2" max="30" value="5" step="1" style="width:80px" oninput="state.pathDuration=parseInt(this.value);document.getElementById('path-dur-val').textContent=this.value+'s'">
+  <div class="sep" style="height:20px"></div>
+  <div class="path-btn" onclick="clearPathPoints()" title="清除">&#x1F5D1;</div>
+</div>
+<div id="export-modal">
+  <div class="modal-box">
+    <div class="modal-close" onclick="closeExportModal()">&times;</div><h2>导出</h2>
+    <div class="modal-option" onclick="exportJSON()"><h4>导出机位数据 (JSON)</h4><p>所有机位参数+路径+物体</p></div>
+    <div class="modal-option" onclick="exportScreenshot()"><h4>截取当前视图 (PNG)</h4><p>保存3D视图或取景器画面</p></div>
+    <div class="modal-option" onclick="exportCSV()"><h4>导出机位列表 (CSV)</h4><p>表格格式参数汇总</p></div>
+  </div>
+</div>
+<div id="template-modal">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-close" onclick="closeTemplateModal()">&times;</div><h2>选择场景模板</h2>
+    <div class="template-grid">
+      <div class="template-card active" data-tpl="studio" onclick="switchTemplate('studio')"><div class="template-icon">&#x1F3AC;</div><div class="template-name">摄影棚</div><div class="template-desc">32m x 24m</div></div>
+      <div class="template-card" data-tpl="blackbox" onclick="switchTemplate('blackbox')"><div class="template-icon">&#x2B1B;</div><div class="template-name">黑匣子</div><div class="template-desc">空场景</div></div>
+      <div class="template-card" data-tpl="outdoor" onclick="switchTemplate('outdoor')"><div class="template-icon">&#x1F333;</div><div class="template-name">户外</div><div class="template-desc">自然光</div></div>
+    </div>
+  </div>
+</div>
 <script>
-// ═══════════════════════════════════════════
-// State
-// ═══════════════════════════════════════════
-const state = {
-  mode: 'navigate',      // 'navigate' | 'add'
-  viewfinder: false,
-  cameras: [],
-  selectedIdx: -1,
-  camCounter: 0,
-  overlays: { grid: true, action: true, title: true, level: false },
-  sceneItems: { floor: true, objects: true, markers: true },
-};
+const state={mode:'navigate',viewfinder:false,cameras:[],selectedIdx:-1,camCounter:0,overlays:{grid:true,action:true,title:true,level:false,dof:false,letterbox:true},sceneItems:{floor:true,objects:true,markers:true,pathline:true},currentTemplate:'studio',pathPoints:[],pathCurve:null,pathPlaying:false,pathProgress:0,pathDuration:5,pathSpeed:1,selectedObject:null,startTime:Date.now()};
+const COLORS=[0x3b82f6,0xef4444,0x22c55e,0xf59e0b,0xa855f7,0x06b6d4,0xec4899,0x84cc16,0xf97316];
+const history={stack:[],pointer:-1,max:50};
+function pushH(a,d){history.stack=history.stack.slice(0,history.pointer+1);history.stack.push({a,d});if(history.stack.length>history.max)history.stack.shift();history.pointer=history.stack.length-1;}
+function undo(){if(history.pointer<0)return;const e=history.stack[history.pointer];history.pointer--;
+  if(e.a==='addCam'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c)delCam(c.idx,true);}
+  else if(e.a==='delCam'){restCam(e.d);}
+  else if(e.a==='param'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c){Object.assign(c,e.d.b);updMarker(c);updParams(c);if(state.viewfinder)updVF();}}
+  else if(e.a==='addObj'){remObj(e.d.id,true);}
+  else if(e.a==='delObj'){restObj(e.d);}}
+function redo(){if(history.pointer>=history.stack.length-1)return;history.pointer++;const e=history.stack[history.pointer];
+  if(e.a==='addCam')restCam(e.d);
+  else if(e.a==='delCam'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c)delCam(c.idx,true);}
+  else if(e.a==='addObj')restObj(e.d);
+  else if(e.a==='delObj')remObj(e.d.id,true);}
 
-const COLORS = [0x3b82f6, 0xef4444, 0x22c55e, 0xf59e0b, 0xa855f7, 0x06b6d4, 0xec4899, 0x84cc16, 0xf97316];
+const vp=document.getElementById('viewport');
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(window.devicePixelRatio);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
+vp.insertBefore(renderer.domElement,vp.firstChild);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0a0c12);scene.fog=new THREE.Fog(0x0a0c12,30,80);
+const mainCam=new THREE.PerspectiveCamera(55,1,0.1,200);mainCam.position.set(12,8,14);
+const ctrl=new THREE.OrbitControls(mainCam,renderer.domElement);ctrl.target.set(0,1,0);ctrl.enableDamping=true;ctrl.dampingFactor=0.08;ctrl.maxPolarAngle=Math.PI/2-0.05;ctrl.minDistance=2;ctrl.maxDistance=60;
+const vfCam=new THREE.PerspectiveCamera(50,1.5,0.05,200);
+let composer=null,bokeh=null;
+try{composer=new THREE.EffectComposer(renderer);composer.addPass(new THREE.RenderPass(scene,vfCam));bokeh=new THREE.BokehPass(scene,vfCam,{focus:5,aperture:0.002,maxblur:0.01,width:vp.clientWidth,height:vp.clientHeight});bokeh.enabled=false;composer.addPass(bokeh);}catch(e){}
 
-// ═══════════════════════════════════════════
-// Three.js Setup
-// ═══════════════════════════════════════════
-const viewport = document.getElementById('viewport');
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputEncoding = THREE.sRGBEncoding;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
-viewport.insertBefore(renderer.domElement, viewport.firstChild);
+const sGrp=new THREE.Group(),objGrp=new THREE.Group(),mkGrp=new THREE.Group(),pathGrp=new THREE.Group(),plcGrp=new THREE.Group();
+scene.add(sGrp);sGrp.add(objGrp);sGrp.add(mkGrp);sGrp.add(pathGrp);sGrp.add(plcGrp);
+let floor,grid,kLight,fLight,aLight;
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0c12);
-scene.fog = new THREE.Fog(0x0a0c12, 30, 80);
+function mm(g,m,x,y,z,rx){const o=new THREE.Mesh(g,m);o.position.set(x||0,y||0,z||0);if(rx)o.rotation.x=rx;return o;}
+function addWall(w,h,x,y,z,ry,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,0.15),new THREE.MeshStandardMaterial({color:c,roughness:0.8}));o.position.set(x,y,z);o.rotation.y=ry;o.castShadow=o.receiveShadow=true;objGrp.add(o);}
+function addBox(w,h,d,x,y,z,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c,roughness:0.6,metalness:0.1}));o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;objGrp.add(o);return o;}
+function addPerson(x,z){const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b});g.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1,0));g.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));g.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,-0.3,1.1,0,0,0,0.15));g.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,0.3,1.1,0,0,0,-0.15));g.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,-0.1,0.4));g.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,0.1,0.4));g.position.set(x,0,z);objGrp.add(g);}
+function addTree(x,z){const g=new THREE.Group();g.add(mm(new THREE.CylinderGeometry(0.15,0.2,2,8),new THREE.MeshStandardMaterial({color:0x5C3317,roughness:0.9}),0,1));const f=new THREE.Mesh(new THREE.SphereGeometry(1.5,8,6),new THREE.MeshStandardMaterial({color:0x2d7a2d}));f.position.y=3;f.castShadow=true;g.add(f);g.position.set(x,0,z);objGrp.add(g);}
 
-// Main camera (free navigation)
-const mainCamera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
-mainCamera.position.set(12, 8, 14);
-
-const controls = new THREE.OrbitControls(mainCamera, renderer.domElement);
-controls.target.set(0, 1, 0);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.maxPolarAngle = Math.PI / 2 - 0.05;
-controls.minDistance = 2;
-controls.maxDistance = 60;
-
-// Viewfinder camera (for camera preview)
-const vfCamera = new THREE.PerspectiveCamera(50, 1.5, 0.05, 200);
-
-// ═══════════════════════════════════════════
-// Scene Objects
-// ═══════════════════════════════════════════
-const sceneGroup = new THREE.Group();
-const objectsGroup = new THREE.Group();
-const markersGroup = new THREE.Group();
-scene.add(sceneGroup);
-sceneGroup.add(objectsGroup);
-sceneGroup.add(markersGroup);
-
-// Floor
-const floorGeo = new THREE.PlaneGeometry(40, 30);
-const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a1d27, roughness: 0.9 });
-const floor = new THREE.Mesh(floorGeo, floorMat);
-floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
-objectsGroup.add(floor);
-
-// Grid
-const gridHelper = new THREE.GridHelper(40, 40, 0x2a2d3a, 0x1e2130);
-objectsGroup.add(gridHelper);
-
-// Walls
-function addWall(w, h, x, y, z, ry, color) {
-  const geo = new THREE.BoxGeometry(w, h, 0.15);
-  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8 });
-  const wall = new THREE.Mesh(geo, mat);
-  wall.position.set(x, y, z);
-  wall.rotation.y = ry || 0;
-  wall.castShadow = true;
-  wall.receiveShadow = true;
-  objectsGroup.add(wall);
+function clearObjs(){while(objGrp.children.length){const c=objGrp.children[0];objGrp.remove(c);c.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}}
+function buildStudio(){
+  floor=mm(new THREE.PlaneGeometry(40,30),new THREE.MeshStandardMaterial({color:0x1a1d27,roughness:0.9}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
+  grid=new THREE.GridHelper(40,40,0x2a2d3a,0x1e2130);objGrp.add(grid);
+  addWall(20,4,0,2,-8,0,0x252830);addWall(16,4,-10,2,0,Math.PI/2,0x22252d);addWall(16,4,10,2,0,Math.PI/2,0x22252d);
+  addBox(8,0.4,5,0,0.2,-4,0x2d3748);addBox(2.4,0.08,1.2,-5,0.75,2,0x4a5568);
+  for(let i=0;i<4;i++){const cx=-5+(i%2)*2.5-1.25,cz=2+Math.floor(i/2)*2-1;addBox(0.5,0.05,0.5,cx,0.45,cz,0x718096);addBox(0.5,0.6,0.05,cx,0.75,cz-0.22,0x718096);}
+  addBox(0.06,0.75,0.06,-5.9,0.375,2.45,0x4a5568);addBox(0.06,0.75,0.06,-4.1,0.375,2.45,0x4a5568);addBox(0.06,0.75,0.06,-5.9,0.375,1.55,0x4a5568);addBox(0.06,0.75,0.06,-4.1,0.375,1.55,0x4a5568);
+  addBox(0.6,1.2,0.5,3,0.6,-3.5,0x4a5568);addBox(3,1.8,0.08,-3,2.5,-7.8,0x1e40af);addBox(3,1.8,0.08,3,2.5,-7.8,0x1e3a5f);
+  addBox(2.5,0.4,0.9,6,0.3,3,0x6b4226);addBox(2.5,0.5,0.15,6,0.65,2.6,0x6b4226);
+  addPerson(-2,-2);addPerson(0,-2);addPerson(2,-2);
+  scene.background=new THREE.Color(0x0a0c12);scene.fog=new THREE.Fog(0x0a0c12,30,80);document.getElementById('scene-info').textContent='Studio Scene | 32m x 24m';
 }
-addWall(20, 4, 0, 2, -8, 0, 0x252830);   // Back wall
-addWall(16, 4, -10, 2, 0, Math.PI/2, 0x22252d); // Left wall
-addWall(16, 4, 10, 2, 0, Math.PI/2, 0x22252d);  // Right wall
-
-// Furniture
-function addBox(w, h, d, x, y, z, color) {
-  const geo = new THREE.BoxGeometry(w, h, d);
-  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.1 });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(x, y, z);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  objectsGroup.add(mesh);
-  return mesh;
+function buildBlack(){
+  floor=mm(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x111111,roughness:0.95}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
+  grid=new THREE.GridHelper(30,30,0x333333,0x222222);objGrp.add(grid);addPerson(0,0);addPerson(-1.5,-1);addPerson(1.5,-1);
+  scene.background=new THREE.Color(0x050505);scene.fog=new THREE.Fog(0x050505,25,60);document.getElementById('scene-info').textContent='Black Box | 30m x 30m';
 }
-// Stage platform
-addBox(8, 0.4, 5, 0, 0.2, -4, 0x2d3748);
-// Table
-addBox(2.4, 0.08, 1.2, -5, 0.75, 2, 0x4a5568);
-addBox(0.06, 0.75, 0.06, -5.9, 0.375, 2.45, 0x4a5568);
-addBox(0.06, 0.75, 0.06, -4.1, 0.375, 2.45, 0x4a5568);
-addBox(0.06, 0.75, 0.06, -5.9, 0.375, 1.55, 0x4a5568);
-addBox(0.06, 0.75, 0.06, -4.1, 0.375, 1.55, 0x4a5568);
-// Chairs
-for (let i = 0; i < 4; i++) {
-  const cx = -5 + (i % 2) * 2.5 - 1.25;
-  const cz = 2 + Math.floor(i / 2) * 2 - 1;
-  addBox(0.5, 0.05, 0.5, cx, 0.45, cz, 0x718096);
-  addBox(0.5, 0.6, 0.05, cx, 0.75, cz - 0.22, 0x718096);
+function buildOutdoor(){
+  floor=mm(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({color:0x2d5016,roughness:1}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
+  grid=new THREE.GridHelper(80,80,0x3a6b20,0x2d5516);objGrp.add(grid);
+  for(let i=0;i<8;i++){const tx=-15+Math.random()*30,tz=-15+Math.random()*30;if(Math.abs(tx)<5&&Math.abs(tz)<5)continue;addTree(tx,tz);}
+  addBox(2,0.08,0.5,3,0.45,2,0x8B6914);addBox(0.1,0.45,0.1,2.1,0.225,2,0x555555);addBox(0.1,0.45,0.1,3.9,0.225,2,0x555555);
+  for(let i=0;i<4;i++){const lx=-6+i*4;const p=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,3,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:0.6}));p.position.set(lx,1.5,-3);p.castShadow=true;objGrp.add(p);objGrp.add(new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateX(lx).translateY(3.1).translateZ(-3));}
+  addPerson(0,0);addPerson(2,1);
+  scene.background=new THREE.Color(0x87CEEB);scene.fog=new THREE.Fog(0x87CEEB,50,150);document.getElementById('scene-info').textContent='Outdoor | 80m x 80m';
 }
-// Podium / lectern
-addBox(0.6, 1.2, 0.5, 3, 0.6, -3.5, 0x4a5568);
-// Monitor screens on back wall
-addBox(3, 1.8, 0.08, -3, 2.5, -7.8, 0x1e40af);
-addBox(3, 1.8, 0.08, 3, 2.5, -7.8, 0x1e3a5f);
-// Sofa
-addBox(2.5, 0.4, 0.9, 6, 0.3, 3, 0x6b4226);
-addBox(2.5, 0.5, 0.15, 6, 0.65, 2.6, 0x6b4226);
-// Standing person placeholders (cylinders)
-for (let i = 0; i < 3; i++) {
-  const px = -2 + i * 2, pz = -2;
-  const bodyGeo = new THREE.CylinderGeometry(0.2, 0.2, 1.2, 8);
-  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x64748b });
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.set(px, 1.0, pz);
-  body.castShadow = true;
-  objectsGroup.add(body);
-  const headGeo = new THREE.SphereGeometry(0.18, 8, 8);
-  const head = new THREE.Mesh(headGeo, bodyMat);
-  head.position.set(px, 1.78, pz);
-  objectsGroup.add(head);
+function switchTemplate(t){state.currentTemplate=t;clearObjs();document.querySelectorAll('.template-card').forEach(c=>c.classList.toggle('active',c.dataset.tpl===t));if(t==='studio')buildStudio();else if(t==='blackbox')buildBlack();else buildOutdoor();setupLights();closeTemplateModal();}
+
+function setupLights(){
+  scene.children.filter(c=>c.isLight).forEach(l=>scene.remove(l));
+  aLight=new THREE.AmbientLight(0x404060,0.4);scene.add(aLight);
+  kLight=new THREE.DirectionalLight(0xfff5e6,0.8);kLight.position.set(5,10,5);kLight.castShadow=true;kLight.shadow.mapSize.set(2048,2048);kLight.shadow.camera.left=-20;kLight.shadow.camera.right=20;kLight.shadow.camera.top=20;kLight.shadow.camera.bottom=-20;scene.add(kLight);
+  fLight=new THREE.DirectionalLight(0xb0c4de,0.3);fLight.position.set(-8,6,-3);scene.add(fLight);
+  const sp=new THREE.SpotLight(0xffffff,0.6,20,Math.PI/6,0.5);sp.position.set(0,8,-3);sp.target.position.set(0,0,-4);scene.add(sp);scene.add(sp.target);
+  scene.add(new THREE.PointLight(0x3b82f6,0.5,12).translateX(-8).translateY(3).translateZ(-5));
+  scene.add(new THREE.PointLight(0xf59e0b,0.4,12).translateX(8).translateY(3).translateZ(4));
+  if(state.currentTemplate==='outdoor'){kLight.color.set(0xfff8e1);kLight.intensity=1.2;fLight.color.set(0x87CEEB);fLight.intensity=0.5;aLight.color.set(0x8899aa);aLight.intensity=0.6;}
+  document.getElementById('key-range').value=kLight.intensity;document.getElementById('key-val').textContent=kLight.intensity.toFixed(1);
+  document.getElementById('fill-range').value=fLight.intensity;document.getElementById('fill-val').textContent=fLight.intensity.toFixed(1);
+  document.getElementById('ambient-range').value=aLight.intensity;document.getElementById('ambient-val').textContent=aLight.intensity.toFixed(1);
+  document.getElementById('exposure-range').value=renderer.toneMappingExposure;document.getElementById('exposure-val').textContent=renderer.toneMappingExposure.toFixed(1);
 }
+function onLightChange(t,v){v=parseFloat(v);if(t==='key')kLight.intensity=v;if(t==='fill')fLight.intensity=v;if(t==='ambient')aLight.intensity=v;if(t==='exposure')renderer.toneMappingExposure=v;document.getElementById(t+'-val').textContent=v.toFixed(1);}
 
-// Lights
-const ambientLight = new THREE.AmbientLight(0x404060, 0.4);
-scene.add(ambientLight);
-
-const keyLight = new THREE.DirectionalLight(0xfff5e6, 0.8);
-keyLight.position.set(5, 10, 5);
-keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(2048, 2048);
-keyLight.shadow.camera.left = -15;
-keyLight.shadow.camera.right = 15;
-keyLight.shadow.camera.top = 15;
-keyLight.shadow.camera.bottom = -15;
-scene.add(keyLight);
-
-const fillLight = new THREE.DirectionalLight(0xb0c4de, 0.3);
-fillLight.position.set(-8, 6, -3);
-scene.add(fillLight);
-
-const spotStage = new THREE.SpotLight(0xffffff, 0.6, 20, Math.PI/6, 0.5);
-spotStage.position.set(0, 8, -3);
-spotStage.target.position.set(0, 0, -4);
-scene.add(spotStage);
-scene.add(spotStage.target);
-
-// Colored accent lights
-const accentLight1 = new THREE.PointLight(0x3b82f6, 0.5, 12);
-accentLight1.position.set(-8, 3, -5);
-scene.add(accentLight1);
-const accentLight2 = new THREE.PointLight(0xf59e0b, 0.4, 12);
-accentLight2.position.set(8, 3, 4);
-scene.add(accentLight2);
-
-// ═══════════════════════════════════════════
-// Camera Markers
-// ═══════════════════════════════════════════
-function createCameraMarker(camData) {
-  const group = new THREE.Group();
-  const color = camData.color;
-
-  // Camera body
-  const bodyGeo = new THREE.BoxGeometry(0.35, 0.25, 0.5);
-  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.3, metalness: 0.6 });
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  group.add(body);
-
-  // Lens cylinder
-  const lensGeo = new THREE.CylinderGeometry(0.08, 0.12, 0.25, 12);
-  const lensMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.2, metalness: 0.8 });
-  const lens = new THREE.Mesh(lensGeo, lensMat);
-  lens.rotation.x = Math.PI / 2;
-  lens.position.z = 0.35;
-  group.add(lens);
-
-  // Direction cone (frustum indicator)
-  const fovRad = camData.fov * Math.PI / 180;
-  const coneLen = 2;
-  const coneRad = Math.tan(fovRad / 2) * coneLen;
-  const coneGeo = new THREE.ConeGeometry(coneRad, coneLen, 4, 1, true);
-  const coneMat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.08, side: THREE.DoubleSide, depthWrite: false });
-  const cone = new THREE.Mesh(coneGeo, coneMat);
-  cone.rotation.x = Math.PI / 2;
-  cone.position.z = 0.25 + coneLen / 2;
-  group.add(cone);
-
-  // Cone wireframe
-  const wireGeo = new THREE.BufferGeometry();
-  const hw = coneRad, hh = coneRad * (16/9 > 1 ? 9/16 : 1);
-  const verts = new Float32Array([
-    0, 0, 0.25,
-    -hw, hh, 0.25 + coneLen,  hw, hh, 0.25 + coneLen,
-    hw, -hh, 0.25 + coneLen, -hw, -hh, 0.25 + coneLen,
-  ]);
-  const indices = [0,1,2, 0,2,3, 0,3,4, 0,4,1, 1,2,3, 1,3,4];
-  wireGeo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
-  wireGeo.setIndex(indices);
-  const wireMat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.3 });
-  const wire = new THREE.LineSegments(wireGeo, wireMat);
-  group.add(wire);
-
-  // Stand (tripod line)
-  const standGeo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, -camData.height, 0)
-  ]);
-  const standMat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.4 });
-  group.add(new THREE.Line(standGeo, standMat));
-
-  // Position and rotation
-  group.position.set(camData.x, camData.height, camData.z);
-  group.rotation.y = -camData.yaw * Math.PI / 180;
-  group.rotation.x = camData.pitch * Math.PI / 180;
-
-  group.userData = { camIdx: camData.idx };
-  markersGroup.add(group);
-  camData.marker = group;
-  camData.cone = cone;
-  camData.wire = wire;
+function createMarker(cd){
+  const g=new THREE.Group(),c=cd.color;
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(0.35,0.25,0.5),new THREE.MeshStandardMaterial({color:c,roughness:0.3,metalness:0.6})));
+  const l=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.12,0.25,12),new THREE.MeshStandardMaterial({color:0x1a1a2e,metalness:0.8}));l.rotation.x=Math.PI/2;l.position.z=0.35;g.add(l);
+  const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;
+  const cone=new THREE.Mesh(new THREE.ConeGeometry(cr,cl,4,1,true),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0.08,side:THREE.DoubleSide,depthWrite:false}));cone.rotation.x=Math.PI/2;cone.position.z=0.25+cl/2;g.add(cone);
+  const wg=new THREE.BufferGeometry();const hw=cr,hh=cr*9/16;wg.setAttribute('position',new THREE.BufferAttribute(new Float32Array([0,0,0.25,-hw,hh,0.25+cl,hw,hh,0.25+cl,hw,-hh,0.25+cl,-hw,-hh,0.25+cl]),3));wg.setIndex([0,1,2,0,2,3,0,3,4,0,4,1,1,2,3,1,3,4]);
+  const wire=new THREE.LineSegments(wg,new THREE.LineBasicMaterial({color:c,transparent:true,opacity:0.3}));g.add(wire);
+  g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-cd.height,0)]),new THREE.LineBasicMaterial({color:c,transparent:true,opacity:0.4})));
+  g.position.set(cd.x,cd.height,cd.z);g.rotation.y=-cd.yaw*Math.PI/180;g.rotation.x=cd.pitch*Math.PI/180;mkGrp.add(g);cd.marker=g;cd.cone=cone;cd.wire=wire;
 }
+function updMarker(cd){if(!cd.marker)return;cd.marker.position.set(cd.x,cd.height,cd.z);cd.marker.rotation.y=-cd.yaw*Math.PI/180;cd.marker.rotation.x=cd.pitch*Math.PI/180;const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;cd.cone.geometry.dispose();cd.cone.geometry=new THREE.ConeGeometry(cr,cl,4,1,true);cd.cone.position.z=0.25+cl/2;}
 
-function updateCameraMarker(camData) {
-  if (!camData.marker) return;
-  camData.marker.position.set(camData.x, camData.height, camData.z);
-  camData.marker.rotation.y = -camData.yaw * Math.PI / 180;
-  camData.marker.rotation.x = camData.pitch * Math.PI / 180;
-
-  // Update frustum cone
-  const fovRad = camData.fov * Math.PI / 180;
-  const coneLen = 2;
-  const coneRad = Math.tan(fovRad / 2) * coneLen;
-  camData.cone.geometry.dispose();
-  camData.cone.geometry = new THREE.ConeGeometry(coneRad, coneLen, 4, 1, true);
-  camData.cone.position.z = 0.25 + coneLen / 2;
+function calcFOV(f,s){return 2*Math.atan(s/(2*f))*180/Math.PI;}
+function addCam(x,z){
+  const[sw,sh]=document.getElementById('sensor-select').value.split(',').map(Number);const f=parseInt(document.getElementById('focal-range').value);const fov=calcFOV(f,sh);
+  const yaw=Math.atan2(-x,-4-z)*180/Math.PI;const ci=state.camCounter++;
+  const cam={idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0'),x,z,height:1.6,yaw,pitch:0,focal:f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov,color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null};
+  state.cameras.push(cam);createMarker(cam);selCam(cam.idx);updList();pushH('addCam',{...cam});setMode('navigate');
 }
+function restCam(d){const c={...d,marker:null,cone:null,wire:null};state.cameras.push(c);if(c.idx>=state.camCounter)state.camCounter=c.idx+1;createMarker(c);selCam(c.idx);updList();}
+function delCam(idx,skip){const ci=state.cameras.findIndex(c=>c.idx===idx);if(ci<0)return;const cam=state.cameras[ci];if(!skip)pushH('delCam',{...cam});if(cam.marker){mkGrp.remove(cam.marker);cam.marker.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}state.cameras.splice(ci,1);if(state.selectedIdx===idx){state.selectedIdx=-1;if(state.viewfinder)toggleVF();document.getElementById('params-section').style.display='none';}updList();}
+function selCam(idx){state.selectedIdx=idx;const c=state.cameras.find(c=>c.idx===idx);if(!c)return;state.cameras.forEach(c=>{if(c.marker){const s=c.idx===idx;c.cone.material.opacity=s?0.15:0.06;c.wire.material.opacity=s?0.6:0.2;}});document.getElementById('params-section').style.display='block';updParams(c);updInfo();updList();if(state.viewfinder)updVF();}
+function updParams(c){document.getElementById('focal-range').value=c.focal;document.getElementById('focal-val').textContent=c.focal+'mm';document.getElementById('fstop-range').value=c.fstop;document.getElementById('fstop-val').textContent='f/'+c.fstop;document.getElementById('focus-range').value=c.focusDist;document.getElementById('focus-val').textContent=c.focusDist.toFixed(1)+'m';document.getElementById('height-range').value=c.height;document.getElementById('height-val').textContent=c.height.toFixed(1)+'m';document.getElementById('yaw-range').value=c.yaw;document.getElementById('yaw-val').textContent=Math.round(c.yaw)+'\u00B0';document.getElementById('pitch-range').value=c.pitch;document.getElementById('pitch-val').textContent=Math.round(c.pitch)+'\u00B0';const s=document.getElementById('sensor-select');for(let i=0;i<s.options.length;i++){const[sw,sh]=s.options[i].value.split(',').map(Number);if(Math.abs(sw-c.sensorW)<0.1&&Math.abs(sh-c.sensorH)<0.1){s.selectedIndex=i;break;}}}
+function getCam(){return state.cameras.find(c=>c.idx===state.selectedIdx);}
 
-// ═══════════════════════════════════════════
-// Camera Management
-// ═══════════════════════════════════════════
-function calcFOV(focalLength, sensorHeight) {
-  return 2 * Math.atan(sensorHeight / (2 * focalLength)) * 180 / Math.PI;
-}
+function updList(){const l=document.getElementById('cam-list');l.innerHTML='';if(!state.cameras.length){l.innerHTML='<div style="font-size:11px;color:var(--text2);padding:6px;text-align:center">暂无机位</div>';return;}state.cameras.forEach(c=>{const d=document.createElement('div');d.className='cam-item'+(c.idx===state.selectedIdx?' selected':'');d.innerHTML='<div class="cam-dot" style="background:#'+c.color.toString(16).padStart(6,'0')+'"></div><div class="cam-name">'+c.name+'</div><div class="cam-focal">'+c.focal+'mm</div><div class="cam-del" onclick="event.stopPropagation();delCam('+c.idx+')">&times;</div>';d.onclick=()=>selCam(c.idx);d.ondblclick=()=>{selCam(c.idx);if(!state.viewfinder)toggleVF();};l.appendChild(d);});}
 
-function addCamera(x, z) {
-  const sensorW = parseFloat(document.getElementById('sensor-select').value.split(',')[0]);
-  const sensorH = parseFloat(document.getElementById('sensor-select').value.split(',')[1]);
-  const focal = parseFloat(document.getElementById('focal-range').value);
-  const fov = calcFOV(focal, sensorH);
-  const colorIdx = state.camCounter % COLORS.length;
+function setMode(m){state.mode=m;document.querySelectorAll('[data-mode]').forEach(e=>e.classList.toggle('active',e.dataset.mode===m));const h=document.getElementById('hint-text'),pp=document.getElementById('path-panel');if(m==='add'){h.textContent='点击地面放置机位';h.className='hint add-mode-hint';h.style.display='block';ctrl.enabled=false;renderer.domElement.style.cursor='crosshair';pp.classList.remove('open');}else if(m==='path'){h.textContent='点击场景添加路径点';h.className='hint path-mode-hint';h.style.display='block';ctrl.enabled=true;renderer.domElement.style.cursor='crosshair';pp.classList.add('open');}else{h.style.display='none';ctrl.enabled=!state.viewfinder;renderer.domElement.style.cursor='default';pp.classList.remove('open');}}
 
-  // Auto-aim toward scene center
-  const dx = 0 - x, dz = -4 - z;
-  const yaw = Math.atan2(-dx, -dz) * 180 / Math.PI;
+function toggleVF(){const c=getCam();if(!c&&!state.viewfinder){const h=document.getElementById('hint-text');h.textContent='请先选择或添加机位';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);return;}state.viewfinder=!state.viewfinder;const ov=document.getElementById('viewfinder-overlay'),tab=document.getElementById('vf-tab');if(state.viewfinder&&c){ov.style.display='block';tab.classList.add('active');ctrl.enabled=false;updVF();updInfo();updLB();drawGrid();if(bokeh&&state.overlays.dof)bokeh.enabled=true;}else{ov.style.display='none';tab.classList.remove('active');state.viewfinder=false;ctrl.enabled=true;if(bokeh)bokeh.enabled=false;}}
+function updVF(){const c=getCam();if(!c)return;vfCam.fov=c.fov;vfCam.aspect=c.sensorW/c.sensorH;vfCam.updateProjectionMatrix();vfCam.position.set(c.x,c.height,c.z);const yr=c.yaw*Math.PI/180,pr=c.pitch*Math.PI/180,d=10;vfCam.lookAt(c.x+Math.sin(yr)*Math.cos(pr)*d,c.height+Math.sin(pr)*d,c.z+Math.cos(yr)*Math.cos(pr)*d);if(bokeh){bokeh.uniforms.focus.value=c.focusDist;bokeh.uniforms.aperture.value=state.overlays.dof?1/(c.fstop*100):0;}}
+function updLB(){if(!state.overlays.letterbox){document.getElementById('vf-lb-top').style.height='0';document.getElementById('vf-lb-bottom').style.height='0';return;}const c=getCam();if(!c)return;const r=vp.getBoundingClientRect(),va=r.width/r.height,ca=c.sensorW/c.sensorH,h=Math.max(0,(1-ca/va)*r.height/2);document.getElementById('vf-lb-top').style.height=h+'px';document.getElementById('vf-lb-bottom').style.height=h+'px';}
+function updInfo(){const c=getCam();if(!c)return;document.getElementById('vf-cam-name').textContent=c.name;document.getElementById('vf-focal').textContent=c.focal;document.getElementById('vf-fstop').textContent=c.fstop;document.getElementById('vf-fov').textContent=c.fov.toFixed(1);document.getElementById('vf-sensor-info').textContent=c.sensorW+'x'+c.sensorH+'mm';}
+function drawGrid(){const cv=document.getElementById('grid-canvas'),r=vp.getBoundingClientRect();cv.width=r.width;cv.height=r.height;const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);if(!state.overlays.grid)return;ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;const x1=cv.width/3,x2=cv.width*2/3,y1=cv.height/3,y2=cv.height*2/3;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(x1,0);ctx.lineTo(x1,cv.height);ctx.moveTo(x2,0);ctx.lineTo(x2,cv.height);ctx.moveTo(0,y1);ctx.lineTo(cv.width,y1);ctx.moveTo(0,y2);ctx.lineTo(cv.width,y2);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.setLineDash([]);const cx=cv.width/2,cy=cv.height/2;ctx.beginPath();ctx.moveTo(cx-15,cy);ctx.lineTo(cx+15,cy);ctx.moveTo(cx,cy-15);ctx.lineTo(cx,cy+15);ctx.stroke();}
 
-  const cam = {
-    idx: state.camCounter++,
-    name: `CAM-${String(state.camCounter).padStart(2, '0')}`,
-    x, z, height: 1.6,
-    yaw: yaw,
-    pitch: 0,
-    focal, sensorW, sensorH,
-    fstop: 2.8,
-    fov,
-    color: COLORS[colorIdx],
-    marker: null, cone: null, wire: null,
-  };
-  state.cameras.push(cam);
-  createCameraMarker(cam);
-  selectCamera(state.cameras.length - 1);
-  updateCamList();
-  setMode('navigate');
-}
+function onSensorChange(){const c=getCam();if(!c)return;const b={sensorW:c.sensorW,sensorH:c.sensorH,fov:c.fov};const[sw,sh]=document.getElementById('sensor-select').value.split(',').map(Number);c.sensorW=sw;c.sensorH=sh;c.fov=calcFOV(c.focal,sh);updMarker(c);updInfo();updLB();if(state.viewfinder)updVF();pushH('param',{idx:c.idx,b});}
+function onFocalChange(v){const c=getCam();if(!c)return;v=parseInt(v);c.focal=v;c.fov=calcFOV(v,c.sensorH);document.getElementById('focal-val').textContent=v+'mm';updMarker(c);updInfo();if(state.viewfinder)updVF();}
+function onFStopChange(v){const c=getCam();if(!c)return;c.fstop=parseFloat(v);document.getElementById('fstop-val').textContent='f/'+parseFloat(v).toFixed(1);updInfo();if(state.viewfinder)updVF();}
+function onFocusChange(v){const c=getCam();if(!c)return;c.focusDist=parseFloat(v);document.getElementById('focus-val').textContent=parseFloat(v).toFixed(1)+'m';if(state.viewfinder)updVF();}
+function onHeightChange(v){const c=getCam();if(!c)return;c.height=parseFloat(v);document.getElementById('height-val').textContent=parseFloat(v).toFixed(1)+'m';updMarker(c);if(state.viewfinder)updVF();}
+function onYawChange(v){const c=getCam();if(!c)return;c.yaw=parseFloat(v);document.getElementById('yaw-val').textContent=Math.round(v)+'\u00B0';updMarker(c);if(state.viewfinder)updVF();}
+function onPitchChange(v){const c=getCam();if(!c)return;c.pitch=parseFloat(v);document.getElementById('pitch-val').textContent=Math.round(v)+'\u00B0';updMarker(c);if(state.viewfinder){updVF();drawGrid();}}
 
-function deleteCamera(idx) {
-  const camIdx = state.cameras.findIndex(c => c.idx === idx);
-  if (camIdx < 0) return;
-  const cam = state.cameras[camIdx];
-  if (cam.marker) {
-    markersGroup.remove(cam.marker);
-    cam.marker.traverse(child => {
-      if (child.geometry) child.geometry.dispose();
-      if (child.material) child.material.dispose();
-    });
+function toggleOverlay(k){state.overlays[k]=!state.overlays[k];document.getElementById('tog-'+k).classList.toggle('on');if(k==='grid'||k==='level')drawGrid();if(k==='action')document.getElementById('action-safe').style.display=state.overlays.action?'block':'none';if(k==='title')document.getElementById('title-safe').style.display=state.overlays.title?'block':'none';if(k==='letterbox')updLB();if(k==='dof'&&bokeh){bokeh.enabled=state.overlays.dof&&state.viewfinder;if(state.viewfinder)updVF();}}
+function toggleScene(k){state.sceneItems[k]=!state.sceneItems[k];document.getElementById('tog-'+k).classList.toggle('on');if(k==='floor'){floor.visible=state.sceneItems.floor;grid.visible=state.sceneItems.floor;}if(k==='objects')objGrp.visible=state.sceneItems.objects;if(k==='markers')mkGrp.visible=state.sceneItems.markers;if(k==='pathline')pathGrp.visible=state.sceneItems.pathline;}
+
+const rc=new THREE.Raycaster(),ms=new THREE.Vector2();
+renderer.domElement.addEventListener('click',e=>{const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;if(state.mode==='add'){rc.setFromCamera(ms,mainCam);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){p.x=Math.max(-18,Math.min(18,p.x));p.z=Math.max(-13,Math.min(13,p.z));addCam(p.x,p.z);}}else if(state.mode==='path'){rc.setFromCamera(ms,mainCam);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){const c=getCam();addPathPt(p.x,c?c.height:1.6,p.z);}}});
+
+function addPathPt(x,y,z){state.pathPoints.push({x,y,z});pathGrp.add(new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(x).translateY(y).translateZ(z));pathGrp.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,0,z),new THREE.Vector3(x,y,z)]),new THREE.LineBasicMaterial({color:0xa855f7,transparent:true,opacity:0.4})));updPathLine();const h=document.getElementById('hint-text');if(state.pathPoints.length>=2)h.textContent=state.pathPoints.length+' 个路径点';}
+function updPathLine(){pathGrp.children.filter(c=>c.userData&&c.userData.isC).forEach(c=>{pathGrp.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();});if(state.pathPoints.length<2)return;const pts=state.pathPoints.map(p=>new THREE.Vector3(p.x,p.y,p.z));state.pathCurve=new THREE.CatmullRomCurve3(pts);const cl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(state.pathCurve.getPoints(100)),new THREE.LineBasicMaterial({color:0xa855f7,linewidth:2}));cl.userData={isC:true};pathGrp.add(cl);}
+function clearPathPoints(){state.pathPoints=[];state.pathCurve=null;state.pathProgress=0;state.pathPlaying=false;document.getElementById('path-play-btn').innerHTML='&#x25B6;';while(pathGrp.children.length){const c=pathGrp.children[0];pathGrp.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();}}
+function pathPlayPause(){if(!state.pathCurve||state.pathPoints.length<2)return;state.pathPlaying=!state.pathPlaying;document.getElementById('path-play-btn').innerHTML=state.pathPlaying?'&#x23F8;':'&#x25B6;';if(state.pathPlaying&&state.pathProgress>=1)state.pathProgress=0;}
+function pathFirst(){state.pathProgress=0;updPlayback();}
+function pathLast(){state.pathProgress=1;updPlayback();}
+function updPlayback(){if(!state.pathCurve||!state.pathPlaying)return;state.pathProgress+=(state.pathSpeed/60)/state.pathDuration;if(state.pathProgress>=1){state.pathProgress=1;state.pathPlaying=false;document.getElementById('path-play-btn').innerHTML='&#x25B6;';}const t=state.pathProgress,pos=state.pathCurve.getPoint(t),lk=state.pathCurve.getPoint(Math.min(t+0.02,1));vfCam.position.copy(pos);vfCam.lookAt(lk);const el=t*state.pathDuration,td=state.pathDuration;document.getElementById('path-time').textContent=String(Math.floor(el/60)).padStart(2,'0')+':'+String(Math.floor(el%60)).padStart(2,'0')+' / '+String(Math.floor(td/60)).padStart(2,'0')+':'+String(td%60).padStart(2,'0');}
+
+const LIB={people:[{icon:'\u{1F9CD}',name:'站立人物',type:'person'},{icon:'\u{1FA91}',name:'坐姿人物',type:'person_sit'},{icon:'\u{1F465}',name:'双人',type:'group2'},{icon:'\u{1F46A}',name:'三人',type:'group3'}],furniture:[{icon:'\u{1F4CB}',name:'桌子',type:'table'},{icon:'\u{1FA91}',name:'椅子',type:'chair'},{icon:'\u{1F6CB}',name:'沙发',type:'sofa'},{icon:'\u{1F4E6}',name:'平台',type:'platform'},{icon:'\u{1F5C4}',name:'柜子',type:'cabinet'}],lighting:[{icon:'\u{1F4A1}',name:'灯架',type:'lightstand'},{icon:'\u2B55',name:'反光板',type:'reflector'},{icon:'\u{1F526}',name:'柔光箱',type:'softbox'},{icon:'\u{1F3AC}',name:'旗板',type:'flag'}],props:[{icon:'\u{1F4F7}',name:'摄影机',type:'propCam'},{icon:'\u{1F3A5}',name:'三脚架',type:'tripod'},{icon:'\u{1F399}',name:'话筒架',type:'mic'},{icon:'\u{1F4E6}',name:'箱子',type:'crate'},{icon:'\u{1F6AA}',name:'门框',type:'door'}]};
+let lTab='people',oid=0;
+function toggleLibPanel(){const p=document.getElementById('left-panel'),t=document.getElementById('lib-tab');p.classList.toggle('open');t.classList.toggle('active');if(p.classList.contains('open'))renderLib();}
+function switchLibTab(t){lTab=t;document.querySelectorAll('.lib-tab').forEach(e=>e.classList.toggle('active',e.dataset.lib===t));renderLib();}
+function renderLib(){const c=document.getElementById('lib-content'),items=LIB[lTab]||[];c.innerHTML='<div class="lib-grid">'+items.map((it,i)=>'<div class="lib-item" onclick="placeItem(\''+lTab+'\','+i+')"><div class="lib-item-icon">'+it.icon+'</div><span class="lib-item-name">'+it.name+'</span></div>').join('')+'</div>';}
+
+function placeItem(tab,idx){const item=LIB[tab][idx],g=mkLibObj(item);if(!g)return;g.userData={libItem:item,id:oid++,type:item.type,name:item.name};plcGrp.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});pushH('addObj',{id:g.userData.id});const h=document.getElementById('hint-text');h.textContent=item.name+' 已放置 | 拖拽移动';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);}
+function mkLibObj(it){
+  const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b,roughness:0.6}),a=new THREE.MeshStandardMaterial({color:0x4a5568,roughness:0.7});
+  switch(it.type){
+    case'person':{const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,-0.3,1.1,0,0,0,0.15));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,0.3,1.1,0,0,0,-0.15));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,-0.1,0.4));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,0.1,0.4));g.add(p);break;}
+    case'person_sit':{const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,0.8,8),m,0,0.8));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.38));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.5,6),m,-0.3,0.8,0,0,0,0.3));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.5,6),m,0.3,0.8,0,0,0,-0.3));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.5,6),m,-0.1,0.35,0.15,Math.PI/3));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.5,6),m,0.1,0.35,0.15,Math.PI/3));g.add(p);break;}
+    case'group2':{for(let i=-1;i<=1;i+=2){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.position.x=i*0.5;g.add(p);}break;}
+    case'group3':{for(let i=-1;i<=1;i++){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.position.x=i*0.6;g.add(p);}break;}
+    case'table':g.add(mm(new THREE.BoxGeometry(1.8,0.05,0.9),a,0,0.75));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,-0.85,0.375,-0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,0.85,0.375,-0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,-0.85,0.375,0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,0.85,0.375,0.4));break;
+    case'chair':g.add(mm(new THREE.BoxGeometry(0.45,0.04,0.45),a,0,0.45));g.add(mm(new THREE.BoxGeometry(0.45,0.5,0.04),m,0,0.7,-0.2));for(let dx of[-0.18,0.18])for(let dz of[-0.18,0.18])g.add(mm(new THREE.CylinderGeometry(0.02,0.02,0.45,6),m,dx,0.225,dz));break;
+    case'sofa':g.add(mm(new THREE.BoxGeometry(2,0.35,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0,0.25));g.add(mm(new THREE.BoxGeometry(2,0.45,0.12),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0,0.55,-0.34));g.add(mm(new THREE.BoxGeometry(0.12,0.3,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),-0.94,0.35));g.add(mm(new THREE.BoxGeometry(0.12,0.3,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0.94,0.35));break;
+    case'platform':g.add(mm(new THREE.BoxGeometry(3,0.3,2),a,0,0.15));break;
+    case'cabinet':g.add(mm(new THREE.BoxGeometry(0.8,1.2,0.4),a,0,0.6));break;
+    case'lightstand':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2.5,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:0.6}),0,1.25));g.add(mm(new THREE.CylinderGeometry(0.2,0.2,0.03,8),m,0,0.015));g.add(new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateY(2.5));break;
+    case'reflector':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.8,8),m,0,0.9));g.add(mm(new THREE.CircleGeometry(0.5,16),new THREE.MeshStandardMaterial({color:0xeeeeee,side:THREE.DoubleSide,roughness:0.3}),0,1.8,0.01));break;
+    case'softbox':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2.2,8),m,0,1.1));g.add(mm(new THREE.BoxGeometry(0.6,0.6,0.15),new THREE.MeshStandardMaterial({color:0x222222}),0,2.3));g.add(mm(new THREE.PlaneGeometry(0.55,0.55),new THREE.MeshBasicMaterial({color:0xffffee}),0,2.3,0.08));break;
+    case'flag':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2,8),m,0,1));g.add(mm(new THREE.BoxGeometry(0.8,0.6,0.02),new THREE.MeshStandardMaterial({color:0x111111}),0,1.8));break;
+    case'propCam':g.add(mm(new THREE.BoxGeometry(0.3,0.2,0.35),new THREE.MeshStandardMaterial({color:0x222222,metalness:0.5}),0,0));g.add(mm(new THREE.CylinderGeometry(0.06,0.09,0.2,12),new THREE.MeshStandardMaterial({color:0x111111,metalness:0.8}),0,0,0.25));break;
+    case'tripod':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,0,0.65,0.15,0.15));g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,-0.13,0.65,-0.08,-0.15));g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,0.13,0.65,-0.08,0.15));g.add(mm(new THREE.BoxGeometry(0.15,0.05,0.15),a,0,1.3));break;
+    case'mic':g.add(mm(new THREE.CylinderGeometry(0.015,0.015,2,8),m,0,1));g.add(mm(new THREE.CylinderGeometry(0.15,0.15,0.02,8),m,0,0.01));g.add(mm(new THREE.CylinderGeometry(0.03,0.03,0.15,8),new THREE.MeshStandardMaterial({color:0x333333}),0,2.05));break;
+    case'crate':g.add(mm(new THREE.BoxGeometry(0.6,0.6,0.6),new THREE.MeshStandardMaterial({color:0x8B6914,roughness:0.9}),0,0.3));break;
+    case'door':g.add(mm(new THREE.BoxGeometry(0.1,2.2,0.15),m,-0.5,1.1));g.add(mm(new THREE.BoxGeometry(0.1,2.2,0.15),m,0.5,1.1));g.add(mm(new THREE.BoxGeometry(1.1,0.1,0.15),m,0,2.2));break;
   }
-  state.cameras.splice(camIdx, 1);
-  if (state.selectedIdx === idx) {
-    state.selectedIdx = -1;
-    if (state.viewfinder) toggleViewfinder();
-    document.getElementById('params-section').style.display = 'none';
-  }
-  updateCamList();
+  g.traverse(ch=>{if(ch.isMesh){ch.castShadow=ch.receiveShadow=true;}});return g;
 }
+function remObj(id,skip){const o=plcGrp.children.find(c=>c.userData&&c.userData.id===id);if(!o)return;if(!skip)pushH('delObj',{id,x:o.position.x,y:o.position.y,z:o.position.z,userData:{...o.userData}});plcGrp.remove(o);o.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}
+function restObj(d){const all=[].concat(LIB.people,LIB.furniture,LIB.lighting,LIB.props);const it=all.find(i=>i.name===d.userData?.name);if(!it)return;const g=mkLibObj(it);g.position.set(d.x,d.y,d.z);g.userData=d.userData;plcGrp.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});}
+function deleteSelectedObject(){if(state.selectedObject){remObj(state.selectedObject.userData.id);state.selectedObject=null;}}
 
-function selectCamera(idx) {
-  state.selectedIdx = idx;
-  const cam = state.cameras.find(c => c.idx === idx);
-  if (!cam) return;
+let dragging=false;const dPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0),dOff=new THREE.Vector3();
+renderer.domElement.addEventListener('mousedown',e=>{if(state.mode!=='navigate'||e.button!==0)return;const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,mainCam);const ms2=[];plcGrp.traverse(c=>{if(c.isMesh)ms2.push(c);});const hits=rc.intersectObjects(ms2);if(hits.length){const pg=hits[0].object.userData._pg||hits[0].object.parent;if(pg&&pg.userData&&pg.userData.id!==undefined){selObj2(pg);dragging=true;ctrl.enabled=false;const ip=new THREE.Vector3();rc.ray.intersectPlane(dPlane,ip);dOff.copy(pg.position).sub(ip);e.preventDefault();}}else deselObj();});
+renderer.domElement.addEventListener('mousemove',e=>{if(!dragging||!state.selectedObject)return;const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,mainCam);const ip=new THREE.Vector3();rc.ray.intersectPlane(dPlane,ip);state.selectedObject.position.copy(ip.add(dOff));});
+renderer.domElement.addEventListener('mouseup',()=>{if(dragging){dragging=false;ctrl.enabled=!state.viewfinder;}});
+function selObj2(g){deselObj();state.selectedObject=g;g.traverse(c=>{if(c.isMesh&&c.material){c.userData._oe=c.material.emissive?c.material.emissive.getHex():0;if(c.material.emissive)c.material.emissive.setHex(0x1a3a5c);}});}
+function deselObj(){if(state.selectedObject){state.selectedObject.traverse(c=>{if(c.isMesh&&c.material&&c.material.emissive)c.material.emissive.setHex(c.userData._oe||0);});state.selectedObject=null;}}
 
-  // Highlight marker
-  state.cameras.forEach(c => {
-    if (c.marker) {
-      const isSelected = c.idx === idx;
-      c.cone.material.opacity = isSelected ? 0.15 : 0.06;
-      c.wire.material.opacity = isSelected ? 0.6 : 0.2;
-    }
-  });
+function openExportModal(){document.getElementById('export-modal').classList.add('open');}
+function closeExportModal(){document.getElementById('export-modal').classList.remove('open');}
+function openTemplateModal(){document.getElementById('template-modal').classList.add('open');}
+function closeTemplateModal(){document.getElementById('template-modal').classList.remove('open');}
+function exportJSON(){const d={v:'1.0',tpl:state.currentTemplate,cams:state.cameras.map(c=>({n:c.name,x:c.x,z:c.z,h:c.height,yaw:c.yaw,pitch:c.pitch,f:c.focal,sw:c.sensorW,sh:c.sensorH,fs:c.fstop,fd:c.focusDist,fov:c.fov})),path:state.pathPoints,dur:state.pathDuration,objs:plcGrp.children.map(o=>({t:o.userData.type,n:o.userData.name,x:o.position.x,y:o.position.y,z:o.position.z}))};dlBlob(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),'cam-planner-'+fDate()+'.json');closeExportModal();}
+function exportScreenshot(){renderer.render(scene,state.viewfinder?vfCam:mainCam);const a=document.createElement('a');a.download='cam-planner-'+fDate()+'.png';a.href=renderer.domElement.toDataURL('image/png');a.click();closeExportModal();}
+function exportCSV(){let csv='Name,Focal,SW,SH,FStop,Focus,H,X,Z,Yaw,Pitch,FOV\n';state.cameras.forEach(c=>{csv+=[c.name,c.focal,c.sensorW,c.sensorH,c.fstop,c.focusDist,c.height,c.x.toFixed(2),c.z.toFixed(2),c.yaw.toFixed(1),c.pitch.toFixed(1),c.fov.toFixed(1)].join(',')+'\n';});dlBlob(new Blob([csv],{type:'text/csv'}),'cam-planner-'+fDate()+'.csv');closeExportModal();}
+function dlBlob(b,fn){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+function fDate(){const d=new Date();return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');}
 
-  // Update params panel
-  document.getElementById('params-section').style.display = 'block';
-  document.getElementById('focal-range').value = cam.focal;
-  document.getElementById('focal-val').textContent = cam.focal + 'mm';
-  document.getElementById('fstop-range').value = cam.fstop;
-  document.getElementById('fstop-val').textContent = 'f/' + cam.fstop;
-  document.getElementById('height-range').value = cam.height;
-  document.getElementById('height-val').textContent = cam.height + 'm';
-  document.getElementById('yaw-range').value = cam.yaw;
-  document.getElementById('yaw-val').textContent = Math.round(cam.yaw) + '°';
-  document.getElementById('pitch-range').value = cam.pitch;
-  document.getElementById('pitch-val').textContent = Math.round(cam.pitch) + '°';
-
-  // Set sensor select
-  const sel = document.getElementById('sensor-select');
-  for (let i = 0; i < sel.options.length; i++) {
-    const [sw, sh] = sel.options[i].value.split(',').map(Number);
-    if (Math.abs(sw - cam.sensorW) < 0.1 && Math.abs(sh - cam.sensorH) < 0.1) {
-      sel.selectedIndex = i; break;
-    }
-  }
-
-  updateVFInfo();
-  updateCamList();
-
-  // If in viewfinder mode, update camera immediately
-  if (state.viewfinder) updateVFCamera();
-}
-
-function getSelectedCam() {
-  return state.cameras.find(c => c.idx === state.selectedIdx);
-}
-
-// ═══════════════════════════════════════════
-// UI Updates
-// ═══════════════════════════════════════════
-function updateCamList() {
-  const list = document.getElementById('cam-list');
-  list.innerHTML = '';
-  if (state.cameras.length === 0) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--text2);padding:8px;text-align:center">暂无机位，点击下方按钮添加</div>';
-    return;
-  }
-  state.cameras.forEach(cam => {
-    const item = document.createElement('div');
-    item.className = 'cam-item' + (cam.idx === state.selectedIdx ? ' selected' : '');
-    item.innerHTML = `
-      <div class="cam-dot" style="background:#${cam.color.toString(16).padStart(6,'0')}"></div>
-      <div class="cam-name">${cam.name}</div>
-      <div class="cam-focal">${cam.focal}mm</div>
-      <div class="cam-del" onclick="event.stopPropagation();deleteCamera(${cam.idx})">&times;</div>
-    `;
-    item.onclick = () => selectCamera(cam.idx);
-    item.ondblclick = () => { selectCamera(cam.idx); if (!state.viewfinder) toggleViewfinder(); };
-    list.appendChild(item);
-  });
-}
-
-// ═══════════════════════════════════════════
-// Mode & View
-// ═══════════════════════════════════════════
-function setMode(mode) {
-  state.mode = mode;
-  document.querySelectorAll('[data-mode]').forEach(el => {
-    el.classList.toggle('active', el.dataset.mode === mode);
-  });
-  const hint = document.getElementById('hint-text');
-  if (mode === 'add') {
-    hint.textContent = '点击场景地面放置机位';
-    hint.className = 'hint add-mode-hint';
-    hint.style.display = 'block';
-    controls.enabled = false;
-    renderer.domElement.style.cursor = 'crosshair';
-  } else {
-    hint.style.display = 'none';
-    controls.enabled = !state.viewfinder;
-    renderer.domElement.style.cursor = 'default';
-  }
-}
-
-function toggleViewfinder() {
-  const cam = getSelectedCam();
-  if (!cam && !state.viewfinder) {
-    // No camera selected, show hint
-    const hint = document.getElementById('hint-text');
-    hint.textContent = '请先选择或添加一个机位';
-    hint.className = 'hint';
-    hint.style.display = 'block';
-    setTimeout(() => hint.style.display = 'none', 2000);
-    return;
-  }
-
-  state.viewfinder = !state.viewfinder;
-  const overlay = document.getElementById('viewfinder-overlay');
-  const tab = document.getElementById('vf-tab');
-
-  if (state.viewfinder && cam) {
-    overlay.style.display = 'block';
-    tab.classList.add('active');
-    controls.enabled = false;
-    updateVFCamera();
-    updateVFInfo();
-    drawGridOverlay();
-  } else {
-    overlay.style.display = 'none';
-    tab.classList.remove('active');
-    state.viewfinder = false;
-    controls.enabled = true;
-  }
-}
-
-function updateVFCamera() {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  vfCamera.fov = cam.fov;
-  vfCamera.aspect = cam.sensorW / cam.sensorH;
-  vfCamera.updateProjectionMatrix();
-  vfCamera.position.set(cam.x, cam.height, cam.z);
-
-  // Calculate look-at point based on yaw and pitch
-  const yawRad = cam.yaw * Math.PI / 180;
-  const pitchRad = cam.pitch * Math.PI / 180;
-  const dist = 10;
-  const lookAt = new THREE.Vector3(
-    cam.x + Math.sin(yawRad) * Math.cos(pitchRad) * dist,
-    cam.height + Math.sin(pitchRad) * dist,
-    cam.z + Math.cos(yawRad) * Math.cos(pitchRad) * dist
-  );
-  vfCamera.lookAt(lookAt);
-}
-
-function updateVFInfo() {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  document.getElementById('vf-cam-name').textContent = cam.name;
-  document.getElementById('vf-focal').textContent = cam.focal;
-  document.getElementById('vf-fstop').textContent = cam.fstop;
-  document.getElementById('vf-fov').textContent = cam.fov.toFixed(1);
-  document.getElementById('vf-sensor-info').textContent = cam.sensorW + 'x' + cam.sensorH + 'mm';
-}
-
-function drawGridOverlay() {
-  const canvas = document.getElementById('grid-canvas');
-  const rect = viewport.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (!state.overlays.grid) return;
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-  ctx.lineWidth = 1;
-
-  // Rule of thirds
-  const x1 = canvas.width / 3, x2 = canvas.width * 2 / 3;
-  const y1 = canvas.height / 3, y2 = canvas.height * 2 / 3;
-
-  ctx.setLineDash([6, 4]);
-  ctx.beginPath();
-  ctx.moveTo(x1, 0); ctx.lineTo(x1, canvas.height);
-  ctx.moveTo(x2, 0); ctx.lineTo(x2, canvas.height);
-  ctx.moveTo(0, y1); ctx.lineTo(canvas.width, y1);
-  ctx.moveTo(0, y2); ctx.lineTo(canvas.width, y2);
-  ctx.stroke();
-
-  // Center crosshair
-  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-  ctx.setLineDash([]);
-  const cx = canvas.width / 2, cy = canvas.height / 2;
-  ctx.beginPath();
-  ctx.moveTo(cx - 15, cy); ctx.lineTo(cx + 15, cy);
-  ctx.moveTo(cx, cy - 15); ctx.lineTo(cx, cy + 15);
-  ctx.stroke();
-
-  // Level indicator
-  if (state.overlays.level) {
-    const cam = getSelectedCam();
-    if (cam) {
-      ctx.save();
-      ctx.translate(cx, canvas.height - 50);
-      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-      ctx.lineWidth = 2;
-      // Horizon line
-      const roll = 0; // no roll in current impl
-      ctx.beginPath();
-      ctx.moveTo(-60, 0);
-      ctx.lineTo(60, 0);
-      ctx.stroke();
-      // Pitch indicator
-      const pitchOffset = cam.pitch * 2;
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.font = '10px monospace';
-      ctx.fillText(cam.pitch + '°', 70, pitchOffset + 4);
-      ctx.beginPath();
-      ctx.moveTo(60, pitchOffset);
-      ctx.lineTo(68, pitchOffset);
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-}
-
-// ═══════════════════════════════════════════
-// Parameter Handlers
-// ═══════════════════════════════════════════
-function onSensorChange() {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  const [sw, sh] = document.getElementById('sensor-select').value.split(',').map(Number);
-  cam.sensorW = sw; cam.sensorH = sh;
-  cam.fov = calcFOV(cam.focal, sh);
-  updateCameraMarker(cam);
-  updateVFInfo();
-  if (state.viewfinder) updateVFCamera();
-}
-
-function onFocalChange(val) {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  val = parseInt(val);
-  cam.focal = val;
-  cam.fov = calcFOV(val, cam.sensorH);
-  document.getElementById('focal-val').textContent = val + 'mm';
-  updateCameraMarker(cam);
-  updateVFInfo();
-  if (state.viewfinder) updateVFCamera();
-}
-
-function onFStopChange(val) {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  cam.fstop = parseFloat(val);
-  document.getElementById('fstop-val').textContent = 'f/' + parseFloat(val).toFixed(1);
-  updateVFInfo();
-}
-
-function onHeightChange(val) {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  cam.height = parseFloat(val);
-  document.getElementById('height-val').textContent = parseFloat(val).toFixed(1) + 'm';
-  updateCameraMarker(cam);
-  if (state.viewfinder) updateVFCamera();
-}
-
-function onYawChange(val) {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  cam.yaw = parseFloat(val);
-  document.getElementById('yaw-val').textContent = Math.round(val) + '°';
-  updateCameraMarker(cam);
-  if (state.viewfinder) updateVFCamera();
-}
-
-function onPitchChange(val) {
-  const cam = getSelectedCam();
-  if (!cam) return;
-  cam.pitch = parseFloat(val);
-  document.getElementById('pitch-val').textContent = Math.round(val) + '°';
-  updateCameraMarker(cam);
-  if (state.viewfinder) {
-    updateVFCamera();
-    drawGridOverlay();
-  }
-}
-
-// ═══════════════════════════════════════════
-// Toggle Overlays
-// ═══════════════════════════════════════════
-function toggleOverlay(key) {
-  state.overlays[key] = !state.overlays[key];
-  document.getElementById('tog-' + key).classList.toggle('on');
-  if (key === 'grid' || key === 'level') drawGridOverlay();
-  if (key === 'action') document.getElementById('action-safe').style.display = state.overlays.action ? 'block' : 'none';
-  if (key === 'title') document.getElementById('title-safe').style.display = state.overlays.title ? 'block' : 'none';
-}
-
-function toggleScene(key) {
-  state.sceneItems[key] = !state.sceneItems[key];
-  document.getElementById('tog-' + key).classList.toggle('on');
-  if (key === 'floor') { floor.visible = state.sceneItems.floor; gridHelper.visible = state.sceneItems.floor; }
-  if (key === 'objects') objectsGroup.visible = state.sceneItems.objects;
-  if (key === 'markers') markersGroup.visible = state.sceneItems.markers;
-}
-
-// ═══════════════════════════════════════════
-// Click to Place Camera
-// ═══════════════════════════════════════════
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-renderer.domElement.addEventListener('click', (e) => {
-  if (state.mode !== 'add') return;
-  const rect = renderer.domElement.getBoundingClientRect();
-  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, mainCamera);
-  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-  const point = new THREE.Vector3();
-  raycaster.ray.intersectPlane(plane, point);
-
-  if (point) {
-    // Clamp to scene bounds
-    point.x = Math.max(-18, Math.min(18, point.x));
-    point.z = Math.max(-13, Math.min(13, point.z));
-    addCamera(point.x, point.z);
-  }
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey){if(e.key==='z'){e.preventDefault();undo();return;}if(e.key==='y'){e.preventDefault();redo();return;}}
+  if(e.key>='1'&&e.key<='9'){const i=parseInt(e.key)-1;if(i<state.cameras.length)selCam(state.cameras[i].idx);}
+  if(e.key==='v'||e.key==='V')toggleVF();if(e.key==='a'||e.key==='A')setMode('add');if(e.key==='p'||e.key==='P')setMode('path');
+  if(e.key==='l'||e.key==='L')toggleLibPanel();if(e.key==='e'||e.key==='E')openExportModal();
+  if(e.key==='Escape'){closeExportModal();closeTemplateModal();if(state.mode!=='navigate')setMode('navigate');else if(state.viewfinder)toggleVF();}
+  if(e.key==='Delete'||e.key==='Backspace'){if(state.selectedObject){deleteSelectedObject();return;}if(state.selectedIdx>=0&&!state.viewfinder)delCam(state.selectedIdx);}
 });
 
-// ═══════════════════════════════════════════
-// Keyboard Shortcuts
-// ═══════════════════════════════════════════
-document.addEventListener('keydown', (e) => {
-  if (e.key >= '1' && e.key <= '9') {
-    const idx = parseInt(e.key) - 1;
-    if (idx < state.cameras.length) selectCamera(state.cameras[idx].idx);
-  }
-  if (e.key === 'v' || e.key === 'V') toggleViewfinder();
-  if (e.key === 'a' || e.key === 'A') setMode('add');
-  if (e.key === 'Escape') {
-    if (state.mode === 'add') setMode('navigate');
-    else if (state.viewfinder) toggleViewfinder();
-  }
-  if (e.key === 'Delete' || e.key === 'Backspace') {
-    if (state.selectedIdx >= 0 && !state.viewfinder) {
-      deleteCamera(state.selectedIdx);
-    }
-  }
-});
+function onResize(){const r=vp.getBoundingClientRect();renderer.setSize(r.width,r.height);mainCam.aspect=r.width/r.height;mainCam.updateProjectionMatrix();if(composer)composer.setSize(r.width,r.height);if(state.viewfinder){updLB();drawGrid();}}
+window.addEventListener('resize',onResize);new ResizeObserver(onResize).observe(vp);
 
-// ═══════════════════════════════════════════
-// Resize
-// ═══════════════════════════════════════════
-function onResize() {
-  const rect = viewport.getBoundingClientRect();
-  const w = rect.width, h = rect.height;
-  renderer.setSize(w, h);
-  mainCamera.aspect = w / h;
-  mainCamera.updateProjectionMatrix();
-  if (state.viewfinder) drawGridOverlay();
-}
-window.addEventListener('resize', onResize);
-new ResizeObserver(onResize).observe(viewport);
+function updTC(){if(!state.viewfinder)return;const e=(Date.now()-state.startTime)/1000;document.getElementById('vf-timecode').textContent=String(Math.floor(e/3600)).padStart(2,'0')+':'+String(Math.floor(e%3600/60)).padStart(2,'0')+':'+String(Math.floor(e%60)).padStart(2,'0')+':'+String(Math.floor(e%1*25)).padStart(2,'0');}
 
-// ═══════════════════════════════════════════
-// Render Loop
-// ═══════════════════════════════════════════
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-
-  if (state.viewfinder && getSelectedCam()) {
-    renderer.render(scene, vfCamera);
-  } else {
-    renderer.render(scene, mainCamera);
-  }
-}
-
-// ═══════════════════════════════════════════
-// Add Preset Cameras for Demo
-// ═══════════════════════════════════════════
-function addPresetCameras() {
-  // Wide shot from back
-  const c1 = { x: 0, z: 10, height: 2.0, yaw: 0, pitch: -5, focal: 24, name: 'Wide' };
-  // Medium from side
-  const c2 = { x: -8, z: 2, height: 1.6, yaw: 60, pitch: -2, focal: 50, name: 'Medium-L' };
-  // Close-up from front
-  const c3 = { x: 2, z: -1, height: 1.5, yaw: 160, pitch: 5, focal: 85, name: 'CU' };
-
-  [c1, c2, c3].forEach(preset => {
-    const sensorW = 36, sensorH = 24;
-    const fov = calcFOV(preset.focal, sensorH);
-    const colorIdx = state.camCounter % COLORS.length;
-    const cam = {
-      idx: state.camCounter++,
-      name: `CAM-${String(state.camCounter).padStart(2, '0')} ${preset.name}`,
-      x: preset.x, z: preset.z,
-      height: preset.height,
-      yaw: preset.yaw, pitch: preset.pitch,
-      focal: preset.focal, sensorW, sensorH,
-      fstop: 2.8, fov,
-      color: COLORS[colorIdx],
-      marker: null, cone: null, wire: null,
-    };
-    state.cameras.push(cam);
-    createCameraMarker(cam);
-  });
-
-  selectCamera(state.cameras[0].idx);
-  updateCamList();
-}
+function animate(){requestAnimationFrame(animate);ctrl.update();if(state.pathPlaying)updPlayback();updTC();if(state.viewfinder&&(getCam()||state.pathPlaying)){if(bokeh&&bokeh.enabled&&composer)composer.render();else renderer.render(scene,vfCam);}else renderer.render(scene,mainCam);}
 
 // Init
-addPresetCameras();
-updateCamList();
-onResize();
-animate();
+[{x:0,z:10,h:2,yaw:0,pitch:-5,f:24,n:'Wide'},{x:-8,z:2,h:1.6,yaw:60,pitch:-2,f:50,n:'Medium-L'},{x:2,z:-1,h:1.5,yaw:160,pitch:5,f:85,n:'CU'}].forEach(p=>{
+  const sw=36,sh=24,ci=state.camCounter++;
+  state.cameras.push({idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0')+' '+p.n,x:p.x,z:p.z,height:p.h,yaw:p.yaw,pitch:p.pitch,focal:p.f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov:calcFOV(p.f,sh),color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null});
+  createMarker(state.cameras[state.cameras.length-1]);
+});
+buildStudio();setupLights();selCam(state.cameras[0].idx);renderLib();onResize();animate();
 </script>
 </body>
 </html>
