@@ -15,456 +15,481 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0f1117;--panel:#1a1d27;--border:#2a2d3a;--text:#e2e8f0;--text2:#94a3b8;--accent:#3b82f6;--accent2:#60a5fa;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--purple:#a855f7}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;display:flex;flex-direction:column}
-#topbar{height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;z-index:10}
-.logo{font-size:15px;font-weight:700;color:var(--accent2);letter-spacing:.5px;flex-shrink:0}
-.sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
-.info{font-size:12px;color:var(--text2);white-space:nowrap}
-.mode-tabs{display:flex;gap:3px;margin-left:auto;flex-shrink:0}
-.mode-tab{padding:5px 10px;font-size:11px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .15s;white-space:nowrap}
-.mode-tab:hover{border-color:var(--accent);color:var(--text)}
-.mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+#topbar{height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0;z-index:10}
+.logo{font-size:14px;font-weight:700;color:var(--accent2);letter-spacing:.5px;flex-shrink:0}
+.sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.info{font-size:11px;color:var(--text2);white-space:nowrap}
+.mode-tabs{display:flex;gap:2px;flex-shrink:0}
+.mode-tab{padding:4px 8px;font-size:10px;border-radius:5px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .15s;white-space:nowrap}
+.mode-tab:hover{border-color:var(--accent);color:var(--text)}.mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.spacer{flex:1}
 #main{flex:1;display:flex;overflow:hidden}
-#left-panel{width:210px;background:var(--panel);border-right:1px solid var(--border);display:none;flex-direction:column;flex-shrink:0;overflow:hidden}
+#left-panel{width:220px;background:var(--panel);border-right:1px solid var(--border);display:none;flex-direction:column;flex-shrink:0;overflow:hidden}
 #left-panel.open{display:flex}
-#viewport{flex:1;position:relative;background:#0a0c12}
+#center-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+#viewport{flex:1;position:relative;background:#0a0c12;min-height:0}
 #viewport canvas{display:block;width:100%;height:100%}
-#sidebar{width:270px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden}
-.sidebar-section{padding:10px 12px;border-bottom:1px solid var(--border)}
-.sidebar-section h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
-.cam-list{display:flex;flex-direction:column;gap:3px}
-.cam-item{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-size:12px}
-.cam-item:hover{background:rgba(255,255,255,.04)}
-.cam-item.selected{background:rgba(59,130,246,.12);border-color:var(--accent)}
+#timeline-bar{height:0;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0;overflow:hidden;transition:height .2s}
+#timeline-bar.open{height:110px}
+#sidebar{width:260px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden}
+.ss{padding:8px 10px;border-bottom:1px solid var(--border)}
+.ss h3{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:4px}
+.cam-list{display:flex;flex-direction:column;gap:2px}
+.cam-item{display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:5px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-size:11px}
+.cam-item:hover{background:rgba(255,255,255,.04)}.cam-item.selected{background:rgba(59,130,246,.12);border-color:var(--accent)}
 .cam-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .cam-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cam-focal{font-size:10px;color:var(--text2)}
-.cam-del{width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:4px;cursor:pointer;font-size:13px;color:var(--text2);opacity:0;transition:.15s}
-.cam-item:hover .cam-del{opacity:1}
-.cam-del:hover{background:var(--red);color:#fff}
-.btn{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
-.btn:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{background:#2563eb}
-.btn.small{padding:4px 8px;font-size:10px}
-.param-group{margin-bottom:8px}
-.param-label{font-size:10px;color:var(--text2);margin-bottom:3px;display:flex;justify-content:space-between}
-.param-label span{color:var(--accent2);font-weight:600}
-input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:var(--border);border-radius:2px;outline:none}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
-select{width:100%;padding:5px 6px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px;outline:none;cursor:pointer}
-select:focus{border-color:var(--accent)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:3px 0}
-.toggle-row label{font-size:11px;color:var(--text2)}
-.toggle{width:32px;height:18px;border-radius:9px;background:var(--border);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
-.toggle.on{background:var(--accent)}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:.2s}
-.toggle.on::after{left:16px}
+.cam-focal{font-size:9px;color:var(--text2)}
+.cam-del{width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:3px;cursor:pointer;font-size:12px;color:var(--text2);opacity:0;transition:.15s}
+.cam-item:hover .cam-del{opacity:1}.cam-del:hover{background:var(--red);color:#fff}
+.btn{padding:5px 8px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:10px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.primary:hover{background:#2563eb}.btn.small{padding:3px 6px;font-size:9px}
+.pg{margin-bottom:6px}.pl{font-size:9px;color:var(--text2);margin-bottom:2px;display:flex;justify-content:space-between}.pl span{color:var(--accent2);font-weight:600}
+input[type="range"]{width:100%;height:3px;-webkit-appearance:none;background:var(--border);border-radius:2px;outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--accent);cursor:pointer}
+select{width:100%;padding:4px 5px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:10px;outline:none;cursor:pointer}
+.tr{display:flex;align-items:center;justify-content:space-between;padding:2px 0}.tr label{font-size:10px;color:var(--text2)}
+.tg{width:30px;height:16px;border-radius:8px;background:var(--border);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.tg.on{background:var(--accent)}.tg::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:.2s}.tg.on::after{left:14px}
+textarea{width:100%;padding:5px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:10px;resize:vertical;outline:none;font-family:inherit;min-height:40px}
+textarea:focus{border-color:var(--accent)}
+input[type="text"]{width:100%;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:10px;outline:none}
+input[type="text"]:focus{border-color:var(--accent)}
 #viewfinder-overlay{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5}
-.vf-letterbox-top,.vf-letterbox-bottom{position:absolute;left:0;right:0;background:#000;z-index:6}
-.vf-letterbox-top{top:0}.vf-letterbox-bottom{bottom:0}
-.vf-info{position:absolute;bottom:12px;left:12px;display:flex;gap:10px;font-size:11px;font-family:'SF Mono','Consolas',monospace;z-index:7}
-.vf-info-item{background:rgba(0,0,0,.7);padding:3px 7px;border-radius:4px}
-.vf-info-item .val{color:var(--accent2);font-weight:600}
-.vf-cam-name{position:absolute;top:12px;left:12px;font-size:13px;font-weight:600;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;z-index:7}
-.vf-rec{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;font-size:11px;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;z-index:7}
-.vf-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1s infinite}
+.vf-lb-t,.vf-lb-b{position:absolute;left:0;right:0;background:#000;z-index:6}.vf-lb-t{top:0}.vf-lb-b{bottom:0}
+.vf-info{position:absolute;bottom:10px;left:10px;display:flex;gap:8px;font-size:10px;font-family:'SF Mono','Consolas',monospace;z-index:7}
+.vf-info-item{background:rgba(0,0,0,.7);padding:2px 6px;border-radius:3px}.vf-info-item .val{color:var(--accent2);font-weight:600}
+.vf-cn{position:absolute;top:10px;left:10px;font-size:12px;font-weight:600;background:rgba(0,0,0,.7);padding:2px 7px;border-radius:3px;z-index:7}
+.vf-rec{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:4px;font-size:10px;background:rgba(0,0,0,.7);padding:2px 7px;border-radius:3px;z-index:7}
+.vf-rec-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.vf-timecode{position:absolute;bottom:12px;right:12px;font-size:12px;font-family:'SF Mono','Consolas',monospace;background:rgba(0,0,0,.7);padding:3px 8px;border-radius:4px;color:var(--green);z-index:7}
-.vf-focus-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:1px solid rgba(255,255,255,.25);border-radius:50%;z-index:7}
-.vf-focus-ring::before,.vf-focus-ring::after{content:'';position:absolute;background:rgba(255,255,255,.25)}
-.vf-focus-ring::before{width:1px;height:16px;left:50%;top:50%;transform:translate(-50%,-50%)}
-.vf-focus-ring::after{width:16px;height:1px;left:50%;top:50%;transform:translate(-50%,-50%)}
-.grid-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:6}
-.safe-frame{position:absolute;border:1px solid rgba(255,255,255,.2);z-index:6}
-.hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:var(--text2);background:rgba(0,0,0,.8);padding:8px 16px;border-radius:8px;pointer-events:none;z-index:20}
-.add-mode-hint{background:rgba(59,130,246,.15);border:1px solid var(--accent);color:var(--accent2)}
-.path-mode-hint{background:rgba(168,85,247,.15);border:1px solid var(--purple);color:var(--purple)}
+.vf-tc{position:absolute;bottom:10px;right:10px;font-size:11px;font-family:'SF Mono',monospace;background:rgba(0,0,0,.7);padding:2px 7px;border-radius:3px;color:var(--green);z-index:7}
+.vf-fr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;border:1px solid rgba(255,255,255,.2);border-radius:50%;z-index:7}
+.vf-fr::before,.vf-fr::after{content:'';position:absolute;background:rgba(255,255,255,.2)}.vf-fr::before{width:1px;height:14px;left:50%;top:50%;transform:translate(-50%,-50%)}.vf-fr::after{width:14px;height:1px;left:50%;top:50%;transform:translate(-50%,-50%)}
+.grid-ov{position:absolute;top:0;left:0;right:0;bottom:0;z-index:6}.sf{position:absolute;border:1px solid rgba(255,255,255,.2);z-index:6}
+.hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;color:var(--text2);background:rgba(0,0,0,.8);padding:6px 14px;border-radius:6px;pointer-events:none;z-index:20}
+.hint-add{background:rgba(59,130,246,.15);border:1px solid var(--accent);color:var(--accent2)}
+.hint-path{background:rgba(168,85,247,.15);border:1px solid var(--purple);color:var(--purple)}
 .lib-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.lib-tab{flex:1;padding:6px;font-size:10px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);transition:.15s}
+.lib-tab{flex:1;padding:5px;font-size:9px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);transition:.15s}
 .lib-tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
-.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px}
-.lib-item{padding:8px 4px;border-radius:6px;border:1px solid var(--border);cursor:pointer;text-align:center;font-size:10px;color:var(--text2);transition:.15s}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:6px}
+.lib-item{padding:6px 3px;border-radius:5px;border:1px solid var(--border);cursor:pointer;text-align:center;font-size:9px;color:var(--text2);transition:.15s}
 .lib-item:hover{border-color:var(--accent);color:var(--text);background:rgba(59,130,246,.06)}
-.lib-item-icon{font-size:18px;margin-bottom:2px}.lib-item-name{display:block}
-#path-panel{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:none;align-items:center;gap:12px;z-index:15;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.lib-item-icon{font-size:16px;margin-bottom:1px}.lib-item-name{display:block}
+#path-panel{position:absolute;bottom:125px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 12px;display:none;align-items:center;gap:10px;z-index:15;box-shadow:0 4px 16px rgba(0,0,0,.5)}
 #path-panel.open{display:flex}
-.path-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s}
-.path-btn:hover{border-color:var(--accent);background:rgba(59,130,246,.1)}
-.path-time{font-size:11px;color:var(--text2);font-family:'SF Mono','Consolas',monospace;min-width:80px;text-align:center}
-#export-modal,#template-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center}
-#export-modal.open,#template-modal.open{display:flex}
-.modal-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;width:400px;max-height:80vh;overflow-y:auto;position:relative}
-.modal-box h2{font-size:14px;margin-bottom:12px}
-.modal-option{padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px;transition:.15s}
-.modal-option:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
-.modal-option h4{font-size:12px;margin-bottom:4px}.modal-option p{font-size:11px;color:var(--text2)}
-.modal-close{position:absolute;top:12px;right:16px;font-size:18px;cursor:pointer;color:var(--text2)}.modal-close:hover{color:var(--text)}
-.template-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
-.template-card{padding:16px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:.15s}
-.template-card:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
-.template-card.active{border-color:var(--accent);background:rgba(59,130,246,.12)}
-.template-icon{font-size:28px;margin-bottom:6px}.template-name{font-size:12px;font-weight:600}.template-desc{font-size:10px;color:var(--text2);margin-top:4px}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-kbd{background:var(--bg);padding:1px 4px;border-radius:3px;border:1px solid var(--border);font-size:10px}
+.pbtn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s}
+.pbtn:hover{border-color:var(--accent);background:rgba(59,130,246,.1)}
+.pt{font-size:10px;color:var(--text2);font-family:'SF Mono',monospace;min-width:70px;text-align:center}
+.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.mbox{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:80vh;overflow-y:auto;position:relative}
+.mbox h2{font-size:13px;margin-bottom:10px}
+.mo{padding:10px;border:1px solid var(--border);border-radius:6px;cursor:pointer;margin-bottom:6px;transition:.15s}
+.mo:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}.mo h4{font-size:11px;margin-bottom:3px}.mo p{font-size:10px;color:var(--text2)}
+.mcl{position:absolute;top:10px;right:14px;font-size:16px;cursor:pointer;color:var(--text2)}.mcl:hover{color:var(--text)}
+.tpl-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.tpl-c{padding:14px 10px;border:1px solid var(--border);border-radius:6px;cursor:pointer;text-align:center;transition:.15s}
+.tpl-c:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}.tpl-c.active{border-color:var(--accent);background:rgba(59,130,246,.12)}
+.tpl-i{font-size:24px;margin-bottom:4px}.tpl-n{font-size:11px;font-weight:600}.tpl-d{font-size:9px;color:var(--text2);margin-top:3px}
+/* Storyboard grid */
+.sb-grid{display:grid;gap:2px;padding:4px;height:100%;overflow-y:auto}
+.sb-grid.g9{grid-template-columns:1fr 1fr 1fr}
+.sb-grid.g25{grid-template-columns:repeat(5,1fr)}
+.sb-cell{background:#111;border:1px solid var(--border);border-radius:3px;position:relative;overflow:hidden;cursor:pointer;min-height:0;aspect-ratio:16/9}
+.sb-cell.active{border-color:var(--accent)}.sb-cell.empty{display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);opacity:.3}
+.sb-cell img{width:100%;height:100%;object-fit:cover;display:block}
+.sb-cell-label{position:absolute;bottom:1px;left:2px;font-size:7px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.6);padding:0 3px;border-radius:2px}
+.sb-cell-idx{position:absolute;top:1px;left:2px;font-size:7px;color:var(--accent2);font-weight:600}
+/* Camera movement presets */
+.move-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:6px}
+.move-item{padding:8px 4px;border-radius:5px;border:1px solid var(--border);cursor:pointer;text-align:center;font-size:9px;color:var(--text2);transition:.15s}
+.move-item:hover{border-color:var(--purple);color:var(--text);background:rgba(168,85,247,.08)}
+.move-icon{font-size:14px;margin-bottom:2px;display:block}
+/* Timeline */
+.tl-wrap{display:flex;flex-direction:column;height:100%;padding:6px 10px}
+.tl-header{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:10px;color:var(--text2)}
+.tl-track{flex:1;display:flex;gap:3px;overflow-x:auto;padding:4px 0;align-items:stretch}
+.tl-block{min-width:60px;max-width:120px;background:rgba(59,130,246,.12);border:1px solid var(--accent);border-radius:4px;padding:3px 6px;cursor:grab;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;transition:.15s}
+.tl-block:hover{background:rgba(59,130,246,.2)}.tl-block.current{border-color:var(--green);background:rgba(34,197,94,.12)}
+.tl-block-name{font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-block-info{font-size:8px;color:var(--text2);margin-top:1px}
+.tl-block-dur{font-size:8px;color:var(--accent2)}
+/* Script editor in sidebar */
+.script-field{margin-bottom:6px}
+.script-field label{font-size:9px;color:var(--text2);margin-bottom:2px;display:block}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+kbd{background:var(--bg);padding:1px 3px;border-radius:2px;border:1px solid var(--border);font-size:9px}
 </style>
 </head>
 <body>
 <div id="topbar">
   <div class="logo">CAM PLANNER</div><div class="sep"></div>
-  <div class="info" id="scene-info">Studio Scene | 32m x 24m</div>
+  <div class="info" id="scene-info">Studio | 32×24m</div>
   <div class="mode-tabs">
     <div class="mode-tab active" data-mode="navigate" onclick="setMode('navigate')">浏览</div>
-    <div class="mode-tab" data-mode="add" onclick="setMode('add')">+ 机位</div>
+    <div class="mode-tab" data-mode="add" onclick="setMode('add')">+机位</div>
     <div class="mode-tab" data-mode="path" onclick="setMode('path')">路径</div>
   </div>
   <div class="sep"></div>
-  <div class="mode-tab" id="vf-tab" onclick="toggleViewfinder()">取景器</div>
-  <div class="mode-tab" id="lib-tab" onclick="toggleLibPanel()">物体库</div>
+  <div class="mode-tab" id="vf-tab" onclick="toggleVF()">取景器</div>
+  <div class="mode-tab" id="sb-tab" onclick="toggleSB()">分镜</div>
+  <div class="mode-tab" id="lib-tab" onclick="toggleLib()">物体库</div>
+  <div class="mode-tab" id="tl-tab" onclick="toggleTL()">时间线</div>
+  <div class="spacer"></div>
+  <div class="btn small" onclick="undo()">↩</div>
+  <div class="btn small" onclick="redo()">↪</div>
   <div class="sep"></div>
-  <div class="btn small" onclick="undo()" title="Ctrl+Z">↩</div>
-  <div class="btn small" onclick="redo()" title="Ctrl+Y">↪</div>
-  <div class="sep"></div>
-  <div class="btn small" onclick="openTemplateModal()">场景</div>
-  <div class="btn small" onclick="openExportModal()">导出</div>
+  <div class="btn small" onclick="openTpl()">场景</div>
+  <div class="btn small" onclick="openExp()">导出</div>
 </div>
 <div id="main">
   <div id="left-panel">
-    <div class="lib-tabs">
-      <div class="lib-tab active" data-lib="people" onclick="switchLibTab('people')">人物</div>
-      <div class="lib-tab" data-lib="furniture" onclick="switchLibTab('furniture')">家具</div>
-      <div class="lib-tab" data-lib="lighting" onclick="switchLibTab('lighting')">灯光</div>
-      <div class="lib-tab" data-lib="props" onclick="switchLibTab('props')">道具</div>
+    <div id="lp-tabs" class="lib-tabs">
+      <div class="lib-tab active" data-lt="objects" onclick="switchLP('objects')">物体</div>
+      <div class="lib-tab" data-lt="moves" onclick="switchLP('moves')">运镜</div>
+      <div class="lib-tab" data-lt="storyboard" onclick="switchLP('storyboard')">分镜</div>
     </div>
-    <div id="lib-content" style="flex:1;overflow-y:auto"></div>
-    <div style="padding:8px;border-top:1px solid var(--border)"><div class="btn small" style="width:100%" onclick="deleteSelectedObject()">删除选中 (Del)</div></div>
+    <div id="lp-content" style="flex:1;overflow-y:auto"></div>
+    <div id="lp-bottom" style="padding:6px;border-top:1px solid var(--border)">
+      <div class="btn small" style="width:100%" onclick="deleteSelectedObject()">删除选中 (Del)</div>
+    </div>
   </div>
-  <div id="viewport">
-    <div id="viewfinder-overlay" style="display:none">
-      <div class="vf-letterbox-top" id="vf-lb-top"></div>
-      <div class="vf-letterbox-bottom" id="vf-lb-bottom"></div>
-      <div class="vf-cam-name" id="vf-cam-name">CAM-01</div>
-      <div class="vf-rec"><div class="vf-rec-dot"></div>LIVE</div>
-      <canvas id="grid-canvas" class="grid-overlay"></canvas>
-      <div class="safe-frame" id="action-safe" style="top:5%;left:5%;right:5%;bottom:5%"></div>
-      <div class="safe-frame" id="title-safe" style="top:10%;left:10%;right:10%;bottom:10%;border-style:dashed"></div>
-      <div class="vf-focus-ring" id="vf-focus-ring"></div>
-      <div class="vf-info">
-        <div class="vf-info-item"><span class="val" id="vf-focal">50</span>mm</div>
-        <div class="vf-info-item">f/<span class="val" id="vf-fstop">2.8</span></div>
-        <div class="vf-info-item">FOV <span class="val" id="vf-fov">46.8</span>&deg;</div>
-        <div class="vf-info-item" id="vf-sensor-info">36x24mm</div>
+  <div id="center-col">
+    <div id="viewport">
+      <div id="viewfinder-overlay" style="display:none">
+        <div class="vf-lb-t" id="vf-lb-t"></div><div class="vf-lb-b" id="vf-lb-b"></div>
+        <div class="vf-cn" id="vf-cn">CAM-01</div>
+        <div class="vf-rec"><div class="vf-rec-dot"></div>LIVE</div>
+        <canvas id="grid-cv" class="grid-ov"></canvas>
+        <div class="sf" id="act-sf" style="top:5%;left:5%;right:5%;bottom:5%"></div>
+        <div class="sf" id="ttl-sf" style="top:10%;left:10%;right:10%;bottom:10%;border-style:dashed"></div>
+        <div class="vf-fr" id="vf-fr"></div>
+        <div class="vf-info"><div class="vf-info-item"><span class="val" id="vf-f">50</span>mm</div><div class="vf-info-item">f/<span class="val" id="vf-fs">2.8</span></div><div class="vf-info-item">FOV <span class="val" id="vf-fov">46.8</span>&deg;</div><div class="vf-info-item" id="vf-si">36x24mm</div></div>
+        <div class="vf-tc" id="vf-tc">00:00:00:00</div>
       </div>
-      <div class="vf-timecode" id="vf-timecode">00:00:00:00</div>
+      <div class="hint" id="hint" style="display:none"></div>
+      <div id="path-panel">
+        <div class="pbtn" onclick="pathFirst()">&#x23EE;</div>
+        <div class="pbtn" id="pp-btn" onclick="pathPP()">&#x25B6;</div>
+        <div class="pt" id="pp-time">00:00/00:05</div>
+        <div class="pbtn" onclick="pathLast()">&#x23ED;</div>
+        <div class="sep" style="height:18px"></div>
+        <select id="pp-spd" style="width:50px;padding:2px;font-size:9px" onchange="state.pathSpeed=parseFloat(this.value)"><option value="0.25">.25x</option><option value="0.5">.5x</option><option value="1" selected>1x</option><option value="2">2x</option></select>
+        <div style="font-size:9px;color:var(--text2)"><span id="pp-dur-v">5</span>s</div>
+        <input type="range" id="pp-dur" min="2" max="30" value="5" step="1" style="width:60px" oninput="state.pathDuration=parseInt(this.value);document.getElementById('pp-dur-v').textContent=this.value">
+        <div class="pbtn" onclick="clearPath()">&#x1F5D1;</div>
+      </div>
     </div>
-    <div class="hint" id="hint-text" style="display:none"></div>
+    <div id="timeline-bar">
+      <div class="tl-wrap">
+        <div class="tl-header"><b>时间线</b><span id="tl-total">总时长: 0s</span><div style="flex:1"></div><div class="btn small" onclick="tlPlay()">▶ 预览</div><div class="btn small" onclick="tlExport()">导出分镜表</div></div>
+        <div class="tl-track" id="tl-track"></div>
+      </div>
+    </div>
   </div>
   <div id="sidebar">
-    <div class="sidebar-section">
-      <h3>机位列表 <span style="font-size:9px;color:var(--text2)">双击取景器</span></h3>
+    <div class="ss">
+      <h3>机位列表 <span style="font-size:8px;color:var(--text2)">双击取景器</span></h3>
       <div class="cam-list" id="cam-list"></div>
-      <div style="margin-top:8px"><button class="btn primary" style="width:100%" onclick="setMode('add')">+ 添加机位</button></div>
+      <div style="margin-top:6px"><button class="btn primary" style="width:100%" onclick="setMode('add')">+ 添加机位</button></div>
     </div>
-    <div class="sidebar-section" id="params-section" style="display:none">
+    <div class="ss" id="params-ss" style="display:none">
       <h3>镜头参数</h3>
-      <div class="param-group"><div class="param-label">传感器预设</div>
-        <select id="sensor-select" onchange="onSensorChange()">
-          <option value="36,24">全画幅 36x24mm</option><option value="27.99,23.04">ARRI Alexa 35 (4:3)</option>
-          <option value="40.96,21.6">RED V-Raptor 8K VV</option><option value="35.7,18.8">Sony FX6 Full Frame</option>
-          <option value="26.2,13.8">Canon C70 Super 35</option><option value="23.1,12.95">BMPCC 6K Super 35</option>
-          <option value="13.2,8.8">MFT 微型4/3</option>
-        </select></div>
-      <div class="param-group"><div class="param-label">焦距 <span id="focal-val">50mm</span></div><input type="range" id="focal-range" min="8" max="300" value="50" step="1" oninput="onFocalChange(this.value)"></div>
-      <div class="param-group"><div class="param-label">光圈 <span id="fstop-val">f/2.8</span></div><input type="range" id="fstop-range" min="1.4" max="22" value="2.8" step="0.1" oninput="onFStopChange(this.value)"></div>
-      <div class="param-group"><div class="param-label">对焦距离 <span id="focus-val">5.0m</span></div><input type="range" id="focus-range" min="0.3" max="50" value="5" step="0.1" oninput="onFocusChange(this.value)"></div>
-      <div class="param-group"><div class="param-label">高度 <span id="height-val">1.6m</span></div><input type="range" id="height-range" min="0.2" max="8" value="1.6" step="0.1" oninput="onHeightChange(this.value)"></div>
-      <div class="param-group"><div class="param-label">水平旋转 <span id="yaw-val">0&deg;</span></div><input type="range" id="yaw-range" min="-180" max="180" value="0" step="1" oninput="onYawChange(this.value)"></div>
-      <div class="param-group"><div class="param-label">俯仰角 <span id="pitch-val">0&deg;</span></div><input type="range" id="pitch-range" min="-45" max="45" value="0" step="1" oninput="onPitchChange(this.value)"></div>
+      <div class="pg"><div class="pl">传感器</div><select id="sen-sel" onchange="onSen()"><option value="36,24">全画幅 36x24mm</option><option value="27.99,23.04">ARRI Alexa 35</option><option value="40.96,21.6">RED V-Raptor 8K</option><option value="35.7,18.8">Sony FX6</option><option value="26.2,13.8">Canon C70 S35</option><option value="23.1,12.95">BMPCC 6K S35</option><option value="13.2,8.8">MFT 4/3</option></select></div>
+      <div class="pg"><div class="pl">焦距 <span id="fv">50mm</span></div><input type="range" id="fr" min="8" max="300" value="50" oninput="onF(this.value)"></div>
+      <div class="pg"><div class="pl">光圈 <span id="fsv">f/2.8</span></div><input type="range" id="fsr" min="1.4" max="22" value="2.8" step="0.1" oninput="onFS(this.value)"></div>
+      <div class="pg"><div class="pl">对焦 <span id="fdv">5.0m</span></div><input type="range" id="fdr" min="0.3" max="50" value="5" step="0.1" oninput="onFD(this.value)"></div>
+      <div class="pg"><div class="pl">高度 <span id="hv">1.6m</span></div><input type="range" id="hr" min="0.2" max="8" value="1.6" step="0.1" oninput="onH(this.value)"></div>
+      <div class="pg"><div class="pl">水平 <span id="yv">0&deg;</span></div><input type="range" id="yr" min="-180" max="180" value="0" oninput="onY(this.value)"></div>
+      <div class="pg"><div class="pl">俯仰 <span id="pv">0&deg;</span></div><input type="range" id="pr" min="-45" max="45" value="0" oninput="onP(this.value)"></div>
     </div>
-    <div class="sidebar-section">
+    <div class="ss" id="script-ss" style="display:none">
+      <h3>剧本/分镜描述</h3>
+      <div class="script-field"><label>场景描述</label><input type="text" id="sc-scene" placeholder="如：咖啡馆内景 下午" oninput="onScript()"></div>
+      <div class="script-field"><label>镜头类型</label><select id="sc-type" onchange="onScript()"><option value="">--</option><option>全景 Establishing</option><option>中景 Medium Shot</option><option>近景 Close-Up</option><option>特写 Extreme CU</option><option>过肩镜头 OTS</option><option>俯拍 High Angle</option><option>仰拍 Low Angle</option><option>主观镜头 POV</option><option>跟踪镜头 Tracking</option></select></div>
+      <div class="script-field"><label>动作描述</label><textarea id="sc-action" rows="2" placeholder="演员动作和走位..." oninput="onScript()"></textarea></div>
+      <div class="script-field"><label>对白/旁白</label><textarea id="sc-dialog" rows="2" placeholder="对白内容..." oninput="onScript()"></textarea></div>
+      <div class="script-field"><label>导演备注</label><textarea id="sc-notes" rows="2" placeholder="备注..." oninput="onScript()"></textarea></div>
+      <div class="pg"><div class="pl">镜头时长 <span id="sc-dur-v">5s</span></div><input type="range" id="sc-dur" min="1" max="30" value="5" step="1" oninput="onScriptDur(this.value)"></div>
+      <div class="pg"><div class="pl">转场方式</div><select id="sc-trans" onchange="onScript()"><option value="cut">硬切 Cut</option><option value="dissolve">叠化 Dissolve</option><option value="fade">淡入淡出 Fade</option><option value="wipe">划变 Wipe</option><option value="jump">跳切 Jump Cut</option></select></div>
+    </div>
+    <div class="ss">
       <h3>取景器叠加</h3>
-      <div class="toggle-row"><label>三分线</label><div class="toggle on" id="tog-grid" onclick="toggleOverlay('grid')"></div></div>
-      <div class="toggle-row"><label>Action Safe</label><div class="toggle on" id="tog-action" onclick="toggleOverlay('action')"></div></div>
-      <div class="toggle-row"><label>Title Safe</label><div class="toggle on" id="tog-title" onclick="toggleOverlay('title')"></div></div>
-      <div class="toggle-row"><label>水平仪</label><div class="toggle" id="tog-level" onclick="toggleOverlay('level')"></div></div>
-      <div class="toggle-row"><label>景深虚化</label><div class="toggle" id="tog-dof" onclick="toggleOverlay('dof')"></div></div>
-      <div class="toggle-row"><label>Letterbox</label><div class="toggle on" id="tog-letterbox" onclick="toggleOverlay('letterbox')"></div></div>
+      <div class="tr"><label>三分线</label><div class="tg on" id="tg-grid" onclick="togOv('grid')"></div></div>
+      <div class="tr"><label>Action Safe</label><div class="tg on" id="tg-action" onclick="togOv('action')"></div></div>
+      <div class="tr"><label>Title Safe</label><div class="tg on" id="tg-title" onclick="togOv('title')"></div></div>
+      <div class="tr"><label>景深虚化</label><div class="tg" id="tg-dof" onclick="togOv('dof')"></div></div>
+      <div class="tr"><label>Letterbox</label><div class="tg on" id="tg-lb" onclick="togOv('lb')"></div></div>
     </div>
-    <div class="sidebar-section">
+    <div class="ss">
       <h3>场景</h3>
-      <div class="toggle-row"><label>网格地面</label><div class="toggle on" id="tog-floor" onclick="toggleScene('floor')"></div></div>
-      <div class="toggle-row"><label>环境物体</label><div class="toggle on" id="tog-objects" onclick="toggleScene('objects')"></div></div>
-      <div class="toggle-row"><label>机位标记</label><div class="toggle on" id="tog-markers" onclick="toggleScene('markers')"></div></div>
-      <div class="toggle-row"><label>路径线</label><div class="toggle on" id="tog-pathline" onclick="toggleScene('pathline')"></div></div>
+      <div class="tr"><label>地面</label><div class="tg on" id="tg-floor" onclick="togSc('floor')"></div></div>
+      <div class="tr"><label>物体</label><div class="tg on" id="tg-objects" onclick="togSc('objects')"></div></div>
+      <div class="tr"><label>机位</label><div class="tg on" id="tg-markers" onclick="togSc('markers')"></div></div>
+      <div class="tr"><label>路径</label><div class="tg on" id="tg-pathline" onclick="togSc('pathline')"></div></div>
     </div>
-    <div class="sidebar-section">
-      <h3>灯光控制</h3>
-      <div class="param-group"><div class="param-label">主灯 <span id="key-val">0.8</span></div><input type="range" id="key-range" min="0" max="3" value="0.8" step="0.1" oninput="onLightChange('key',this.value)"></div>
-      <div class="param-group"><div class="param-label">辅灯 <span id="fill-val">0.3</span></div><input type="range" id="fill-range" min="0" max="3" value="0.3" step="0.1" oninput="onLightChange('fill',this.value)"></div>
-      <div class="param-group"><div class="param-label">环境光 <span id="ambient-val">0.4</span></div><input type="range" id="ambient-range" min="0" max="2" value="0.4" step="0.1" oninput="onLightChange('ambient',this.value)"></div>
-      <div class="param-group"><div class="param-label">曝光 <span id="exposure-val">1.0</span></div><input type="range" id="exposure-range" min="0.1" max="3" value="1.0" step="0.1" oninput="onLightChange('exposure',this.value)"></div>
+    <div class="ss">
+      <h3>灯光</h3>
+      <div class="pg"><div class="pl">主灯 <span id="kl-v">0.8</span></div><input type="range" id="kl-r" min="0" max="3" value="0.8" step="0.1" oninput="onLt('key',this.value)"></div>
+      <div class="pg"><div class="pl">辅灯 <span id="fl-v">0.3</span></div><input type="range" id="fl-r" min="0" max="3" value="0.3" step="0.1" oninput="onLt('fill',this.value)"></div>
+      <div class="pg"><div class="pl">环境 <span id="al-v">0.4</span></div><input type="range" id="al-r" min="0" max="2" value="0.4" step="0.1" oninput="onLt('ambient',this.value)"></div>
+      <div class="pg"><div class="pl">曝光 <span id="el-v">1.0</span></div><input type="range" id="el-r" min="0.1" max="3" value="1" step="0.1" oninput="onLt('exposure',this.value)"></div>
     </div>
-    <div class="sidebar-section" style="border-bottom:none">
+    <div class="ss" style="border-bottom:none">
       <h3>快捷键</h3>
-      <div style="font-size:10px;color:var(--text2);line-height:1.9">
+      <div style="font-size:9px;color:var(--text2);line-height:1.8">
         <div><kbd>1-9</kbd> 机位 <kbd>V</kbd> 取景器 <kbd>A</kbd> 添加</div>
         <div><kbd>P</kbd> 路径 <kbd>L</kbd> 物体库 <kbd>E</kbd> 导出</div>
+        <div><kbd>S</kbd> 分镜 <kbd>T</kbd> 时间线 <kbd>M</kbd> 运镜</div>
         <div><kbd>Ctrl+Z</kbd> 撤销 <kbd>Ctrl+Y</kbd> 重做</div>
-        <div><kbd>Esc</kbd> 返回 <kbd>Del</kbd> 删除</div>
       </div>
     </div>
   </div>
 </div>
-<div id="path-panel">
-  <div class="path-btn" onclick="pathFirst()" title="起点">&#x23EE;</div>
-  <div class="path-btn" id="path-play-btn" onclick="pathPlayPause()">&#x25B6;</div>
-  <div class="path-time" id="path-time">00:00 / 00:05</div>
-  <div class="path-btn" onclick="pathLast()" title="末尾">&#x23ED;</div>
-  <div class="sep" style="height:20px"></div>
-  <div style="font-size:10px;color:var(--text2)">速度</div>
-  <select id="path-speed" style="width:60px;padding:3px" onchange="state.pathSpeed=parseFloat(this.value)">
-    <option value="0.25">0.25x</option><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option>
-  </select>
-  <div class="sep" style="height:20px"></div>
-  <div style="font-size:10px;color:var(--text2)">时长 <span id="path-dur-val">5s</span></div>
-  <input type="range" id="path-duration" min="2" max="30" value="5" step="1" style="width:80px" oninput="state.pathDuration=parseInt(this.value);document.getElementById('path-dur-val').textContent=this.value+'s'">
-  <div class="sep" style="height:20px"></div>
-  <div class="path-btn" onclick="clearPathPoints()" title="清除">&#x1F5D1;</div>
-</div>
-<div id="export-modal">
-  <div class="modal-box">
-    <div class="modal-close" onclick="closeExportModal()">&times;</div><h2>导出</h2>
-    <div class="modal-option" onclick="exportJSON()"><h4>导出机位数据 (JSON)</h4><p>所有机位参数+路径+物体</p></div>
-    <div class="modal-option" onclick="exportScreenshot()"><h4>截取当前视图 (PNG)</h4><p>保存3D视图或取景器画面</p></div>
-    <div class="modal-option" onclick="exportCSV()"><h4>导出机位列表 (CSV)</h4><p>表格格式参数汇总</p></div>
+
+<div class="modal-bg" id="exp-modal"><div class="mbox" style="width:380px">
+  <div class="mcl" onclick="clModal('exp-modal')">&times;</div><h2>导出</h2>
+  <div class="mo" onclick="expJSON()"><h4>机位数据 (JSON)</h4><p>全部机位+路径+物体+剧本数据</p></div>
+  <div class="mo" onclick="expShot()"><h4>截取视图 (PNG)</h4><p>当前3D视图或取景器画面</p></div>
+  <div class="mo" onclick="expCSV()"><h4>机位列表 (CSV)</h4><p>表格格式参数汇总</p></div>
+  <div class="mo" onclick="expSB()"><h4>分镜表 (PNG)</h4><p>九宫格/25宫格分镜图</p></div>
+  <div class="mo" onclick="expProd()"><h4>完整制作文档 (JSON)</h4><p>剧本+机位+时间线完整数据</p></div>
+</div></div>
+
+<div class="modal-bg" id="tpl-modal"><div class="mbox" style="width:440px">
+  <div class="mcl" onclick="clModal('tpl-modal')">&times;</div><h2>场景模板</h2>
+  <div class="tpl-g">
+    <div class="tpl-c active" data-t="studio" onclick="swTpl('studio')"><div class="tpl-i">&#x1F3AC;</div><div class="tpl-n">摄影棚</div><div class="tpl-d">32×24m</div></div>
+    <div class="tpl-c" data-t="blackbox" onclick="swTpl('blackbox')"><div class="tpl-i">&#x2B1B;</div><div class="tpl-n">黑匣子</div><div class="tpl-d">空场景</div></div>
+    <div class="tpl-c" data-t="outdoor" onclick="swTpl('outdoor')"><div class="tpl-i">&#x1F333;</div><div class="tpl-n">户外</div><div class="tpl-d">自然光</div></div>
   </div>
-</div>
-<div id="template-modal">
-  <div class="modal-box" style="width:480px">
-    <div class="modal-close" onclick="closeTemplateModal()">&times;</div><h2>选择场景模板</h2>
-    <div class="template-grid">
-      <div class="template-card active" data-tpl="studio" onclick="switchTemplate('studio')"><div class="template-icon">&#x1F3AC;</div><div class="template-name">摄影棚</div><div class="template-desc">32m x 24m</div></div>
-      <div class="template-card" data-tpl="blackbox" onclick="switchTemplate('blackbox')"><div class="template-icon">&#x2B1B;</div><div class="template-name">黑匣子</div><div class="template-desc">空场景</div></div>
-      <div class="template-card" data-tpl="outdoor" onclick="switchTemplate('outdoor')"><div class="template-icon">&#x1F333;</div><div class="template-name">户外</div><div class="template-desc">自然光</div></div>
-    </div>
-  </div>
-</div>
+</div></div>
+
 <script>
-const state={mode:'navigate',viewfinder:false,cameras:[],selectedIdx:-1,camCounter:0,overlays:{grid:true,action:true,title:true,level:false,dof:false,letterbox:true},sceneItems:{floor:true,objects:true,markers:true,pathline:true},currentTemplate:'studio',pathPoints:[],pathCurve:null,pathPlaying:false,pathProgress:0,pathDuration:5,pathSpeed:1,selectedObject:null,startTime:Date.now()};
+// ═══ STATE ═══
+const S={mode:'navigate',vf:false,cams:[],selIdx:-1,cCnt:0,ov:{grid:1,action:1,title:1,level:0,dof:0,lb:1},si:{floor:1,objects:1,markers:1,pathline:1},tpl:'studio',pp:[],pc:null,pPlay:false,pProg:0,pDur:5,pSpd:1,selObj:null,t0:Date.now(),lpTab:'objects',sbMode:'g9',sbImgs:{},tlOpen:false,tlPlaying:false};
 const COLORS=[0x3b82f6,0xef4444,0x22c55e,0xf59e0b,0xa855f7,0x06b6d4,0xec4899,0x84cc16,0xf97316];
-const history={stack:[],pointer:-1,max:50};
-function pushH(a,d){history.stack=history.stack.slice(0,history.pointer+1);history.stack.push({a,d});if(history.stack.length>history.max)history.stack.shift();history.pointer=history.stack.length-1;}
-function undo(){if(history.pointer<0)return;const e=history.stack[history.pointer];history.pointer--;
-  if(e.a==='addCam'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c)delCam(c.idx,true);}
-  else if(e.a==='delCam'){restCam(e.d);}
-  else if(e.a==='param'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c){Object.assign(c,e.d.b);updMarker(c);updParams(c);if(state.viewfinder)updVF();}}
-  else if(e.a==='addObj'){remObj(e.d.id,true);}
-  else if(e.a==='delObj'){restObj(e.d);}}
-function redo(){if(history.pointer>=history.stack.length-1)return;history.pointer++;const e=history.stack[history.pointer];
-  if(e.a==='addCam')restCam(e.d);
-  else if(e.a==='delCam'){const c=state.cameras.find(c=>c.idx===e.d.idx);if(c)delCam(c.idx,true);}
-  else if(e.a==='addObj')restObj(e.d);
-  else if(e.a==='delObj')remObj(e.d.id,true);}
+// History
+const H={s:[],p:-1,mx:50};
+function pH(a,d){H.s=H.s.slice(0,H.p+1);H.s.push({a,d});if(H.s.length>H.mx)H.s.shift();H.p=H.s.length-1;}
+function undo(){if(H.p<0)return;const e=H.s[H.p];H.p--;
+  if(e.a==='ac'){const c=S.cams.find(c=>c.idx===e.d.idx);if(c)dC(c.idx,1);}
+  else if(e.a==='dc')rC(e.d);
+  else if(e.a==='pm'){const c=S.cams.find(c=>c.idx===e.d.idx);if(c){Object.assign(c,e.d.b);uM(c);uP(c);if(S.vf)uVF();}}
+  else if(e.a==='ao')rO(e.d.id,1);
+  else if(e.a==='do')rsO(e.d);}
+function redo(){if(H.p>=H.s.length-1)return;H.p++;const e=H.s[H.p];
+  if(e.a==='ac')rC(e.d);else if(e.a==='dc'){const c=S.cams.find(c=>c.idx===e.d.idx);if(c)dC(c.idx,1);}
+  else if(e.a==='ao')rsO(e.d);else if(e.a==='do')rO(e.d.id,1);}
 
+// ═══ THREE.JS ═══
 const vp=document.getElementById('viewport');
-const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
-renderer.setPixelRatio(window.devicePixelRatio);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
-vp.insertBefore(renderer.domElement,vp.firstChild);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x0a0c12);scene.fog=new THREE.Fog(0x0a0c12,30,80);
-const mainCam=new THREE.PerspectiveCamera(55,1,0.1,200);mainCam.position.set(12,8,14);
-const ctrl=new THREE.OrbitControls(mainCam,renderer.domElement);ctrl.target.set(0,1,0);ctrl.enableDamping=true;ctrl.dampingFactor=0.08;ctrl.maxPolarAngle=Math.PI/2-0.05;ctrl.minDistance=2;ctrl.maxDistance=60;
-const vfCam=new THREE.PerspectiveCamera(50,1.5,0.05,200);
-let composer=null,bokeh=null;
-try{composer=new THREE.EffectComposer(renderer);composer.addPass(new THREE.RenderPass(scene,vfCam));bokeh=new THREE.BokehPass(scene,vfCam,{focus:5,aperture:0.002,maxblur:0.01,width:vp.clientWidth,height:vp.clientHeight});bokeh.enabled=false;composer.addPass(bokeh);}catch(e){}
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+R.setPixelRatio(devicePixelRatio);R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1;
+vp.insertBefore(R.domElement,vp.firstChild);
+const SC=new THREE.Scene();SC.background=new THREE.Color(0x0a0c12);SC.fog=new THREE.Fog(0x0a0c12,30,80);
+const MC=new THREE.PerspectiveCamera(55,1,.1,200);MC.position.set(12,8,14);
+const OC=new THREE.OrbitControls(MC,R.domElement);OC.target.set(0,1,0);OC.enableDamping=true;OC.dampingFactor=.08;OC.maxPolarAngle=Math.PI/2-.05;OC.minDistance=2;OC.maxDistance=60;
+const VC=new THREE.PerspectiveCamera(50,1.5,.05,200);
+let comp=null,bk=null;
+try{comp=new THREE.EffectComposer(R);comp.addPass(new THREE.RenderPass(SC,VC));bk=new THREE.BokehPass(SC,VC,{focus:5,aperture:.002,maxblur:.01,width:vp.clientWidth,height:vp.clientHeight});bk.enabled=false;comp.addPass(bk);}catch(e){}
+const SG=new THREE.Group(),OG=new THREE.Group(),MG=new THREE.Group(),PG=new THREE.Group(),PLG=new THREE.Group();
+SC.add(SG);SG.add(OG);SG.add(MG);SG.add(PG);SG.add(PLG);
+let floor,grid,kL,fL,aL;
 
-const sGrp=new THREE.Group(),objGrp=new THREE.Group(),mkGrp=new THREE.Group(),pathGrp=new THREE.Group(),plcGrp=new THREE.Group();
-scene.add(sGrp);sGrp.add(objGrp);sGrp.add(mkGrp);sGrp.add(pathGrp);sGrp.add(plcGrp);
-let floor,grid,kLight,fLight,aLight;
-
+// ═══ HELPERS ═══
 function mm(g,m,x,y,z,rx){const o=new THREE.Mesh(g,m);o.position.set(x||0,y||0,z||0);if(rx)o.rotation.x=rx;return o;}
-function addWall(w,h,x,y,z,ry,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,0.15),new THREE.MeshStandardMaterial({color:c,roughness:0.8}));o.position.set(x,y,z);o.rotation.y=ry;o.castShadow=o.receiveShadow=true;objGrp.add(o);}
-function addBox(w,h,d,x,y,z,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c,roughness:0.6,metalness:0.1}));o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;objGrp.add(o);return o;}
-function addPerson(x,z){const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b});g.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1,0));g.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));g.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,-0.3,1.1,0,0,0,0.15));g.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,0.3,1.1,0,0,0,-0.15));g.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,-0.1,0.4));g.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,0.1,0.4));g.position.set(x,0,z);objGrp.add(g);}
-function addTree(x,z){const g=new THREE.Group();g.add(mm(new THREE.CylinderGeometry(0.15,0.2,2,8),new THREE.MeshStandardMaterial({color:0x5C3317,roughness:0.9}),0,1));const f=new THREE.Mesh(new THREE.SphereGeometry(1.5,8,6),new THREE.MeshStandardMaterial({color:0x2d7a2d}));f.position.y=3;f.castShadow=true;g.add(f);g.position.set(x,0,z);objGrp.add(g);}
+function aW(w,h,x,y,z,ry,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,.15),new THREE.MeshStandardMaterial({color:c,roughness:.8}));o.position.set(x,y,z);o.rotation.y=ry;o.castShadow=o.receiveShadow=true;OG.add(o);}
+function aB(w,h,d,x,y,z,c){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c,roughness:.6,metalness:.1}));o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;OG.add(o);return o;}
+function aP(x,z){const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b});g.add(mm(new THREE.CylinderGeometry(.2,.2,1.2,8),m,0,1));g.add(new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),m).translateY(1.78));g.add(mm(new THREE.CylinderGeometry(.05,.05,.6,6),m,-.3,1.1,0,0,0,.15));g.add(mm(new THREE.CylinderGeometry(.05,.05,.6,6),m,.3,1.1,0,0,0,-.15));g.add(mm(new THREE.CylinderGeometry(.07,.07,.8,6),m,-.1,.4));g.add(mm(new THREE.CylinderGeometry(.07,.07,.8,6),m,.1,.4));g.position.set(x,0,z);OG.add(g);}
+function aT(x,z){const g=new THREE.Group();g.add(mm(new THREE.CylinderGeometry(.15,.2,2,8),new THREE.MeshStandardMaterial({color:0x5C3317,roughness:.9}),0,1));const f=new THREE.Mesh(new THREE.SphereGeometry(1.5,8,6),new THREE.MeshStandardMaterial({color:0x2d7a2d}));f.position.y=3;f.castShadow=true;g.add(f);g.position.set(x,0,z);OG.add(g);}
 
-function clearObjs(){while(objGrp.children.length){const c=objGrp.children[0];objGrp.remove(c);c.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}}
-function buildStudio(){
-  floor=mm(new THREE.PlaneGeometry(40,30),new THREE.MeshStandardMaterial({color:0x1a1d27,roughness:0.9}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
-  grid=new THREE.GridHelper(40,40,0x2a2d3a,0x1e2130);objGrp.add(grid);
-  addWall(20,4,0,2,-8,0,0x252830);addWall(16,4,-10,2,0,Math.PI/2,0x22252d);addWall(16,4,10,2,0,Math.PI/2,0x22252d);
-  addBox(8,0.4,5,0,0.2,-4,0x2d3748);addBox(2.4,0.08,1.2,-5,0.75,2,0x4a5568);
-  for(let i=0;i<4;i++){const cx=-5+(i%2)*2.5-1.25,cz=2+Math.floor(i/2)*2-1;addBox(0.5,0.05,0.5,cx,0.45,cz,0x718096);addBox(0.5,0.6,0.05,cx,0.75,cz-0.22,0x718096);}
-  addBox(0.06,0.75,0.06,-5.9,0.375,2.45,0x4a5568);addBox(0.06,0.75,0.06,-4.1,0.375,2.45,0x4a5568);addBox(0.06,0.75,0.06,-5.9,0.375,1.55,0x4a5568);addBox(0.06,0.75,0.06,-4.1,0.375,1.55,0x4a5568);
-  addBox(0.6,1.2,0.5,3,0.6,-3.5,0x4a5568);addBox(3,1.8,0.08,-3,2.5,-7.8,0x1e40af);addBox(3,1.8,0.08,3,2.5,-7.8,0x1e3a5f);
-  addBox(2.5,0.4,0.9,6,0.3,3,0x6b4226);addBox(2.5,0.5,0.15,6,0.65,2.6,0x6b4226);
-  addPerson(-2,-2);addPerson(0,-2);addPerson(2,-2);
-  scene.background=new THREE.Color(0x0a0c12);scene.fog=new THREE.Fog(0x0a0c12,30,80);document.getElementById('scene-info').textContent='Studio Scene | 32m x 24m';
-}
-function buildBlack(){
-  floor=mm(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x111111,roughness:0.95}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
-  grid=new THREE.GridHelper(30,30,0x333333,0x222222);objGrp.add(grid);addPerson(0,0);addPerson(-1.5,-1);addPerson(1.5,-1);
-  scene.background=new THREE.Color(0x050505);scene.fog=new THREE.Fog(0x050505,25,60);document.getElementById('scene-info').textContent='Black Box | 30m x 30m';
-}
-function buildOutdoor(){
-  floor=mm(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({color:0x2d5016,roughness:1}),0,0,0,-Math.PI/2);floor.receiveShadow=true;objGrp.add(floor);
-  grid=new THREE.GridHelper(80,80,0x3a6b20,0x2d5516);objGrp.add(grid);
-  for(let i=0;i<8;i++){const tx=-15+Math.random()*30,tz=-15+Math.random()*30;if(Math.abs(tx)<5&&Math.abs(tz)<5)continue;addTree(tx,tz);}
-  addBox(2,0.08,0.5,3,0.45,2,0x8B6914);addBox(0.1,0.45,0.1,2.1,0.225,2,0x555555);addBox(0.1,0.45,0.1,3.9,0.225,2,0x555555);
-  for(let i=0;i<4;i++){const lx=-6+i*4;const p=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,3,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:0.6}));p.position.set(lx,1.5,-3);p.castShadow=true;objGrp.add(p);objGrp.add(new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateX(lx).translateY(3.1).translateZ(-3));}
-  addPerson(0,0);addPerson(2,1);
-  scene.background=new THREE.Color(0x87CEEB);scene.fog=new THREE.Fog(0x87CEEB,50,150);document.getElementById('scene-info').textContent='Outdoor | 80m x 80m';
-}
-function switchTemplate(t){state.currentTemplate=t;clearObjs();document.querySelectorAll('.template-card').forEach(c=>c.classList.toggle('active',c.dataset.tpl===t));if(t==='studio')buildStudio();else if(t==='blackbox')buildBlack();else buildOutdoor();setupLights();closeTemplateModal();}
+// ═══ SCENES ═══
+function clObj(){while(OG.children.length){const c=OG.children[0];OG.remove(c);c.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}}
+function bStudio(){floor=mm(new THREE.PlaneGeometry(40,30),new THREE.MeshStandardMaterial({color:0x1a1d27,roughness:.9}),0,0,0,-Math.PI/2);floor.receiveShadow=true;OG.add(floor);grid=new THREE.GridHelper(40,40,0x2a2d3a,0x1e2130);OG.add(grid);aW(20,4,0,2,-8,0,0x252830);aW(16,4,-10,2,0,Math.PI/2,0x22252d);aW(16,4,10,2,0,Math.PI/2,0x22252d);aB(8,.4,5,0,.2,-4,0x2d3748);aB(2.4,.08,1.2,-5,.75,2,0x4a5568);for(let i=0;i<4;i++){const cx=-5+(i%2)*2.5-1.25,cz=2+~~(i/2)*2-1;aB(.5,.05,.5,cx,.45,cz,0x718096);aB(.5,.6,.05,cx,.75,cz-.22,0x718096);}aB(.06,.75,.06,-5.9,.375,2.45,0x4a5568);aB(.06,.75,.06,-4.1,.375,2.45,0x4a5568);aB(.06,.75,.06,-5.9,.375,1.55,0x4a5568);aB(.06,.75,.06,-4.1,.375,1.55,0x4a5568);aB(.6,1.2,.5,3,.6,-3.5,0x4a5568);aB(3,1.8,.08,-3,2.5,-7.8,0x1e40af);aB(3,1.8,.08,3,2.5,-7.8,0x1e3a5f);aB(2.5,.4,.9,6,.3,3,0x6b4226);aB(2.5,.5,.15,6,.65,2.6,0x6b4226);aP(-2,-2);aP(0,-2);aP(2,-2);SC.background=new THREE.Color(0x0a0c12);SC.fog=new THREE.Fog(0x0a0c12,30,80);document.getElementById('scene-info').textContent='Studio | 32×24m';}
+function bBlack(){floor=mm(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x111111,roughness:.95}),0,0,0,-Math.PI/2);floor.receiveShadow=true;OG.add(floor);grid=new THREE.GridHelper(30,30,0x333333,0x222222);OG.add(grid);aP(0,0);aP(-1.5,-1);aP(1.5,-1);SC.background=new THREE.Color(0x050505);SC.fog=new THREE.Fog(0x050505,25,60);document.getElementById('scene-info').textContent='Black Box | 30×30m';}
+function bOutdoor(){floor=mm(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({color:0x2d5016,roughness:1}),0,0,0,-Math.PI/2);floor.receiveShadow=true;OG.add(floor);grid=new THREE.GridHelper(80,80,0x3a6b20,0x2d5516);OG.add(grid);for(let i=0;i<8;i++){const tx=-15+Math.random()*30,tz=-15+Math.random()*30;if(Math.abs(tx)<5&&Math.abs(tz)<5)continue;aT(tx,tz);}aB(2,.08,.5,3,.45,2,0x8B6914);aB(.1,.45,.1,2.1,.225,2,0x555555);aB(.1,.45,.1,3.9,.225,2,0x555555);for(let i=0;i<4;i++){const lx=-6+i*4;const p=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,3,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:.6}));p.position.set(lx,1.5,-3);p.castShadow=true;OG.add(p);OG.add(new THREE.Mesh(new THREE.SphereGeometry(.15,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateX(lx).translateY(3.1).translateZ(-3));}aP(0,0);aP(2,1);SC.background=new THREE.Color(0x87CEEB);SC.fog=new THREE.Fog(0x87CEEB,50,150);document.getElementById('scene-info').textContent='Outdoor | 80×80m';}
+function swTpl(t){S.tpl=t;clObj();document.querySelectorAll('.tpl-c').forEach(c=>c.classList.toggle('active',c.dataset.t===t));if(t==='studio')bStudio();else if(t==='blackbox')bBlack();else bOutdoor();sLt();clModal('tpl-modal');}
 
-function setupLights(){
-  scene.children.filter(c=>c.isLight).forEach(l=>scene.remove(l));
-  aLight=new THREE.AmbientLight(0x404060,0.4);scene.add(aLight);
-  kLight=new THREE.DirectionalLight(0xfff5e6,0.8);kLight.position.set(5,10,5);kLight.castShadow=true;kLight.shadow.mapSize.set(2048,2048);kLight.shadow.camera.left=-20;kLight.shadow.camera.right=20;kLight.shadow.camera.top=20;kLight.shadow.camera.bottom=-20;scene.add(kLight);
-  fLight=new THREE.DirectionalLight(0xb0c4de,0.3);fLight.position.set(-8,6,-3);scene.add(fLight);
-  const sp=new THREE.SpotLight(0xffffff,0.6,20,Math.PI/6,0.5);sp.position.set(0,8,-3);sp.target.position.set(0,0,-4);scene.add(sp);scene.add(sp.target);
-  scene.add(new THREE.PointLight(0x3b82f6,0.5,12).translateX(-8).translateY(3).translateZ(-5));
-  scene.add(new THREE.PointLight(0xf59e0b,0.4,12).translateX(8).translateY(3).translateZ(4));
-  if(state.currentTemplate==='outdoor'){kLight.color.set(0xfff8e1);kLight.intensity=1.2;fLight.color.set(0x87CEEB);fLight.intensity=0.5;aLight.color.set(0x8899aa);aLight.intensity=0.6;}
-  document.getElementById('key-range').value=kLight.intensity;document.getElementById('key-val').textContent=kLight.intensity.toFixed(1);
-  document.getElementById('fill-range').value=fLight.intensity;document.getElementById('fill-val').textContent=fLight.intensity.toFixed(1);
-  document.getElementById('ambient-range').value=aLight.intensity;document.getElementById('ambient-val').textContent=aLight.intensity.toFixed(1);
-  document.getElementById('exposure-range').value=renderer.toneMappingExposure;document.getElementById('exposure-val').textContent=renderer.toneMappingExposure.toFixed(1);
-}
-function onLightChange(t,v){v=parseFloat(v);if(t==='key')kLight.intensity=v;if(t==='fill')fLight.intensity=v;if(t==='ambient')aLight.intensity=v;if(t==='exposure')renderer.toneMappingExposure=v;document.getElementById(t+'-val').textContent=v.toFixed(1);}
+// ═══ LIGHTS ═══
+function sLt(){SC.children.filter(c=>c.isLight).forEach(l=>SC.remove(l));aL=new THREE.AmbientLight(0x404060,.4);SC.add(aL);kL=new THREE.DirectionalLight(0xfff5e6,.8);kL.position.set(5,10,5);kL.castShadow=true;kL.shadow.mapSize.set(2048,2048);kL.shadow.camera.left=-20;kL.shadow.camera.right=20;kL.shadow.camera.top=20;kL.shadow.camera.bottom=-20;SC.add(kL);fL=new THREE.DirectionalLight(0xb0c4de,.3);fL.position.set(-8,6,-3);SC.add(fL);const sp=new THREE.SpotLight(0xffffff,.6,20,Math.PI/6,.5);sp.position.set(0,8,-3);sp.target.position.set(0,0,-4);SC.add(sp);SC.add(sp.target);SC.add(new THREE.PointLight(0x3b82f6,.5,12).translateX(-8).translateY(3).translateZ(-5));SC.add(new THREE.PointLight(0xf59e0b,.4,12).translateX(8).translateY(3).translateZ(4));if(S.tpl==='outdoor'){kL.color.set(0xfff8e1);kL.intensity=1.2;fL.color.set(0x87CEEB);fL.intensity=.5;aL.color.set(0x8899aa);aL.intensity=.6;}document.getElementById('kl-r').value=kL.intensity;document.getElementById('kl-v').textContent=kL.intensity.toFixed(1);document.getElementById('fl-r').value=fL.intensity;document.getElementById('fl-v').textContent=fL.intensity.toFixed(1);document.getElementById('al-r').value=aL.intensity;document.getElementById('al-v').textContent=aL.intensity.toFixed(1);document.getElementById('el-r').value=R.toneMappingExposure;document.getElementById('el-v').textContent=R.toneMappingExposure.toFixed(1);}
+function onLt(t,v){v=parseFloat(v);if(t==='key')kL.intensity=v;if(t==='fill')fL.intensity=v;if(t==='ambient')aL.intensity=v;if(t==='exposure')R.toneMappingExposure=v;document.getElementById(t[0]+'l-v').textContent=v.toFixed(1);}
 
-function createMarker(cd){
-  const g=new THREE.Group(),c=cd.color;
-  g.add(new THREE.Mesh(new THREE.BoxGeometry(0.35,0.25,0.5),new THREE.MeshStandardMaterial({color:c,roughness:0.3,metalness:0.6})));
-  const l=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.12,0.25,12),new THREE.MeshStandardMaterial({color:0x1a1a2e,metalness:0.8}));l.rotation.x=Math.PI/2;l.position.z=0.35;g.add(l);
-  const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;
-  const cone=new THREE.Mesh(new THREE.ConeGeometry(cr,cl,4,1,true),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0.08,side:THREE.DoubleSide,depthWrite:false}));cone.rotation.x=Math.PI/2;cone.position.z=0.25+cl/2;g.add(cone);
-  const wg=new THREE.BufferGeometry();const hw=cr,hh=cr*9/16;wg.setAttribute('position',new THREE.BufferAttribute(new Float32Array([0,0,0.25,-hw,hh,0.25+cl,hw,hh,0.25+cl,hw,-hh,0.25+cl,-hw,-hh,0.25+cl]),3));wg.setIndex([0,1,2,0,2,3,0,3,4,0,4,1,1,2,3,1,3,4]);
-  const wire=new THREE.LineSegments(wg,new THREE.LineBasicMaterial({color:c,transparent:true,opacity:0.3}));g.add(wire);
-  g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-cd.height,0)]),new THREE.LineBasicMaterial({color:c,transparent:true,opacity:0.4})));
-  g.position.set(cd.x,cd.height,cd.z);g.rotation.y=-cd.yaw*Math.PI/180;g.rotation.x=cd.pitch*Math.PI/180;mkGrp.add(g);cd.marker=g;cd.cone=cone;cd.wire=wire;
-}
-function updMarker(cd){if(!cd.marker)return;cd.marker.position.set(cd.x,cd.height,cd.z);cd.marker.rotation.y=-cd.yaw*Math.PI/180;cd.marker.rotation.x=cd.pitch*Math.PI/180;const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;cd.cone.geometry.dispose();cd.cone.geometry=new THREE.ConeGeometry(cr,cl,4,1,true);cd.cone.position.z=0.25+cl/2;}
+// ═══ CAMERA MARKERS ═══
+function cM(cd){const g=new THREE.Group(),c=cd.color;g.add(new THREE.Mesh(new THREE.BoxGeometry(.35,.25,.5),new THREE.MeshStandardMaterial({color:c,roughness:.3,metalness:.6})));const l=new THREE.Mesh(new THREE.CylinderGeometry(.08,.12,.25,12),new THREE.MeshStandardMaterial({color:0x1a1a2e,metalness:.8}));l.rotation.x=Math.PI/2;l.position.z=.35;g.add(l);const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;const cn=new THREE.Mesh(new THREE.ConeGeometry(cr,cl,4,1,true),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.08,side:THREE.DoubleSide,depthWrite:false}));cn.rotation.x=Math.PI/2;cn.position.z=.25+cl/2;g.add(cn);const wg=new THREE.BufferGeometry();const hw=cr,hh=cr*9/16;wg.setAttribute('position',new THREE.BufferAttribute(new Float32Array([0,0,.25,-hw,hh,.25+cl,hw,hh,.25+cl,hw,-hh,.25+cl,-hw,-hh,.25+cl]),3));wg.setIndex([0,1,2,0,2,3,0,3,4,0,4,1,1,2,3,1,3,4]);const wr=new THREE.LineSegments(wg,new THREE.LineBasicMaterial({color:c,transparent:true,opacity:.3}));g.add(wr);g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-cd.height,0)]),new THREE.LineBasicMaterial({color:c,transparent:true,opacity:.4})));g.position.set(cd.x,cd.height,cd.z);g.rotation.y=-cd.yaw*Math.PI/180;g.rotation.x=cd.pitch*Math.PI/180;MG.add(g);cd.marker=g;cd.cone=cn;cd.wire=wr;}
+function uM(cd){if(!cd.marker)return;cd.marker.position.set(cd.x,cd.height,cd.z);cd.marker.rotation.y=-cd.yaw*Math.PI/180;cd.marker.rotation.x=cd.pitch*Math.PI/180;const fr=cd.fov*Math.PI/180,cl=2,cr=Math.tan(fr/2)*cl;cd.cone.geometry.dispose();cd.cone.geometry=new THREE.ConeGeometry(cr,cl,4,1,true);cd.cone.position.z=.25+cl/2;}
 
-function calcFOV(f,s){return 2*Math.atan(s/(2*f))*180/Math.PI;}
-function addCam(x,z){
-  const[sw,sh]=document.getElementById('sensor-select').value.split(',').map(Number);const f=parseInt(document.getElementById('focal-range').value);const fov=calcFOV(f,sh);
-  const yaw=Math.atan2(-x,-4-z)*180/Math.PI;const ci=state.camCounter++;
-  const cam={idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0'),x,z,height:1.6,yaw,pitch:0,focal:f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov,color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null};
-  state.cameras.push(cam);createMarker(cam);selCam(cam.idx);updList();pushH('addCam',{...cam});setMode('navigate');
-}
-function restCam(d){const c={...d,marker:null,cone:null,wire:null};state.cameras.push(c);if(c.idx>=state.camCounter)state.camCounter=c.idx+1;createMarker(c);selCam(c.idx);updList();}
-function delCam(idx,skip){const ci=state.cameras.findIndex(c=>c.idx===idx);if(ci<0)return;const cam=state.cameras[ci];if(!skip)pushH('delCam',{...cam});if(cam.marker){mkGrp.remove(cam.marker);cam.marker.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}state.cameras.splice(ci,1);if(state.selectedIdx===idx){state.selectedIdx=-1;if(state.viewfinder)toggleVF();document.getElementById('params-section').style.display='none';}updList();}
-function selCam(idx){state.selectedIdx=idx;const c=state.cameras.find(c=>c.idx===idx);if(!c)return;state.cameras.forEach(c=>{if(c.marker){const s=c.idx===idx;c.cone.material.opacity=s?0.15:0.06;c.wire.material.opacity=s?0.6:0.2;}});document.getElementById('params-section').style.display='block';updParams(c);updInfo();updList();if(state.viewfinder)updVF();}
-function updParams(c){document.getElementById('focal-range').value=c.focal;document.getElementById('focal-val').textContent=c.focal+'mm';document.getElementById('fstop-range').value=c.fstop;document.getElementById('fstop-val').textContent='f/'+c.fstop;document.getElementById('focus-range').value=c.focusDist;document.getElementById('focus-val').textContent=c.focusDist.toFixed(1)+'m';document.getElementById('height-range').value=c.height;document.getElementById('height-val').textContent=c.height.toFixed(1)+'m';document.getElementById('yaw-range').value=c.yaw;document.getElementById('yaw-val').textContent=Math.round(c.yaw)+'\u00B0';document.getElementById('pitch-range').value=c.pitch;document.getElementById('pitch-val').textContent=Math.round(c.pitch)+'\u00B0';const s=document.getElementById('sensor-select');for(let i=0;i<s.options.length;i++){const[sw,sh]=s.options[i].value.split(',').map(Number);if(Math.abs(sw-c.sensorW)<0.1&&Math.abs(sh-c.sensorH)<0.1){s.selectedIndex=i;break;}}}
-function getCam(){return state.cameras.find(c=>c.idx===state.selectedIdx);}
+// ═══ CAMERA MGMT ═══
+function cFOV(f,s){return 2*Math.atan(s/(2*f))*180/Math.PI;}
+function aC(x,z){const[sw,sh]=document.getElementById('sen-sel').value.split(',').map(Number);const f=parseInt(document.getElementById('fr').value);const fov=cFOV(f,sh);const yaw=Math.atan2(-x,-4-z)*180/Math.PI;const ci=S.cCnt++;const cam={idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0'),x,z,height:1.6,yaw,pitch:0,focal:f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov,color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null,script:{scene:'',type:'',action:'',dialog:'',notes:'',duration:5,transition:'cut'}};S.cams.push(cam);cM(cam);sC(cam.idx);uCL();pH('ac',{...cam,script:{...cam.script}});setMode('navigate');}
+function rC(d){const c={...d,marker:null,cone:null,wire:null,script:{...d.script}};S.cams.push(c);if(c.idx>=S.cCnt)S.cCnt=c.idx+1;cM(c);sC(c.idx);uCL();}
+function dC(idx,skip){const ci=S.cams.findIndex(c=>c.idx===idx);if(ci<0)return;const cam=S.cams[ci];if(!skip)pH('dc',{...cam,script:{...cam.script}});if(cam.marker){MG.remove(cam.marker);cam.marker.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}S.cams.splice(ci,1);if(S.selIdx===idx){S.selIdx=-1;if(S.vf)toggleVF();document.getElementById('params-ss').style.display='none';document.getElementById('script-ss').style.display='none';}uCL();uTL();}
+function sC(idx){S.selIdx=idx;const c=S.cams.find(c=>c.idx===idx);if(!c)return;S.cams.forEach(c=>{if(c.marker){const s=c.idx===idx;c.cone.material.opacity=s?.15:.06;c.wire.material.opacity=s?.6:.2;}});document.getElementById('params-ss').style.display='block';document.getElementById('script-ss').style.display='block';uP(c);uI();uCL();uScript();uTL();if(S.vf)uVF();}
+function uP(c){document.getElementById('fr').value=c.focal;document.getElementById('fv').textContent=c.focal+'mm';document.getElementById('fsr').value=c.fstop;document.getElementById('fsv').textContent='f/'+c.fstop;document.getElementById('fdr').value=c.focusDist;document.getElementById('fdv').textContent=c.focusDist.toFixed(1)+'m';document.getElementById('hr').value=c.height;document.getElementById('hv').textContent=c.height.toFixed(1)+'m';document.getElementById('yr').value=c.yaw;document.getElementById('yv').textContent=Math.round(c.yaw)+'\u00B0';document.getElementById('pr').value=c.pitch;document.getElementById('pv').textContent=Math.round(c.pitch)+'\u00B0';const s=document.getElementById('sen-sel');for(let i=0;i<s.options.length;i++){const[sw,sh]=s.options[i].value.split(',').map(Number);if(Math.abs(sw-c.sensorW)<.1&&Math.abs(sh-c.sensorH)<.1){s.selectedIndex=i;break;}}}
+function gC(){return S.cams.find(c=>c.idx===S.selIdx);}
 
-function updList(){const l=document.getElementById('cam-list');l.innerHTML='';if(!state.cameras.length){l.innerHTML='<div style="font-size:11px;color:var(--text2);padding:6px;text-align:center">暂无机位</div>';return;}state.cameras.forEach(c=>{const d=document.createElement('div');d.className='cam-item'+(c.idx===state.selectedIdx?' selected':'');d.innerHTML='<div class="cam-dot" style="background:#'+c.color.toString(16).padStart(6,'0')+'"></div><div class="cam-name">'+c.name+'</div><div class="cam-focal">'+c.focal+'mm</div><div class="cam-del" onclick="event.stopPropagation();delCam('+c.idx+')">&times;</div>';d.onclick=()=>selCam(c.idx);d.ondblclick=()=>{selCam(c.idx);if(!state.viewfinder)toggleVF();};l.appendChild(d);});}
+// ═══ SCRIPT ═══
+function uScript(){const c=gC();if(!c)return;const s=c.script||{};document.getElementById('sc-scene').value=s.scene||'';document.getElementById('sc-type').value=s.type||'';document.getElementById('sc-action').value=s.action||'';document.getElementById('sc-dialog').value=s.dialog||'';document.getElementById('sc-notes').value=s.notes||'';document.getElementById('sc-dur').value=s.duration||5;document.getElementById('sc-dur-v').textContent=(s.duration||5)+'s';document.getElementById('sc-trans').value=s.transition||'cut';}
+function onScript(){const c=gC();if(!c)return;if(!c.script)c.script={};c.script.scene=document.getElementById('sc-scene').value;c.script.type=document.getElementById('sc-type').value;c.script.action=document.getElementById('sc-action').value;c.script.dialog=document.getElementById('sc-dialog').value;c.script.notes=document.getElementById('sc-notes').value;c.script.transition=document.getElementById('sc-trans').value;uTL();}
+function onScriptDur(v){const c=gC();if(!c)return;if(!c.script)c.script={};c.script.duration=parseInt(v);document.getElementById('sc-dur-v').textContent=v+'s';uTL();}
 
-function setMode(m){state.mode=m;document.querySelectorAll('[data-mode]').forEach(e=>e.classList.toggle('active',e.dataset.mode===m));const h=document.getElementById('hint-text'),pp=document.getElementById('path-panel');if(m==='add'){h.textContent='点击地面放置机位';h.className='hint add-mode-hint';h.style.display='block';ctrl.enabled=false;renderer.domElement.style.cursor='crosshair';pp.classList.remove('open');}else if(m==='path'){h.textContent='点击场景添加路径点';h.className='hint path-mode-hint';h.style.display='block';ctrl.enabled=true;renderer.domElement.style.cursor='crosshair';pp.classList.add('open');}else{h.style.display='none';ctrl.enabled=!state.viewfinder;renderer.domElement.style.cursor='default';pp.classList.remove('open');}}
+// ═══ UI ═══
+function uCL(){const l=document.getElementById('cam-list');l.innerHTML='';if(!S.cams.length){l.innerHTML='<div style="font-size:10px;color:var(--text2);padding:4px;text-align:center">暂无机位</div>';return;}S.cams.forEach(c=>{const d=document.createElement('div');d.className='cam-item'+(c.idx===S.selIdx?' selected':'');d.innerHTML='<div class="cam-dot" style="background:#'+c.color.toString(16).padStart(6,'0')+'"></div><div class="cam-name">'+c.name+'</div><div class="cam-focal">'+c.focal+'mm</div><div class="cam-del" onclick="event.stopPropagation();dC('+c.idx+')">&times;</div>';d.onclick=()=>sC(c.idx);d.ondblclick=()=>{sC(c.idx);if(!S.vf)toggleVF();};l.appendChild(d);});}
 
-function toggleVF(){const c=getCam();if(!c&&!state.viewfinder){const h=document.getElementById('hint-text');h.textContent='请先选择或添加机位';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);return;}state.viewfinder=!state.viewfinder;const ov=document.getElementById('viewfinder-overlay'),tab=document.getElementById('vf-tab');if(state.viewfinder&&c){ov.style.display='block';tab.classList.add('active');ctrl.enabled=false;updVF();updInfo();updLB();drawGrid();if(bokeh&&state.overlays.dof)bokeh.enabled=true;}else{ov.style.display='none';tab.classList.remove('active');state.viewfinder=false;ctrl.enabled=true;if(bokeh)bokeh.enabled=false;}}
-function updVF(){const c=getCam();if(!c)return;vfCam.fov=c.fov;vfCam.aspect=c.sensorW/c.sensorH;vfCam.updateProjectionMatrix();vfCam.position.set(c.x,c.height,c.z);const yr=c.yaw*Math.PI/180,pr=c.pitch*Math.PI/180,d=10;vfCam.lookAt(c.x+Math.sin(yr)*Math.cos(pr)*d,c.height+Math.sin(pr)*d,c.z+Math.cos(yr)*Math.cos(pr)*d);if(bokeh){bokeh.uniforms.focus.value=c.focusDist;bokeh.uniforms.aperture.value=state.overlays.dof?1/(c.fstop*100):0;}}
-function updLB(){if(!state.overlays.letterbox){document.getElementById('vf-lb-top').style.height='0';document.getElementById('vf-lb-bottom').style.height='0';return;}const c=getCam();if(!c)return;const r=vp.getBoundingClientRect(),va=r.width/r.height,ca=c.sensorW/c.sensorH,h=Math.max(0,(1-ca/va)*r.height/2);document.getElementById('vf-lb-top').style.height=h+'px';document.getElementById('vf-lb-bottom').style.height=h+'px';}
-function updInfo(){const c=getCam();if(!c)return;document.getElementById('vf-cam-name').textContent=c.name;document.getElementById('vf-focal').textContent=c.focal;document.getElementById('vf-fstop').textContent=c.fstop;document.getElementById('vf-fov').textContent=c.fov.toFixed(1);document.getElementById('vf-sensor-info').textContent=c.sensorW+'x'+c.sensorH+'mm';}
-function drawGrid(){const cv=document.getElementById('grid-canvas'),r=vp.getBoundingClientRect();cv.width=r.width;cv.height=r.height;const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);if(!state.overlays.grid)return;ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;const x1=cv.width/3,x2=cv.width*2/3,y1=cv.height/3,y2=cv.height*2/3;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(x1,0);ctx.lineTo(x1,cv.height);ctx.moveTo(x2,0);ctx.lineTo(x2,cv.height);ctx.moveTo(0,y1);ctx.lineTo(cv.width,y1);ctx.moveTo(0,y2);ctx.lineTo(cv.width,y2);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.setLineDash([]);const cx=cv.width/2,cy=cv.height/2;ctx.beginPath();ctx.moveTo(cx-15,cy);ctx.lineTo(cx+15,cy);ctx.moveTo(cx,cy-15);ctx.lineTo(cx,cy+15);ctx.stroke();}
+// ═══ MODES ═══
+function setMode(m){S.mode=m;document.querySelectorAll('[data-mode]').forEach(e=>e.classList.toggle('active',e.dataset.mode===m));const h=document.getElementById('hint'),pp=document.getElementById('path-panel');if(m==='add'){h.textContent='点击地面放置机位';h.className='hint hint-add';h.style.display='block';OC.enabled=false;R.domElement.style.cursor='crosshair';pp.classList.remove('open');}else if(m==='path'){h.textContent='点击场景添加路径点';h.className='hint hint-path';h.style.display='block';OC.enabled=true;R.domElement.style.cursor='crosshair';pp.classList.add('open');}else{h.style.display='none';OC.enabled=!S.vf;R.domElement.style.cursor='default';pp.classList.remove('open');}}
 
-function onSensorChange(){const c=getCam();if(!c)return;const b={sensorW:c.sensorW,sensorH:c.sensorH,fov:c.fov};const[sw,sh]=document.getElementById('sensor-select').value.split(',').map(Number);c.sensorW=sw;c.sensorH=sh;c.fov=calcFOV(c.focal,sh);updMarker(c);updInfo();updLB();if(state.viewfinder)updVF();pushH('param',{idx:c.idx,b});}
-function onFocalChange(v){const c=getCam();if(!c)return;v=parseInt(v);c.focal=v;c.fov=calcFOV(v,c.sensorH);document.getElementById('focal-val').textContent=v+'mm';updMarker(c);updInfo();if(state.viewfinder)updVF();}
-function onFStopChange(v){const c=getCam();if(!c)return;c.fstop=parseFloat(v);document.getElementById('fstop-val').textContent='f/'+parseFloat(v).toFixed(1);updInfo();if(state.viewfinder)updVF();}
-function onFocusChange(v){const c=getCam();if(!c)return;c.focusDist=parseFloat(v);document.getElementById('focus-val').textContent=parseFloat(v).toFixed(1)+'m';if(state.viewfinder)updVF();}
-function onHeightChange(v){const c=getCam();if(!c)return;c.height=parseFloat(v);document.getElementById('height-val').textContent=parseFloat(v).toFixed(1)+'m';updMarker(c);if(state.viewfinder)updVF();}
-function onYawChange(v){const c=getCam();if(!c)return;c.yaw=parseFloat(v);document.getElementById('yaw-val').textContent=Math.round(v)+'\u00B0';updMarker(c);if(state.viewfinder)updVF();}
-function onPitchChange(v){const c=getCam();if(!c)return;c.pitch=parseFloat(v);document.getElementById('pitch-val').textContent=Math.round(v)+'\u00B0';updMarker(c);if(state.viewfinder){updVF();drawGrid();}}
+// ═══ VIEWFINDER ═══
+function toggleVF(){const c=gC();if(!c&&!S.vf){const h=document.getElementById('hint');h.textContent='请先选择机位';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);return;}S.vf=!S.vf;const ov=document.getElementById('viewfinder-overlay'),tab=document.getElementById('vf-tab');if(S.vf&&c){ov.style.display='block';tab.classList.add('active');OC.enabled=false;uVF();uI();uLB();dG();if(bk&&S.ov.dof)bk.enabled=true;}else{ov.style.display='none';tab.classList.remove('active');S.vf=false;OC.enabled=true;if(bk)bk.enabled=false;}}
+function uVF(){const c=gC();if(!c)return;VC.fov=c.fov;VC.aspect=c.sensorW/c.sensorH;VC.updateProjectionMatrix();VC.position.set(c.x,c.height,c.z);const yr=c.yaw*Math.PI/180,pr=c.pitch*Math.PI/180,d=10;VC.lookAt(c.x+Math.sin(yr)*Math.cos(pr)*d,c.height+Math.sin(pr)*d,c.z+Math.cos(yr)*Math.cos(pr)*d);if(bk){bk.uniforms.focus.value=c.focusDist;bk.uniforms.aperture.value=S.ov.dof?1/(c.fstop*100):0;}}
+function uLB(){if(!S.ov.lb){document.getElementById('vf-lb-t').style.height='0';document.getElementById('vf-lb-b').style.height='0';return;}const c=gC();if(!c)return;const r=vp.getBoundingClientRect(),va=r.width/r.height,ca=c.sensorW/c.sensorH,h=Math.max(0,(1-ca/va)*r.height/2);document.getElementById('vf-lb-t').style.height=h+'px';document.getElementById('vf-lb-b').style.height=h+'px';}
+function uI(){const c=gC();if(!c)return;document.getElementById('vf-cn').textContent=c.name;document.getElementById('vf-f').textContent=c.focal;document.getElementById('vf-fs').textContent=c.fstop;document.getElementById('vf-fov').textContent=c.fov.toFixed(1);document.getElementById('vf-si').textContent=c.sensorW+'x'+c.sensorH+'mm';}
+function dG(){const cv=document.getElementById('grid-cv'),r=vp.getBoundingClientRect();cv.width=r.width;cv.height=r.height;const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);if(!S.ov.grid)return;ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;const x1=cv.width/3,x2=cv.width*2/3,y1=cv.height/3,y2=cv.height*2/3;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(x1,0);ctx.lineTo(x1,cv.height);ctx.moveTo(x2,0);ctx.lineTo(x2,cv.height);ctx.moveTo(0,y1);ctx.lineTo(cv.width,y1);ctx.moveTo(0,y2);ctx.lineTo(cv.width,y2);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,.25)';ctx.setLineDash([]);const cx=cv.width/2,cy=cv.height/2;ctx.beginPath();ctx.moveTo(cx-12,cy);ctx.lineTo(cx+12,cy);ctx.moveTo(cx,cy-12);ctx.lineTo(cx,cy+12);ctx.stroke();}
 
-function toggleOverlay(k){state.overlays[k]=!state.overlays[k];document.getElementById('tog-'+k).classList.toggle('on');if(k==='grid'||k==='level')drawGrid();if(k==='action')document.getElementById('action-safe').style.display=state.overlays.action?'block':'none';if(k==='title')document.getElementById('title-safe').style.display=state.overlays.title?'block':'none';if(k==='letterbox')updLB();if(k==='dof'&&bokeh){bokeh.enabled=state.overlays.dof&&state.viewfinder;if(state.viewfinder)updVF();}}
-function toggleScene(k){state.sceneItems[k]=!state.sceneItems[k];document.getElementById('tog-'+k).classList.toggle('on');if(k==='floor'){floor.visible=state.sceneItems.floor;grid.visible=state.sceneItems.floor;}if(k==='objects')objGrp.visible=state.sceneItems.objects;if(k==='markers')mkGrp.visible=state.sceneItems.markers;if(k==='pathline')pathGrp.visible=state.sceneItems.pathline;}
+// ═══ PARAMS ═══
+function onSen(){const c=gC();if(!c)return;const b={sensorW:c.sensorW,sensorH:c.sensorH,fov:c.fov};const[sw,sh]=document.getElementById('sen-sel').value.split(',').map(Number);c.sensorW=sw;c.sensorH=sh;c.fov=cFOV(c.focal,sh);uM(c);uI();uLB();if(S.vf)uVF();pH('pm',{idx:c.idx,b});}
+function onF(v){const c=gC();if(!c)return;v=parseInt(v);c.focal=v;c.fov=cFOV(v,c.sensorH);document.getElementById('fv').textContent=v+'mm';uM(c);uI();if(S.vf)uVF();}
+function onFS(v){const c=gC();if(!c)return;c.fstop=parseFloat(v);document.getElementById('fsv').textContent='f/'+parseFloat(v).toFixed(1);uI();if(S.vf)uVF();}
+function onFD(v){const c=gC();if(!c)return;c.focusDist=parseFloat(v);document.getElementById('fdv').textContent=parseFloat(v).toFixed(1)+'m';if(S.vf)uVF();}
+function onH(v){const c=gC();if(!c)return;c.height=parseFloat(v);document.getElementById('hv').textContent=parseFloat(v).toFixed(1)+'m';uM(c);if(S.vf)uVF();}
+function onY(v){const c=gC();if(!c)return;c.yaw=parseFloat(v);document.getElementById('yv').textContent=Math.round(v)+'\u00B0';uM(c);if(S.vf)uVF();}
+function onP(v){const c=gC();if(!c)return;c.pitch=parseFloat(v);document.getElementById('pv').textContent=Math.round(v)+'\u00B0';uM(c);if(S.vf){uVF();dG();}}
 
+// ═══ TOGGLES ═══
+function togOv(k){S.ov[k]=!S.ov[k];document.getElementById('tg-'+k).classList.toggle('on');if(k==='grid')dG();if(k==='action')document.getElementById('act-sf').style.display=S.ov.action?'block':'none';if(k==='title')document.getElementById('ttl-sf').style.display=S.ov.title?'block':'none';if(k==='lb')uLB();if(k==='dof'&&bk){bk.enabled=S.ov.dof&&S.vf;if(S.vf)uVF();}}
+function togSc(k){S.si[k]=!S.si[k];document.getElementById('tg-'+k).classList.toggle('on');if(k==='floor'){floor.visible=S.si.floor;grid.visible=S.si.floor;}if(k==='objects')OG.visible=S.si.objects;if(k==='markers')MG.visible=S.si.markers;if(k==='pathline')PG.visible=S.si.pathline;}
+
+// ═══ CLICK ═══
 const rc=new THREE.Raycaster(),ms=new THREE.Vector2();
-renderer.domElement.addEventListener('click',e=>{const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;if(state.mode==='add'){rc.setFromCamera(ms,mainCam);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){p.x=Math.max(-18,Math.min(18,p.x));p.z=Math.max(-13,Math.min(13,p.z));addCam(p.x,p.z);}}else if(state.mode==='path'){rc.setFromCamera(ms,mainCam);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){const c=getCam();addPathPt(p.x,c?c.height:1.6,p.z);}}});
+R.domElement.addEventListener('click',e=>{const r=R.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;if(S.mode==='add'){rc.setFromCamera(ms,MC);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){p.x=Math.max(-18,Math.min(18,p.x));p.z=Math.max(-13,Math.min(13,p.z));aC(p.x,p.z);}}else if(S.mode==='path'){rc.setFromCamera(ms,MC);const p=new THREE.Vector3();rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p);if(p){const c=gC();aPP(p.x,c?c.height:1.6,p.z);}}});
 
-function addPathPt(x,y,z){state.pathPoints.push({x,y,z});pathGrp.add(new THREE.Mesh(new THREE.SphereGeometry(0.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(x).translateY(y).translateZ(z));pathGrp.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,0,z),new THREE.Vector3(x,y,z)]),new THREE.LineBasicMaterial({color:0xa855f7,transparent:true,opacity:0.4})));updPathLine();const h=document.getElementById('hint-text');if(state.pathPoints.length>=2)h.textContent=state.pathPoints.length+' 个路径点';}
-function updPathLine(){pathGrp.children.filter(c=>c.userData&&c.userData.isC).forEach(c=>{pathGrp.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();});if(state.pathPoints.length<2)return;const pts=state.pathPoints.map(p=>new THREE.Vector3(p.x,p.y,p.z));state.pathCurve=new THREE.CatmullRomCurve3(pts);const cl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(state.pathCurve.getPoints(100)),new THREE.LineBasicMaterial({color:0xa855f7,linewidth:2}));cl.userData={isC:true};pathGrp.add(cl);}
-function clearPathPoints(){state.pathPoints=[];state.pathCurve=null;state.pathProgress=0;state.pathPlaying=false;document.getElementById('path-play-btn').innerHTML='&#x25B6;';while(pathGrp.children.length){const c=pathGrp.children[0];pathGrp.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();}}
-function pathPlayPause(){if(!state.pathCurve||state.pathPoints.length<2)return;state.pathPlaying=!state.pathPlaying;document.getElementById('path-play-btn').innerHTML=state.pathPlaying?'&#x23F8;':'&#x25B6;';if(state.pathPlaying&&state.pathProgress>=1)state.pathProgress=0;}
-function pathFirst(){state.pathProgress=0;updPlayback();}
-function pathLast(){state.pathProgress=1;updPlayback();}
-function updPlayback(){if(!state.pathCurve||!state.pathPlaying)return;state.pathProgress+=(state.pathSpeed/60)/state.pathDuration;if(state.pathProgress>=1){state.pathProgress=1;state.pathPlaying=false;document.getElementById('path-play-btn').innerHTML='&#x25B6;';}const t=state.pathProgress,pos=state.pathCurve.getPoint(t),lk=state.pathCurve.getPoint(Math.min(t+0.02,1));vfCam.position.copy(pos);vfCam.lookAt(lk);const el=t*state.pathDuration,td=state.pathDuration;document.getElementById('path-time').textContent=String(Math.floor(el/60)).padStart(2,'0')+':'+String(Math.floor(el%60)).padStart(2,'0')+' / '+String(Math.floor(td/60)).padStart(2,'0')+':'+String(td%60).padStart(2,'0');}
+// ═══ PATH ═══
+function aPP(x,y,z){S.pp.push({x,y,z});PG.add(new THREE.Mesh(new THREE.SphereGeometry(.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(x).translateY(y).translateZ(z));PG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,0,z),new THREE.Vector3(x,y,z)]),new THREE.LineBasicMaterial({color:0xa855f7,transparent:true,opacity:.4})));uPL();const h=document.getElementById('hint');if(S.pp.length>=2)h.textContent=S.pp.length+' 个路径点';}
+function uPL(){PG.children.filter(c=>c.userData&&c.userData.isC).forEach(c=>{PG.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();});if(S.pp.length<2)return;S.pc=new THREE.CatmullRomCurve3(S.pp.map(p=>new THREE.Vector3(p.x,p.y,p.z)));const cl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(S.pc.getPoints(100)),new THREE.LineBasicMaterial({color:0xa855f7,linewidth:2}));cl.userData={isC:true};PG.add(cl);}
+function clearPath(){S.pp=[];S.pc=null;S.pProg=0;S.pPlay=false;document.getElementById('pp-btn').innerHTML='&#x25B6;';while(PG.children.length){const c=PG.children[0];PG.remove(c);if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();}}
+function pathPP(){if(!S.pc||S.pp.length<2)return;S.pPlay=!S.pPlay;document.getElementById('pp-btn').innerHTML=S.pPlay?'&#x23F8;':'&#x25B6;';if(S.pPlay&&S.pProg>=1)S.pProg=0;}
+function pathFirst(){S.pProg=0;uPB();}
+function pathLast(){S.pProg=1;uPB();}
+function uPB(){if(!S.pc||!S.pPlay)return;S.pProg+=(S.pSpd/60)/S.pDur;if(S.pProg>=1){S.pProg=1;S.pPlay=false;document.getElementById('pp-btn').innerHTML='&#x25B6;';}const t=S.pProg,pos=S.pc.getPoint(t),lk=S.pc.getPoint(Math.min(t+.02,1));VC.position.copy(pos);VC.lookAt(lk);const el=t*S.pDur,td=S.pDur;document.getElementById('pp-time').textContent=~~(el/60)+':'+String(~~(el%60)).padStart(2,'0')+'/'+~~(td/60)+':'+String(td%60).padStart(2,'0');}
 
-const LIB={people:[{icon:'\u{1F9CD}',name:'站立人物',type:'person'},{icon:'\u{1FA91}',name:'坐姿人物',type:'person_sit'},{icon:'\u{1F465}',name:'双人',type:'group2'},{icon:'\u{1F46A}',name:'三人',type:'group3'}],furniture:[{icon:'\u{1F4CB}',name:'桌子',type:'table'},{icon:'\u{1FA91}',name:'椅子',type:'chair'},{icon:'\u{1F6CB}',name:'沙发',type:'sofa'},{icon:'\u{1F4E6}',name:'平台',type:'platform'},{icon:'\u{1F5C4}',name:'柜子',type:'cabinet'}],lighting:[{icon:'\u{1F4A1}',name:'灯架',type:'lightstand'},{icon:'\u2B55',name:'反光板',type:'reflector'},{icon:'\u{1F526}',name:'柔光箱',type:'softbox'},{icon:'\u{1F3AC}',name:'旗板',type:'flag'}],props:[{icon:'\u{1F4F7}',name:'摄影机',type:'propCam'},{icon:'\u{1F3A5}',name:'三脚架',type:'tripod'},{icon:'\u{1F399}',name:'话筒架',type:'mic'},{icon:'\u{1F4E6}',name:'箱子',type:'crate'},{icon:'\u{1F6AA}',name:'门框',type:'door'}]};
-let lTab='people',oid=0;
-function toggleLibPanel(){const p=document.getElementById('left-panel'),t=document.getElementById('lib-tab');p.classList.toggle('open');t.classList.toggle('active');if(p.classList.contains('open'))renderLib();}
-function switchLibTab(t){lTab=t;document.querySelectorAll('.lib-tab').forEach(e=>e.classList.toggle('active',e.dataset.lib===t));renderLib();}
-function renderLib(){const c=document.getElementById('lib-content'),items=LIB[lTab]||[];c.innerHTML='<div class="lib-grid">'+items.map((it,i)=>'<div class="lib-item" onclick="placeItem(\''+lTab+'\','+i+')"><div class="lib-item-icon">'+it.icon+'</div><span class="lib-item-name">'+it.name+'</span></div>').join('')+'</div>';}
+// ═══ CAMERA MOVEMENT PRESETS ═══
+const MOVES=[
+  {icon:'&#x27A1;',name:'推进 Push In',gen:(c,d)=>{const pts=[];const yr=c.yaw*Math.PI/180;for(let i=0;i<=5;i++){const t=i/5;pts.push({x:c.x+Math.sin(yr)*d*t*.6,z:c.z+Math.cos(yr)*d*t*.6,y:c.height});}return pts;}},
+  {icon:'&#x2B05;',name:'拉出 Pull Out',gen:(c,d)=>{const pts=[];const yr=c.yaw*Math.PI/180;for(let i=0;i<=5;i++){const t=i/5;pts.push({x:c.x-Math.sin(yr)*d*t*.6,z:c.z-Math.cos(yr)*d*t*.6,y:c.height});}return pts;}},
+  {icon:'&#x2194;',name:'横摇 Pan',gen:(c)=>{return[{x:c.x,y:c.height,z:c.z,yawS:c.yaw-45,yawE:c.yaw+45,pitch:c.pitch}];}},
+  {icon:'&#x2195;',name:'俯仰 Tilt',gen:(c)=>{return[{x:c.x,y:c.height,z:c.z,yaw:c.yaw,pitchS:-20,pitchE:20}];}},
+  {icon:'&#x27A1;',name:'横移 Track',gen:(c,d)=>{const pts=[];const yr=(c.yaw+90)*Math.PI/180;for(let i=0;i<=5;i++){const t=i/5;pts.push({x:c.x+Math.sin(yr)*d*t*.8,z:c.z+Math.cos(yr)*d*t*.8,y:c.height});}return pts;}},
+  {icon:'&#x1F504;',name:'环绕 Orbit',gen:(c,d)=>{const pts=[];const r=d*.8;for(let i=0;i<=12;i++){const a=i/12*Math.PI*2;pts.push({x:c.x+Math.sin(a)*r,z:c.z+Math.cos(a)*r,y:c.height});}return pts;}},
+  {icon:'&#x2B06;',name:'升降 Crane Up',gen:(c)=>{return[{x:c.x,y:c.height,z:c.z},{x:c.x,y:c.height+3,z:c.z}];}},
+  {icon:'&#x2B07;',name:'降 Crane Down',gen:(c)=>{return[{x:c.x,y:c.height+3,z:c.z},{x:c.x,y:Math.max(.3,c.height-2),z:c.z}];}},
+];
+function applyMove(idx){const c=gC();if(!c)return;clearPath();const mv=MOVES[idx];const pts=mv.gen(c,5);if(pts.length===1&&pts[0].yawS!==undefined){// Pan
+  const p=pts[0];for(let i=0;i<=8;i++){const t=i/8;S.pp.push({x:p.x,y:p.y,z:p.z});}
+  // Animate yaw via custom path
+  S.pp=S.pp.map((pt,i)=>({...pt,yawOverride:pts[0].yawS+(pts[0].yawE-pts[0].yawS)*(i/S.pp.length)}));
+  pts.forEach(p2=>PG.add(new THREE.Mesh(new THREE.SphereGeometry(.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(p2.x).translateY(p2.y).translateZ(p2.z)));
+}else if(pts.length===1&&pts[0].pitchS!==undefined){// Tilt
+  for(let i=0;i<=8;i++){S.pp.push({x:pts[0].x,y:pts[0].y,z:pts[0].z});}
+  PG.add(new THREE.Mesh(new THREE.SphereGeometry(.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(pts[0].x).translateY(pts[0].y).translateZ(pts[0].z));
+}else{pts.forEach(p=>{S.pp.push({x:p.x,y:p.y,z:p.z});PG.add(new THREE.Mesh(new THREE.SphereGeometry(.15,8,8),new THREE.MeshBasicMaterial({color:0xa855f7})).translateX(p.x).translateY(p.y).translateZ(p.z));});}
+uPL();setMode('path');document.getElementById('path-panel').classList.add('open');const h=document.getElementById('hint');h.textContent=mv.name+' 已应用 | 点击播放预览';h.className='hint hint-path';h.style.display='block';setTimeout(()=>h.style.display='none',2000);}
 
-function placeItem(tab,idx){const item=LIB[tab][idx],g=mkLibObj(item);if(!g)return;g.userData={libItem:item,id:oid++,type:item.type,name:item.name};plcGrp.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});pushH('addObj',{id:g.userData.id});const h=document.getElementById('hint-text');h.textContent=item.name+' 已放置 | 拖拽移动';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);}
-function mkLibObj(it){
-  const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b,roughness:0.6}),a=new THREE.MeshStandardMaterial({color:0x4a5568,roughness:0.7});
-  switch(it.type){
-    case'person':{const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,-0.3,1.1,0,0,0,0.15));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.6,6),m,0.3,1.1,0,0,0,-0.15));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,-0.1,0.4));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.8,6),m,0.1,0.4));g.add(p);break;}
-    case'person_sit':{const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,0.8,8),m,0,0.8));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.38));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.5,6),m,-0.3,0.8,0,0,0,0.3));p.add(mm(new THREE.CylinderGeometry(0.05,0.05,0.5,6),m,0.3,0.8,0,0,0,-0.3));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.5,6),m,-0.1,0.35,0.15,Math.PI/3));p.add(mm(new THREE.CylinderGeometry(0.07,0.07,0.5,6),m,0.1,0.35,0.15,Math.PI/3));g.add(p);break;}
-    case'group2':{for(let i=-1;i<=1;i+=2){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.position.x=i*0.5;g.add(p);}break;}
-    case'group3':{for(let i=-1;i<=1;i++){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(0.2,0.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8),m).translateY(1.78));p.position.x=i*0.6;g.add(p);}break;}
-    case'table':g.add(mm(new THREE.BoxGeometry(1.8,0.05,0.9),a,0,0.75));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,-0.85,0.375,-0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,0.85,0.375,-0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,-0.85,0.375,0.4));g.add(mm(new THREE.BoxGeometry(0.05,0.75,0.05),m,0.85,0.375,0.4));break;
-    case'chair':g.add(mm(new THREE.BoxGeometry(0.45,0.04,0.45),a,0,0.45));g.add(mm(new THREE.BoxGeometry(0.45,0.5,0.04),m,0,0.7,-0.2));for(let dx of[-0.18,0.18])for(let dz of[-0.18,0.18])g.add(mm(new THREE.CylinderGeometry(0.02,0.02,0.45,6),m,dx,0.225,dz));break;
-    case'sofa':g.add(mm(new THREE.BoxGeometry(2,0.35,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0,0.25));g.add(mm(new THREE.BoxGeometry(2,0.45,0.12),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0,0.55,-0.34));g.add(mm(new THREE.BoxGeometry(0.12,0.3,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),-0.94,0.35));g.add(mm(new THREE.BoxGeometry(0.12,0.3,0.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:0.8}),0.94,0.35));break;
-    case'platform':g.add(mm(new THREE.BoxGeometry(3,0.3,2),a,0,0.15));break;
-    case'cabinet':g.add(mm(new THREE.BoxGeometry(0.8,1.2,0.4),a,0,0.6));break;
-    case'lightstand':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2.5,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:0.6}),0,1.25));g.add(mm(new THREE.CylinderGeometry(0.2,0.2,0.03,8),m,0,0.015));g.add(new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateY(2.5));break;
-    case'reflector':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.8,8),m,0,0.9));g.add(mm(new THREE.CircleGeometry(0.5,16),new THREE.MeshStandardMaterial({color:0xeeeeee,side:THREE.DoubleSide,roughness:0.3}),0,1.8,0.01));break;
-    case'softbox':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2.2,8),m,0,1.1));g.add(mm(new THREE.BoxGeometry(0.6,0.6,0.15),new THREE.MeshStandardMaterial({color:0x222222}),0,2.3));g.add(mm(new THREE.PlaneGeometry(0.55,0.55),new THREE.MeshBasicMaterial({color:0xffffee}),0,2.3,0.08));break;
-    case'flag':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,2,8),m,0,1));g.add(mm(new THREE.BoxGeometry(0.8,0.6,0.02),new THREE.MeshStandardMaterial({color:0x111111}),0,1.8));break;
-    case'propCam':g.add(mm(new THREE.BoxGeometry(0.3,0.2,0.35),new THREE.MeshStandardMaterial({color:0x222222,metalness:0.5}),0,0));g.add(mm(new THREE.CylinderGeometry(0.06,0.09,0.2,12),new THREE.MeshStandardMaterial({color:0x111111,metalness:0.8}),0,0,0.25));break;
-    case'tripod':g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,0,0.65,0.15,0.15));g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,-0.13,0.65,-0.08,-0.15));g.add(mm(new THREE.CylinderGeometry(0.02,0.02,1.3,6),m,0.13,0.65,-0.08,0.15));g.add(mm(new THREE.BoxGeometry(0.15,0.05,0.15),a,0,1.3));break;
-    case'mic':g.add(mm(new THREE.CylinderGeometry(0.015,0.015,2,8),m,0,1));g.add(mm(new THREE.CylinderGeometry(0.15,0.15,0.02,8),m,0,0.01));g.add(mm(new THREE.CylinderGeometry(0.03,0.03,0.15,8),new THREE.MeshStandardMaterial({color:0x333333}),0,2.05));break;
-    case'crate':g.add(mm(new THREE.BoxGeometry(0.6,0.6,0.6),new THREE.MeshStandardMaterial({color:0x8B6914,roughness:0.9}),0,0.3));break;
-    case'door':g.add(mm(new THREE.BoxGeometry(0.1,2.2,0.15),m,-0.5,1.1));g.add(mm(new THREE.BoxGeometry(0.1,2.2,0.15),m,0.5,1.1));g.add(mm(new THREE.BoxGeometry(1.1,0.1,0.15),m,0,2.2));break;
-  }
-  g.traverse(ch=>{if(ch.isMesh){ch.castShadow=ch.receiveShadow=true;}});return g;
-}
-function remObj(id,skip){const o=plcGrp.children.find(c=>c.userData&&c.userData.id===id);if(!o)return;if(!skip)pushH('delObj',{id,x:o.position.x,y:o.position.y,z:o.position.z,userData:{...o.userData}});plcGrp.remove(o);o.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}
-function restObj(d){const all=[].concat(LIB.people,LIB.furniture,LIB.lighting,LIB.props);const it=all.find(i=>i.name===d.userData?.name);if(!it)return;const g=mkLibObj(it);g.position.set(d.x,d.y,d.z);g.userData=d.userData;plcGrp.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});}
-function deleteSelectedObject(){if(state.selectedObject){remObj(state.selectedObject.userData.id);state.selectedObject=null;}}
+// ═══ OBJECT LIBRARY ═══
+const LIB={people:[{i:'\u{1F9CD}',n:'站立',t:'person'},{i:'\u{1FA91}',n:'坐姿',t:'sit'},{i:'\u{1F465}',n:'双人',t:'g2'},{i:'\u{1F46A}',n:'三人',t:'g3'}],furniture:[{i:'\u{1F4CB}',n:'桌子',t:'table'},{i:'\u{1FA91}',n:'椅子',t:'chair'},{i:'\u{1F6CB}',n:'沙发',t:'sofa'},{i:'\u{1F4E6}',n:'平台',t:'plat'},{i:'\u{1F5C4}',n:'柜子',t:'cab'}],lighting:[{i:'\u{1F4A1}',n:'灯架',t:'ls'},{i:'\u2B55',n:'反光板',t:'ref'},{i:'\u{1F526}',n:'柔光箱',t:'sb'},{i:'\u{1F3AC}',n:'旗板',t:'flag'}],props:[{i:'\u{1F4F7}',n:'摄影机',t:'pc'},{i:'\u{1F3A5}',n:'三脚架',t:'tri'},{i:'\u{1F399}',n:'话筒架',t:'mic'},{i:'\u{1F4E6}',n:'箱子',t:'crate'},{i:'\u{1F6AA}',n:'门框',t:'door'}]};
+let oId=0;
+function toggleLib(){const p=document.getElementById('left-panel'),t=document.getElementById('lib-tab');p.classList.toggle('open');t.classList.add('active');switchLP('objects');if(p.classList.contains('open'))rLib();else t.classList.remove('active');}
+function toggleSB(){const p=document.getElementById('left-panel'),t=document.getElementById('sb-tab');const wasOpen=p.classList.contains('open')&&S.lpTab==='storyboard';if(wasOpen){p.classList.remove('open');t.classList.remove('active');}else{p.classList.add('open');t.classList.add('active');switchLP('storyboard');rLib();}}
+function switchLP(tab){S.lpTab=tab;document.querySelectorAll('[data-lt]').forEach(e=>e.classList.toggle('active',e.dataset.lt===tab));document.getElementById('lp-bottom').style.display=tab==='objects'?'block':'none';rLib();}
+function rLib(){const c=document.getElementById('lp-content');if(S.lpTab==='objects'){const items=LIB[libCat||'people'];c.innerHTML='<div class="lib-tabs" style="border-bottom:1px solid var(--border)">'+['people','furniture','lighting','props'].map(t=>'<div class="lib-tab'+(libCat===t?' active':'')+'" onclick="libCat=\''+t+'\';rLib()" style="font-size:9px;padding:4px">'+{people:'人物',furniture:'家具',lighting:'灯光',props:'道具'}[t]+'</div>').join('')+'</div><div class="lib-grid">'+items.map((it,i)=>'<div class="lib-item" onclick="plItem(\''+libCat+'\','+i+')"><div class="lib-item-icon">'+it.i+'</div><span>'+it.n+'</span></div>').join('')+'</div>';}
+else if(S.lpTab==='moves'){c.innerHTML='<div style="padding:6px 4px;font-size:9px;color:var(--text2)">选择运镜预设，自动应用到当前机位</div><div class="move-grid">'+MOVES.map((m,i)=>'<div class="move-item" onclick="applyMove('+i+')"><span class="move-icon">'+m.icon+'</span>'+m.name+'</div>').join('')+'</div>';}
+else if(S.lpTab==='storyboard'){const n=S.sbMode==='g9'?9:25;c.innerHTML='<div style="padding:6px;display:flex;gap:4px;align-items:center"><div class="btn small'+(S.sbMode==='g9'?' primary':'')+'" onclick="S.sbMode=\'g9\';rLib()">3×3</div><div class="btn small'+(S.sbMode==='g25'?' primary':'')+'" onclick="S.sbMode=\'g25\';rLib()">5×5</div><div style="flex:1"></div><div class="btn small" onclick="capSB()">截图全部</div></div><div class="sb-grid '+S.sbMode+'" id="sb-grid"></div>';renderSBGrid();}}
+let libCat='people';
 
-let dragging=false;const dPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0),dOff=new THREE.Vector3();
-renderer.domElement.addEventListener('mousedown',e=>{if(state.mode!=='navigate'||e.button!==0)return;const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,mainCam);const ms2=[];plcGrp.traverse(c=>{if(c.isMesh)ms2.push(c);});const hits=rc.intersectObjects(ms2);if(hits.length){const pg=hits[0].object.userData._pg||hits[0].object.parent;if(pg&&pg.userData&&pg.userData.id!==undefined){selObj2(pg);dragging=true;ctrl.enabled=false;const ip=new THREE.Vector3();rc.ray.intersectPlane(dPlane,ip);dOff.copy(pg.position).sub(ip);e.preventDefault();}}else deselObj();});
-renderer.domElement.addEventListener('mousemove',e=>{if(!dragging||!state.selectedObject)return;const r=renderer.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,mainCam);const ip=new THREE.Vector3();rc.ray.intersectPlane(dPlane,ip);state.selectedObject.position.copy(ip.add(dOff));});
-renderer.domElement.addEventListener('mouseup',()=>{if(dragging){dragging=false;ctrl.enabled=!state.viewfinder;}});
-function selObj2(g){deselObj();state.selectedObject=g;g.traverse(c=>{if(c.isMesh&&c.material){c.userData._oe=c.material.emissive?c.material.emissive.getHex():0;if(c.material.emissive)c.material.emissive.setHex(0x1a3a5c);}});}
-function deselObj(){if(state.selectedObject){state.selectedObject.traverse(c=>{if(c.isMesh&&c.material&&c.material.emissive)c.material.emissive.setHex(c.userData._oe||0);});state.selectedObject=null;}}
+// ═══ STORYBOARD ═══
+function renderSBGrid(){const grid=document.getElementById('sb-grid');if(!grid)return;const n=S.sbMode==='g9'?9:25;grid.innerHTML='';const cams=S.cams;for(let i=0;i<n;i++){const cell=document.createElement('div');cell.className='sb-cell'+(cams[i]&&cams[i].idx===S.selIdx?' active':'');if(i<cams.length){const cam=cams[i];cell.innerHTML='<div style="width:100%;height:100%;background:#0a0c12;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text2)">'+cam.name+'</div><div class="sb-cell-idx">'+(i+1)+'</div><div class="sb-cell-label">'+cam.focal+'mm</div>';if(S.sbImgs[cam.idx]){cell.querySelector('div').innerHTML='<img src="'+S.sbImgs[cam.idx]+'">';}cell.onclick=()=>sC(cam.idx);}else{cell.className='sb-cell empty';cell.textContent='+';cell.onclick=()=>{setMode('add');document.getElementById('hint').textContent='点击场景放置第'+(i+1)+'个机位';document.getElementById('hint').style.display='block';};}grid.appendChild(cell);}}
+function capSB(){if(!S.cams.length)return;const wasVF=S.vf;const origBg=SC.background.clone();const origFog=SC.fog;if(wasVF)toggleVF();S.cams.forEach(cam=>{VC.fov=cam.fov;VC.aspect=cam.sensorW/cam.sensorH;VC.updateProjectionMatrix();VC.position.set(cam.x,cam.height,cam.z);const yr=cam.yaw*Math.PI/180,pr=cam.pitch*Math.PI/180,d=10;VC.lookAt(cam.x+Math.sin(yr)*Math.cos(pr)*d,cam.height+Math.sin(pr)*d,cam.z+Math.cos(yr)*Math.cos(pr)*d);R.render(SC,VC);S.sbImgs[cam.idx]=R.domElement.toDataURL('image/jpeg',0.7);});if(wasVF)toggleVF();rLib();const h=document.getElementById('hint');h.textContent='分镜截图已更新';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);}
 
-function openExportModal(){document.getElementById('export-modal').classList.add('open');}
-function closeExportModal(){document.getElementById('export-modal').classList.remove('open');}
-function openTemplateModal(){document.getElementById('template-modal').classList.add('open');}
-function closeTemplateModal(){document.getElementById('template-modal').classList.remove('open');}
-function exportJSON(){const d={v:'1.0',tpl:state.currentTemplate,cams:state.cameras.map(c=>({n:c.name,x:c.x,z:c.z,h:c.height,yaw:c.yaw,pitch:c.pitch,f:c.focal,sw:c.sensorW,sh:c.sensorH,fs:c.fstop,fd:c.focusDist,fov:c.fov})),path:state.pathPoints,dur:state.pathDuration,objs:plcGrp.children.map(o=>({t:o.userData.type,n:o.userData.name,x:o.position.x,y:o.position.y,z:o.position.z}))};dlBlob(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),'cam-planner-'+fDate()+'.json');closeExportModal();}
-function exportScreenshot(){renderer.render(scene,state.viewfinder?vfCam:mainCam);const a=document.createElement('a');a.download='cam-planner-'+fDate()+'.png';a.href=renderer.domElement.toDataURL('image/png');a.click();closeExportModal();}
-function exportCSV(){let csv='Name,Focal,SW,SH,FStop,Focus,H,X,Z,Yaw,Pitch,FOV\n';state.cameras.forEach(c=>{csv+=[c.name,c.focal,c.sensorW,c.sensorH,c.fstop,c.focusDist,c.height,c.x.toFixed(2),c.z.toFixed(2),c.yaw.toFixed(1),c.pitch.toFixed(1),c.fov.toFixed(1)].join(',')+'\n';});dlBlob(new Blob([csv],{type:'text/csv'}),'cam-planner-'+fDate()+'.csv');closeExportModal();}
-function dlBlob(b,fn){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
-function fDate(){const d=new Date();return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');}
+// ═══ TIMELINE ═══
+function toggleTL(){S.tlOpen=!S.tlOpen;document.getElementById('timeline-bar').classList.toggle('open',S.tlOpen);document.getElementById('tl-tab').classList.toggle('active',S.tlOpen);if(S.tlOpen)uTL();}
+function uTL(){if(!S.tlOpen)return;const track=document.getElementById('tl-track');track.innerHTML='';let total=0;S.cams.forEach((c,i)=>{const dur=(c.script&&c.script.duration)||5;total+=dur;const b=document.createElement('div');b.className='tl-block'+(c.idx===S.selIdx?' current':'');b.innerHTML='<div class="tl-block-name" style="color:#'+c.color.toString(16).padStart(6,'0')+'">'+c.name+'</div><div class="tl-block-info">'+(c.script&&c.script.type||'')+' '+c.focal+'mm</div><div class="tl-block-dur">'+dur+'s | '+(c.script&&c.script.transition||'cut')+'</div>';b.onclick=()=>sC(c.idx);track.appendChild(b);});document.getElementById('tl-total').textContent='总时长: '+total+'s';}
+function tlPlay(){if(S.tlPlaying){S.tlPlaying=false;return;}S.tlPlaying=true;let idx=0;const playNext=()=>{if(!S.tlPlaying||idx>=S.cams.length){S.tlPlaying=false;return;}sC(S.cams[idx].idx);if(!S.vf)toggleVF();const dur=((S.cams[idx].script&&S.cams[idx].script.duration)||5)*1000;idx++;setTimeout(playNext,dur);};playNext();}
+function tlExport(){expSB();}
 
+// ═══ PLACE OBJECTS ═══
+function plItem(tab,idx){const item=LIB[tab][idx];const g=mkObj(item);if(!g)return;g.userData={libItem:item,id:oId++,type:item.t,name:item.n};PLG.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});pH('ao',{id:g.userData.id});const h=document.getElementById('hint');h.textContent=item.n+' 已放置';h.className='hint';h.style.display='block';setTimeout(()=>h.style.display='none',2000);}
+function mkObj(it){const g=new THREE.Group(),m=new THREE.MeshStandardMaterial({color:0x64748b,roughness:.6}),a=new THREE.MeshStandardMaterial({color:0x4a5568,roughness:.7});
+switch(it.t){case'person':{g.add(mm(new THREE.CylinderGeometry(.2,.2,1.2,8),m,0,1));g.add(new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),m).translateY(1.78));g.add(mm(new THREE.CylinderGeometry(.05,.05,.6,6),m,-.3,1.1,0,0,0,.15));g.add(mm(new THREE.CylinderGeometry(.05,.05,.6,6),m,.3,1.1,0,0,0,-.15));g.add(mm(new THREE.CylinderGeometry(.07,.07,.8,6),m,-.1,.4));g.add(mm(new THREE.CylinderGeometry(.07,.07,.8,6),m,.1,.4));break;}
+case'sit':{g.add(mm(new THREE.CylinderGeometry(.2,.2,.8,8),m,0,.8));g.add(new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),m).translateY(1.38));g.add(mm(new THREE.CylinderGeometry(.07,.07,.5,6),m,-.1,.35,.15,Math.PI/3));g.add(mm(new THREE.CylinderGeometry(.07,.07,.5,6),m,.1,.35,.15,Math.PI/3));break;}
+case'g2':for(let i=-1;i<=1;i+=2){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(.2,.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),m).translateY(1.78));p.position.x=i*.5;g.add(p);}break;
+case'g3':for(let i=-1;i<=1;i++){const p=new THREE.Group();p.add(mm(new THREE.CylinderGeometry(.2,.2,1.2,8),m,0,1));p.add(new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),m).translateY(1.78));p.position.x=i*.6;g.add(p);}break;
+case'table':g.add(mm(new THREE.BoxGeometry(1.8,.05,.9),a,0,.75));for(let dx of[-.85,.85])for(let dz of[-.4,.4])g.add(mm(new THREE.CylinderGeometry(.025,.025,.75,6),m,dx,.375,dz));break;
+case'chair':g.add(mm(new THREE.BoxGeometry(.45,.04,.45),a,0,.45));g.add(mm(new THREE.BoxGeometry(.45,.5,.04),m,0,.7,-.2));for(let dx of[-.18,.18])for(let dz of[-.18,.18])g.add(mm(new THREE.CylinderGeometry(.02,.02,.45,6),m,dx,.225,dz));break;
+case'sofa':g.add(mm(new THREE.BoxGeometry(2,.35,.8),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:.8}),0,.25));g.add(mm(new THREE.BoxGeometry(2,.45,.12),new THREE.MeshStandardMaterial({color:0x6b4226,roughness:.8}),0,.55,-.34));break;
+case'plat':g.add(mm(new THREE.BoxGeometry(3,.3,2),a,0,.15));break;
+case'cab':g.add(mm(new THREE.BoxGeometry(.8,1.2,.4),a,0,.6));break;
+case'ls':g.add(mm(new THREE.CylinderGeometry(.02,.02,2.5,8),new THREE.MeshStandardMaterial({color:0x888888,metalness:.6}),0,1.25));g.add(new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),new THREE.MeshBasicMaterial({color:0xffffcc})).translateY(2.5));break;
+case'ref':g.add(mm(new THREE.CylinderGeometry(.02,.02,1.8,8),m,0,.9));g.add(mm(new THREE.CircleGeometry(.5,16),new THREE.MeshStandardMaterial({color:0xeeeeee,side:THREE.DoubleSide}),0,1.8,.01));break;
+case'sb':g.add(mm(new THREE.CylinderGeometry(.02,.02,2.2,8),m,0,1.1));g.add(mm(new THREE.BoxGeometry(.6,.6,.15),new THREE.MeshStandardMaterial({color:0x222222}),0,2.3));break;
+case'flag':g.add(mm(new THREE.CylinderGeometry(.02,.02,2,8),m,0,1));g.add(mm(new THREE.BoxGeometry(.8,.6,.02),new THREE.MeshStandardMaterial({color:0x111111}),0,1.8));break;
+case'pc':g.add(mm(new THREE.BoxGeometry(.3,.2,.35),new THREE.MeshStandardMaterial({color:0x222222,metalness:.5}),0,0));g.add(mm(new THREE.CylinderGeometry(.06,.09,.2,12),new THREE.MeshStandardMaterial({color:0x111111,metalness:.8}),0,0,.25));break;
+case'tri':g.add(mm(new THREE.CylinderGeometry(.02,.02,1.3,6),m,0,.65,.15,.15));g.add(mm(new THREE.CylinderGeometry(.02,.02,1.3,6),m,-.13,.65,-.08,-.15));g.add(mm(new THREE.CylinderGeometry(.02,.02,1.3,6),m,.13,.65,-.08,.15));break;
+case'mic':g.add(mm(new THREE.CylinderGeometry(.015,.015,2,8),m,0,1));g.add(mm(new THREE.CylinderGeometry(.15,.15,.02,8),m,0,.01));break;
+case'crate':g.add(mm(new THREE.BoxGeometry(.6,.6,.6),new THREE.MeshStandardMaterial({color:0x8B6914,roughness:.9}),0,.3));break;
+case'door':g.add(mm(new THREE.BoxGeometry(.1,2.2,.15),m,-.5,1.1));g.add(mm(new THREE.BoxGeometry(.1,2.2,.15),m,.5,1.1));g.add(mm(new THREE.BoxGeometry(1.1,.1,.15),m,0,2.2));break;
+}g.traverse(ch=>{if(ch.isMesh){ch.castShadow=ch.receiveShadow=true;}});return g;}
+function rO(id,skip){const o=PLG.children.find(c=>c.userData&&c.userData.id===id);if(!o)return;if(!skip)pH('do',{id,x:o.position.x,y:o.position.y,z:o.position.z,userData:{...o.userData}});PLG.remove(o);o.traverse(ch=>{if(ch.geometry)ch.geometry.dispose();if(ch.material)ch.material.dispose();});}
+function rsO(d){const all=[].concat(LIB.people,LIB.furniture,LIB.lighting,LIB.props);const it=all.find(i=>i.n===d.userData?.name);if(!it)return;const g=mkObj(it);g.position.set(d.x,d.y,d.z);g.userData=d.userData;PLG.add(g);g.traverse(ch=>{if(ch.isMesh)ch.userData._pg=g;});}
+function deleteSelectedObject(){if(S.selObj){rO(S.selObj.userData.id);S.selObj=null;}}
+let dragging=false;const dPl=new THREE.Plane(new THREE.Vector3(0,1,0),0),dOf=new THREE.Vector3();
+R.domElement.addEventListener('mousedown',e=>{if(S.mode!=='navigate'||e.button!==0)return;const r=R.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,MC);const ms2=[];PLG.traverse(c=>{if(c.isMesh)ms2.push(c);});const hits=rc.intersectObjects(ms2);if(hits.length){const pg=hits[0].object.userData._pg||hits[0].object.parent;if(pg&&pg.userData&&pg.userData.id!==undefined){selO(pg);dragging=true;OC.enabled=false;const ip=new THREE.Vector3();rc.ray.intersectPlane(dPl,ip);dOf.copy(pg.position).sub(ip);e.preventDefault();}}else deselO();});
+R.domElement.addEventListener('mousemove',e=>{if(!dragging||!S.selObj)return;const r=R.domElement.getBoundingClientRect();ms.x=((e.clientX-r.left)/r.width)*2-1;ms.y=-((e.clientY-r.top)/r.height)*2+1;rc.setFromCamera(ms,MC);const ip=new THREE.Vector3();rc.ray.intersectPlane(dPl,ip);S.selObj.position.copy(ip.add(dOf));});
+R.domElement.addEventListener('mouseup',()=>{if(dragging){dragging=false;OC.enabled=!S.vf;}});
+function selO(g){deselO();S.selObj=g;g.traverse(c=>{if(c.isMesh&&c.material){c.userData._oe=c.material.emissive?c.material.emissive.getHex():0;if(c.material.emissive)c.material.emissive.setHex(0x1a3a5c);}});}
+function deselO(){if(S.selObj){S.selObj.traverse(c=>{if(c.isMesh&&c.material&&c.material.emissive)c.material.emissive.setHex(c.userData._oe||0);});S.selObj=null;}}
+
+// ═══ EXPORT ═══
+function openExp(){document.getElementById('exp-modal').classList.add('open');}
+function openTpl(){document.getElementById('tpl-modal').classList.add('open');}
+function clModal(id){document.getElementById(id).classList.remove('open');}
+function expJSON(){const d={v:'2.0',tpl:S.tpl,cams:S.cams.map(c=>({n:c.name,x:c.x,z:c.z,h:c.height,yaw:c.yaw,pitch:c.pitch,f:c.focal,sw:c.sensorW,sh:c.sensorH,fs:c.fstop,fd:c.focusDist,fov:c.fov,script:c.script})),path:S.pp,dur:S.pDur,objs:PLG.children.map(o=>({t:o.userData.type,n:o.userData.name,x:o.position.x,y:o.position.y,z:o.position.z}))};dl(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),'cam-'+fD()+'.json');clModal('exp-modal');}
+function expShot(){R.render(SC,S.vf?VC:MC);const a=document.createElement('a');a.download='cam-'+fD()+'.png';a.href=R.domElement.toDataURL('image/png');a.click();clModal('exp-modal');}
+function expCSV(){let csv='Name,Focal,SW,SH,FStop,Focus,H,X,Z,Yaw,Pitch,FOV,Scene,Type,Action,Dialog,Duration,Transition\n';S.cams.forEach(c=>{const s=c.script||{};csv+=[c.name,c.focal,c.sensorW,c.sensorH,c.fstop,c.focusDist,c.height,c.x.toFixed(2),c.z.toFixed(2),c.yaw.toFixed(1),c.pitch.toFixed(1),c.fov.toFixed(1),'"'+(s.scene||'')+'"','"'+(s.type||'')+'"','"'+(s.action||'')+'"','"'+(s.dialog||'')+'"',s.duration||5,s.transition||'cut'].join(',')+'\n';});dl(new Blob([csv],{type:'text/csv'}),'cam-'+fD()+'.csv');clModal('exp-modal');}
+function expSB(){const n=S.sbMode==='g9'?9:25;const cols=S.sbMode==='g9'?3:5;const rows=Math.ceil(Math.min(n,S.cams.length)/cols);const cw=320,ch=180,pad=4,header=40;const canvas=document.createElement('canvas');canvas.width=cols*cw+(cols+1)*pad;canvas.height=rows*ch+(rows+1)*pad+header;const ctx=canvas.getContext('2d');ctx.fillStyle='#0f1117';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#e2e8f0';ctx.font='bold 14px sans-serif';ctx.fillText('Camera Planner - Storyboard | '+S.tpl+' | '+new Date().toLocaleString(),pad,pad+16);const wasVF=S.vf;if(wasVF)toggleVF();for(let i=0;i<Math.min(n,S.cams.length);i++){const col=i%cols,row=Math.floor(i/cols);const cx=pad+col*(cw+pad),cy=header+pad+row*(ch+pad);const cam=S.cams[i];VC.fov=cam.fov;VC.aspect=cam.sensorW/cam.sensorH;VC.updateProjectionMatrix();VC.position.set(cam.x,cam.height,cam.z);const yr=cam.yaw*Math.PI/180,pr=cam.pitch*Math.PI/180,d=10;VC.lookAt(cam.x+Math.sin(yr)*Math.cos(pr)*d,cam.height+Math.sin(pr)*d,cam.z+Math.cos(yr)*Math.cos(pr)*d);R.render(SC,VC);const img=new Image();img.src=R.domElement.toDataURL('image/jpeg',.8);ctx.fillStyle='#1a1d27';ctx.fillRect(cx,cy,cw,ch);ctx.strokeStyle='#2a2d3a';ctx.strokeRect(cx,cy,cw,ch);try{ctx.drawImage(img,cx+2,cy+2,cw-4,ch-28);}catch(e){}ctx.fillStyle='#60a5fa';ctx.font='bold 10px sans-serif';ctx.fillText(cam.name+' | '+cam.focal+'mm | f/'+cam.fstop,cx+4,cy+ch-10);const sc=cam.script||{};if(sc.type){ctx.fillStyle='#94a3b8';ctx.font='9px sans-serif';ctx.fillText(sc.type+(sc.scene?' | '+sc.scene:''),cx+4,cy+ch-22);}}if(wasVF)toggleVF();canvas.toBlob(b=>{dl(b,'storyboard-'+fD()+'.png');clModal('exp-modal');});}
+function expProd(){const d={v:'2.0',tpl:S.tpl,created:new Date().toISOString(),cams:S.cams.map(c=>({...c,marker:undefined,cone:undefined,wire:undefined})),path:S.pp,dur:S.pDur,objs:PLG.children.map(o=>({t:o.userData.type,n:o.userData.name,pos:[o.position.x,o.position.y,o.position.z]})),lighting:{key:kL.intensity,fill:fL.intensity,ambient:aL.intensity,exposure:R.toneMappingExposure}};dl(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),'production-'+fD()+'.json');clModal('exp-modal');}
+function dl(b,fn){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+function fD(){const d=new Date();return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');}
+
+// ═══ KEYBOARD ═══
 document.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey){if(e.key==='z'){e.preventDefault();undo();return;}if(e.key==='y'){e.preventDefault();redo();return;}}
-  if(e.key>='1'&&e.key<='9'){const i=parseInt(e.key)-1;if(i<state.cameras.length)selCam(state.cameras[i].idx);}
+  if(e.key>='1'&&e.key<='9'){const i=parseInt(e.key)-1;if(i<S.cams.length)sC(S.cams[i].idx);}
   if(e.key==='v'||e.key==='V')toggleVF();if(e.key==='a'||e.key==='A')setMode('add');if(e.key==='p'||e.key==='P')setMode('path');
-  if(e.key==='l'||e.key==='L')toggleLibPanel();if(e.key==='e'||e.key==='E')openExportModal();
-  if(e.key==='Escape'){closeExportModal();closeTemplateModal();if(state.mode!=='navigate')setMode('navigate');else if(state.viewfinder)toggleVF();}
-  if(e.key==='Delete'||e.key==='Backspace'){if(state.selectedObject){deleteSelectedObject();return;}if(state.selectedIdx>=0&&!state.viewfinder)delCam(state.selectedIdx);}
+  if(e.key==='l'||e.key==='L')toggleLib();if(e.key==='e'||e.key==='E')openExp();if(e.key==='s'||e.key==='S')toggleSB();if(e.key==='t'||e.key==='T')toggleTL();
+  if(e.key==='m'||e.key==='M'){const p=document.getElementById('left-panel');if(!p.classList.contains('open')){p.classList.add('open');}switchLP('moves');rLib();}
+  if(e.key==='Escape'){clModal('exp-modal');clModal('tpl-modal');if(S.mode!=='navigate')setMode('navigate');else if(S.vf)toggleVF();}
+  if(e.key==='Delete'||e.key==='Backspace'){if(S.selObj){deleteSelectedObject();return;}if(S.selIdx>=0&&!S.vf)dC(S.selIdx);}
 });
 
-function onResize(){const r=vp.getBoundingClientRect();renderer.setSize(r.width,r.height);mainCam.aspect=r.width/r.height;mainCam.updateProjectionMatrix();if(composer)composer.setSize(r.width,r.height);if(state.viewfinder){updLB();drawGrid();}}
-window.addEventListener('resize',onResize);new ResizeObserver(onResize).observe(vp);
+// ═══ RESIZE ═══
+function onR(){const r=vp.getBoundingClientRect();R.setSize(r.width,r.height);MC.aspect=r.width/r.height;MC.updateProjectionMatrix();if(comp)comp.setSize(r.width,r.height);if(S.vf){uLB();dG();}}
+window.addEventListener('resize',onR);new ResizeObserver(onR).observe(vp);
 
-function updTC(){if(!state.viewfinder)return;const e=(Date.now()-state.startTime)/1000;document.getElementById('vf-timecode').textContent=String(Math.floor(e/3600)).padStart(2,'0')+':'+String(Math.floor(e%3600/60)).padStart(2,'0')+':'+String(Math.floor(e%60)).padStart(2,'0')+':'+String(Math.floor(e%1*25)).padStart(2,'0');}
+// ═══ TIMECODE ═══
+function uTC(){if(!S.vf)return;const e=(Date.now()-S.t0)/1000;document.getElementById('vf-tc').textContent=String(~~(e/3600)).padStart(2,'0')+':'+String(~~(e%3600/60)).padStart(2,'0')+':'+String(~~(e%60)).padStart(2,'0')+':'+String(~~(e%1*25)).padStart(2,'0');}
 
-function animate(){requestAnimationFrame(animate);ctrl.update();if(state.pathPlaying)updPlayback();updTC();if(state.viewfinder&&(getCam()||state.pathPlaying)){if(bokeh&&bokeh.enabled&&composer)composer.render();else renderer.render(scene,vfCam);}else renderer.render(scene,mainCam);}
+// ═══ LOOP ═══
+function animate(){requestAnimationFrame(animate);OC.update();if(S.pPlay)uPB();uTC();if(S.vf&&(gC()||S.pPlay)){if(bk&&bk.enabled&&comp)comp.render();else R.render(SC,VC);}else R.render(SC,MC);}
 
-// Init
-[{x:0,z:10,h:2,yaw:0,pitch:-5,f:24,n:'Wide'},{x:-8,z:2,h:1.6,yaw:60,pitch:-2,f:50,n:'Medium-L'},{x:2,z:-1,h:1.5,yaw:160,pitch:5,f:85,n:'CU'}].forEach(p=>{
-  const sw=36,sh=24,ci=state.camCounter++;
-  state.cameras.push({idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0')+' '+p.n,x:p.x,z:p.z,height:p.h,yaw:p.yaw,pitch:p.pitch,focal:p.f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov:calcFOV(p.f,sh),color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null});
-  createMarker(state.cameras[state.cameras.length-1]);
+// ═══ INIT ═══
+[{x:0,z:10,h:2,yaw:0,pitch:-5,f:24,n:'Wide'},{x:-8,z:2,h:1.6,yaw:60,pitch:-2,f:50,n:'Med-L'},{x:2,z:-1,h:1.5,yaw:160,pitch:5,f:85,n:'CU'}].forEach(p=>{
+  const sw=36,sh=24,ci=S.cCnt++;
+  S.cams.push({idx:ci,name:'CAM-'+String(ci+1).padStart(2,'0')+' '+p.n,x:p.x,z:p.z,height:p.h,yaw:p.yaw,pitch:p.pitch,focal:p.f,sensorW:sw,sensorH:sh,fstop:2.8,focusDist:5,fov:cFOV(p.f,sh),color:COLORS[ci%COLORS.length],marker:null,cone:null,wire:null,script:{scene:'',type:'',action:'',dialog:'',notes:'',duration:5,transition:'cut'}});
+  cM(S.cams[S.cams.length-1]);
 });
-buildStudio();setupLights();selCam(state.cameras[0].idx);renderLib();onResize();animate();
+bStudio();sLt();sC(S.cams[0].idx);rLib();onR();animate();
 </script>
 </body>
 </html>
