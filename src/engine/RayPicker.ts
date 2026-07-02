@@ -1,0 +1,224 @@
+/**
+ * RayPicker — Raycasting for object/camera selection and drag interaction.
+ *
+ * Handles mouse/touch ray casting against scene objects and camera meshes.
+ * Supports: click-to-select, hover highlight, drag-to-move on the ground plane.
+ */
+
+import * as THREE from 'three'
+
+export type PickTarget = 'camera' | 'object' | 'ground' | null
+
+export interface PickResult {
+  target: PickTarget
+  id: string | null          // camera or object ID
+  point: THREE.Vector3       // intersection point in world space
+  groundPoint: THREE.Vector3 | null  // projection onto y=0 plane
+}
+
+export class RayPicker {
+  private camera: THREE.Camera
+  private scene: THREE.Scene
+  private raycaster: THREE.Raycaster
+  private mouse: THREE.Vector2
+  private groundPlane: THREE.Plane
+
+  // Callbacks
+  private onPickCallback: ((result: PickResult) => void) | null = null
+  private onHoverCallback: ((result: PickResult | null) => void) | null = null
+
+  // Drag state
+  private isDragging = false
+  private dragTarget: { type: 'camera' | 'object'; id: string } | null = null
+  private dragPlane: THREE.Plane
+  private dragOffset: THREE.Vector3
+
+  // Reference to interactable objects
+  private cameraGroups: THREE.Group[] = []
+  private objectMeshes: THREE.Object3D[] = []
+
+  constructor(camera: THREE.Camera, scene: THREE.Scene) {
+    this.camera = camera
+    this.scene = scene
+    this.raycaster = new THREE.Raycaster()
+    this.mouse = new THREE.Vector2()
+    this.groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+    this.dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+    this.dragOffset = new THREE.Vector3()
+  }
+
+  /** Set the camera groups that can be picked */
+  setCameraGroups(groups: THREE.Group[]): void {
+    this.cameraGroups = groups
+  }
+
+  /** Set the object meshes that can be picked */
+  setObjectMeshes(meshes: THREE.Object3D[]): void {
+    this.objectMeshes = meshes
+  }
+
+  /** Enable picking on a canvas element */
+  enable(canvas: HTMLElement): void {
+    canvas.addEventListener('pointerdown', this.onPointerDown)
+    canvas.addEventListener('pointermove', this.onPointerMove)
+    canvas.addEventListener('pointerup', this.onPointerUp)
+  }
+
+  /** Disable picking */
+  disable(canvas: HTMLElement): void {
+    canvas.removeEventListener('pointerdown', this.onPointerDown)
+    canvas.removeEventListener('pointermove', this.onPointerMove)
+    canvas.removeEventListener('pointerup', this.onPointerUp)
+  }
+
+  /** Register pick callback */
+  onPick(callback: (result: PickResult) => void): void {
+    this.onPickCallback = callback
+  }
+
+  /** Register hover callback */
+  onHover(callback: (result: PickResult | null) => void): void {
+    this.onHoverCallback = callback
+  }
+
+  // --- Private event handlers ---
+
+  private onPointerDown = (event: PointerEvent): void => {
+    this.updateMouse(event)
+    const result = this.raycast()
+
+    if (result.target === 'camera' || result.target === 'object') {
+      this.isDragging = true
+      this.dragTarget = {
+        type: result.target,
+        id: result.id!,
+      }
+
+      // Set drag plane at the object's Y height
+      const worldPos = this.getWorldPosition(result.target, result.id!)
+      if (worldPos) {
+        this.dragPlane.set(new THREE.Vector3(0, 1, 0), -worldPos.y)
+        const intersection = new THREE.Vector3()
+        this.raycaster.ray.intersectPlane(this.dragPlane, intersection)
+        this.dragOffset.copy(worldPos).sub(intersection)
+      }
+    }
+
+    if (this.onPickCallback) {
+      this.onPickCallback(result)
+    }
+  }
+
+  private onPointerMove = (event: PointerEvent): void => {
+    this.updateMouse(event)
+
+    if (this.isDragging && this.dragTarget) {
+      // Calculate new position on drag plane
+      const intersection = new THREE.Vector3()
+      this.raycaster.ray.intersectPlane(this.dragPlane, intersection)
+      intersection.add(this.dragOffset)
+
+      if (this.onPickCallback) {
+        this.onPickCallback({
+          target: this.dragTarget.type,
+          id: this.dragTarget.id,
+          point: intersection.clone(),
+          groundPoint: new THREE.Vector3(intersection.x, 0, intersection.z),
+        })
+      }
+      return
+    }
+
+    // Hover detection
+    const result = this.raycast()
+    if (this.onHoverCallback) {
+      this.onHoverCallback(result.target ? result : null)
+    }
+  }
+
+  private onPointerUp = (_event: PointerEvent): void => {
+    this.isDragging = false
+    this.dragTarget = null
+  }
+
+  private updateMouse(event: PointerEvent): void {
+    const rect = (event.target as HTMLElement).getBoundingClientRect?.()
+    if (!rect) return
+    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+  }
+
+  private raycast(): PickResult {
+    const empty: PickResult = {
+      target: null,
+      id: null,
+      point: new THREE.Vector3(),
+      groundPoint: null,
+    }
+
+    // Collect all pickable meshes
+    const allMeshes: THREE.Object3D[] = []
+    for (const group of this.cameraGroups) {
+      group.traverse((child) => {
+        if (child instanceof THREE.Mesh) allMeshes.push(child)
+      })
+    }
+    for (const obj of this.objectMeshes) {
+      obj.traverse((child) => {
+        if (child instanceof THREE.Mesh) allMeshes.push(child)
+      })
+    }
+
+    const intersects = this.raycaster.intersectObjects(allMeshes, false)
+
+    if (intersects.length > 0) {
+      const hit = intersects[0]
+      const userData = hit.object.userData
+
+      // Check ground point
+      const groundPoint = new THREE.Vector3()
+      this.raycaster.ray.intersectPlane(this.groundPlane, groundPoint)
+
+      if (userData.cameraId) {
+        return {
+          target: 'camera',
+          id: userData.cameraId,
+          point: hit.point.clone(),
+          groundPoint,
+        }
+      }
+      if (userData.objectId) {
+        return {
+          target: 'object',
+          id: userData.objectId,
+          point: hit.point.clone(),
+          groundPoint,
+        }
+      }
+    }
+
+    // Hit ground
+    const groundPoint = new THREE.Vector3()
+    const groundHit = this.raycaster.ray.intersectPlane(this.groundPlane, groundPoint)
+    if (groundHit) {
+      return {
+        target: 'ground',
+        id: null,
+        point: groundPoint.clone(),
+        groundPoint: groundPoint.clone(),
+      }
+    }
+
+    return empty
+  }
+
+  private getWorldPosition(type: 'camera' | 'object', id: string): THREE.Vector3 | null {
+    if (type === 'camera') {
+      const group = this.cameraGroups.find(g => g.userData.cameraId === id)
+      return group ? group.position.clone() : null
+    }
+    const mesh = this.objectMeshes.find(m => m.userData.objectId === id)
+    return mesh ? mesh.position.clone() : null
+  }
+}

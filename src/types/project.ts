@@ -1,0 +1,76 @@
+// Project-level types
+
+import { Camera } from './camera'
+import { SceneConfig, SceneObject } from './scene'
+
+export interface ProjectData {
+  version: string
+  cameras: Camera[]
+  scene: SceneConfig
+  path: PathPoint[]
+  storyboard: StoryboardConfig
+  timeline: TimelineConfig
+}
+
+export interface PathPoint {
+  id: string
+  position: { x: number; y: number; z: number }
+  rotation: { yaw: number; pitch: number; roll: number }
+  cameraId?: string       // which camera this keyframe belongs to
+  t: number               // time position (0-1)
+}
+
+export interface StoryboardConfig {
+  grid: '3x3' | '5x5'
+  cells: StoryboardCell[]
+}
+
+export interface StoryboardCell {
+  index: number
+  cameraId?: string
+  label?: string
+  thumbnail?: string      // data URL
+}
+
+export interface TimelineConfig {
+  duration: number        // total seconds
+  currentTime: number     // playback head position
+  playing: boolean
+  keyframes: TimelineKeyframe[]
+}
+
+export interface TimelineKeyframe {
+  id: string
+  time: number            // seconds
+  cameraId: string
+  type: string            // 'position' | 'rotation' | 'focal'
+  value: unknown
+}
+
+export function createEmptyProject(): ProjectData {
+  return {
+    version: '3.0',
+    cameras: [],
+    scene: {
+      template: 'empty',
+      objects: [],
+      lighting: {
+        position: { x: 5, y: 10, z: 5 },
+        intensity: 1.0,
+        color: 0xffffff,
+        preset: 'daylight',
+      },
+    },
+    path: [],
+    storyboard: {
+      grid: '3x3',
+      cells: [],
+    },
+    timeline: {
+      duration: 30,
+      currentTime: 0,
+      playing: false,
+      keyframes: [],
+    },
+  }
+}
