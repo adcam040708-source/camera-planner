@@ -7,6 +7,7 @@ import { usePlannerStore, SideTab } from '../store/usePlannerStore'
 import { CameraList } from './CameraList'
 import { ObjectPalette } from './ObjectPalette'
 import { SceneTemplates } from './SceneTemplates'
+import css from '../styles.module.css'
 
 const TABS: { value: SideTab; label: string; icon: string }[] = [
   { value: 'cameras', label: '机位', icon: '📷' },
@@ -20,28 +21,28 @@ export const Sidebar: React.FC = () => {
   const setSideTab = usePlannerStore(s => s.setSideTab)
 
   return (
-    <div className="cp-sidebar">
-      <div className="cp-sidebar-tabs">
+    <div className={css.cpSidebar}>
+      <div className={css.cpSidebarTabs}>
         {TABS.map(t => (
           <button
             key={t.value}
-            className={`cp-tab-btn ${sideTab === t.value ? 'active' : ''}`}
+            className={`${css.cpTabBtn} ${sideTab === t.value ? css.active : ''}`}
             onClick={() => setSideTab(t.value)}
             title={t.label}
           >
-            <span className="cp-icon">{t.icon}</span>
-            <span className="cp-tab-label">{t.label}</span>
+            <span className={css.cpIcon}>{t.icon}</span>
+            <span className={css.cpTabLabel}>{t.label}</span>
           </button>
         ))}
       </div>
-      <div className="cp-sidebar-content">
+      <div className={css.cpSidebarContent}>
         {sideTab === 'cameras' && <CameraList />}
         {sideTab === 'objects' && <ObjectPalette />}
         {sideTab === 'templates' && <SceneTemplates />}
         {sideTab === 'characters' && (
-          <div className="cp-placeholder">
+          <div className={css.cpPlaceholder}>
             <p>角色面板（待开发）</p>
-            <p className="cp-hint">从剧本导入角色，自动分配位置</p>
+            <p className={css.cpHint}>从剧本导入角色，自动分配位置</p>
           </div>
         )}
       </div>

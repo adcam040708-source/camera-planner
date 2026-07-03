@@ -276,14 +276,17 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   undo: () => {
     if (historyStack.length === 0) return
     const prev = historyStack.pop()!
-    redoStack.push(get().project)
+    // Save the state we're leaving so redo can return to it
+    redoStack.push(structuredClone(get().project))
     set({ project: prev })
   },
 
   redo: () => {
     if (redoStack.length === 0) return
     const next = redoStack.pop()!
-    pushHistory(get().project)
+    // Save the state we're leaving so undo can return to it (don't clear redoStack)
+    historyStack.push(structuredClone(get().project))
+    if (historyStack.length > MAX_HISTORY) historyStack.shift()
     set({ project: next })
   },
 }))

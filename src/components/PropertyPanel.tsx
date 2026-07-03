@@ -8,6 +8,7 @@ import { outputManager } from './CameraPlanner'
 import { SENSOR_PRESETS } from '../presets/sensors'
 import { MOVEMENT_PRESETS } from '../presets/movements'
 import { Camera } from '../types/camera'
+import css from '../styles.module.css'
 
 export const PropertyPanel: React.FC = () => {
   const selectedCameraId = usePlannerStore(s => s.selectedCameraId)
@@ -22,8 +23,8 @@ export const PropertyPanel: React.FC = () => {
 
   if (!selectedCamera && !selectedObject) {
     return (
-      <div className="cp-property-panel">
-        <div className="cp-placeholder">
+      <div className={css.cpPropertyPanel}>
+        <div className={css.cpPlaceholder}>
           <p>选择机位或物体查看属性</p>
         </div>
       </div>
@@ -74,11 +75,11 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
   }
 
   return (
-    <div className="cp-property-panel">
-      <div className="cp-panel-section">
-        <div className="cp-section-title">摄像机参数</div>
+    <div className={css.cpPropertyPanel}>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>摄像机参数</div>
 
-        <div className="cp-field">
+        <div className={css.cpField}>
           <label>名称</label>
           <input
             type="text"
@@ -87,17 +88,17 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
           />
         </div>
 
-        <div className="cp-field">
+        <div className={css.cpField}>
           <label>焦距 (mm)</label>
           <input
             type="range" min="8" max="300" step="1"
             value={camera.focal}
             onChange={e => handleChange('focal', Number(e.target.value))}
           />
-          <span className="cp-field-value">{camera.focal}mm</span>
+          <span className={css.cpFieldValue}>{camera.focal}mm</span>
         </div>
 
-        <div className="cp-field">
+        <div className={css.cpField}>
           <label>传感器</label>
           <select
             value={SENSOR_PRESETS.find(s =>
@@ -111,31 +112,31 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
           </select>
         </div>
 
-        <div className="cp-field">
+        <div className={css.cpField}>
           <label>光圈 (f/)</label>
           <input
             type="range" min="1.2" max="22" step="0.1"
             value={camera.fstop}
             onChange={e => handleChange('fstop', Number(e.target.value))}
           />
-          <span className="cp-field-value">f/{camera.fstop.toFixed(1)}</span>
+          <span className={css.cpFieldValue}>f/{camera.fstop.toFixed(1)}</span>
         </div>
 
-        <div className="cp-field">
+        <div className={css.cpField}>
           <label>对焦距离 (m)</label>
           <input
             type="range" min="0.3" max="100" step="0.1"
             value={camera.focusDist}
             onChange={e => handleChange('focusDist', Number(e.target.value))}
           />
-          <span className="cp-field-value">{camera.focusDist.toFixed(1)}m</span>
+          <span className={css.cpFieldValue}>{camera.focusDist.toFixed(1)}m</span>
         </div>
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">位置</div>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>位置</div>
         {(['x', 'y', 'z'] as const).map(axis => (
-          <div className="cp-field cp-field-row" key={axis}>
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
             <label>{axis.toUpperCase()}</label>
             <input
               type="number" step="0.1"
@@ -146,47 +147,47 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
         ))}
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">旋转</div>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>旋转</div>
         {(['yaw', 'pitch', 'roll'] as const).map(axis => (
-          <div className="cp-field cp-field-row" key={axis}>
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
             <label>{axis}</label>
             <input
               type="range" min="-180" max="180" step="1"
               value={camera.rotation[axis]}
               onChange={e => handleRotationChange(axis, Number(e.target.value))}
             />
-            <span className="cp-field-value">{camera.rotation[axis]}°</span>
+            <span className={css.cpFieldValue}>{camera.rotation[axis]}°</span>
           </div>
         ))}
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">计算值</div>
-        <div className="cp-calc-row">
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>计算值</div>
+        <div className={css.cpCalcRow}>
           <span>FOV</span>
-          <span className="cp-calc-value">{camera.fov.toFixed(1)}°</span>
+          <span className={css.cpCalcValue}>{camera.fov.toFixed(1)}°</span>
         </div>
-        <div className="cp-calc-row">
+        <div className={css.cpCalcRow}>
           <span>景深范围</span>
-          <span className="cp-calc-value">
+          <span className={css.cpCalcValue}>
             {camera.dof.range === Infinity ? '∞' : `${camera.dof.range.toFixed(2)}m`}
           </span>
         </div>
-        <div className="cp-calc-row">
+        <div className={css.cpCalcRow}>
           <span>近焦</span>
-          <span className="cp-calc-value">{camera.dof.near.toFixed(2)}m</span>
+          <span className={css.cpCalcValue}>{camera.dof.near.toFixed(2)}m</span>
         </div>
-        <div className="cp-calc-row">
+        <div className={css.cpCalcRow}>
           <span>远焦</span>
-          <span className="cp-calc-value">
+          <span className={css.cpCalcValue}>
             {camera.dof.far === Infinity ? '∞' : `${camera.dof.far.toFixed(2)}m`}
           </span>
         </div>
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">运镜</div>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>运镜</div>
         <select
           value={camera.movement?.type || ''}
           onChange={e => {
@@ -203,6 +204,65 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
             <option key={p.type} value={p.type}>{p.label} ({p.labelEn})</option>
           ))}
         </select>
+      </div>
+
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>剧本绑定</div>
+        <div className={css.cpField}>
+          <label>场景</label>
+          <input
+            type="text"
+            value={camera.script?.sceneId || ''}
+            onChange={e => onUpdate(camera.id, {
+              script: { ...camera.script, sceneId: e.target.value },
+            })}
+            placeholder="Scene-01"
+          />
+        </div>
+        <div className={css.cpField}>
+          <label>镜号</label>
+          <input
+            type="text"
+            value={camera.script?.shotId || ''}
+            onChange={e => onUpdate(camera.id, {
+              script: { ...camera.script, shotId: e.target.value },
+            })}
+            placeholder="Shot-03"
+          />
+        </div>
+        <div className={css.cpField}>
+          <label>描述</label>
+          <input
+            type="text"
+            value={camera.script?.description || ''}
+            onChange={e => onUpdate(camera.id, {
+              script: { ...camera.script, description: e.target.value },
+            })}
+            placeholder="主角对话近景"
+          />
+        </div>
+        <div className={css.cpField}>
+          <label>对白</label>
+          <input
+            type="text"
+            value={camera.script?.dialogue || ''}
+            onChange={e => onUpdate(camera.id, {
+              script: { ...camera.script, dialogue: e.target.value },
+            })}
+            placeholder="你怎么来了？"
+          />
+        </div>
+        <div className={css.cpField}>
+          <label>动作</label>
+          <input
+            type="text"
+            value={camera.script?.action || ''}
+            onChange={e => onUpdate(camera.id, {
+              script: { ...camera.script, action: e.target.value },
+            })}
+            placeholder="转身离开"
+          />
+        </div>
       </div>
     </div>
   )
@@ -225,19 +285,19 @@ const ObjectProperties: React.FC<ObjectPropsProps> = ({ object, onUpdate }) => {
   }
 
   return (
-    <div className="cp-property-panel">
-      <div className="cp-panel-section">
-        <div className="cp-section-title">物体: {object.type}</div>
-        <div className="cp-calc-row">
+    <div className={css.cpPropertyPanel}>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>物体: {object.type}</div>
+        <div className={css.cpCalcRow}>
           <span>ID</span>
-          <span className="cp-calc-value cp-mono">{object.id.slice(0, 8)}</span>
+          <span className={[css.cpCalcValue, css.cpMono].join(' ')}>{object.id.slice(0, 8)}</span>
         </div>
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">位置</div>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>位置</div>
         {(['x', 'y', 'z'] as const).map(axis => (
-          <div className="cp-field cp-field-row" key={axis}>
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
             <label>{axis.toUpperCase()}</label>
             <input
               type="number" step="0.1"
@@ -248,10 +308,10 @@ const ObjectProperties: React.FC<ObjectPropsProps> = ({ object, onUpdate }) => {
         ))}
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">缩放</div>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>缩放</div>
         {(['x', 'y', 'z'] as const).map(axis => (
-          <div className="cp-field cp-field-row" key={axis}>
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
             <label>{axis.toUpperCase()}</label>
             <input
               type="number" step="0.1" min="0.1"
@@ -262,9 +322,9 @@ const ObjectProperties: React.FC<ObjectPropsProps> = ({ object, onUpdate }) => {
         ))}
       </div>
 
-      <div className="cp-panel-section">
-        <div className="cp-section-title">颜色</div>
-        <div className="cp-field">
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>颜色</div>
+        <div className={css.cpField}>
           <input
             type="color"
             value={`#${object.color.toString(16).padStart(6, '0')}`}

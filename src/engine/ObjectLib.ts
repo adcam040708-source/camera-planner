@@ -140,6 +140,8 @@ export class ObjectLib {
         return this.createCar(data, mat)
       case 'tree':
         return this.createTree(data, mat)
+      case 'chair':
+        return this.createChair(data, mat)
       case 'prop':
         geo = new THREE.BoxGeometry(0.3, 0.3, 0.3) // generic small prop
         break
@@ -254,6 +256,41 @@ export class ObjectLib {
     canopy.position.y = 2
     canopy.castShadow = true
     group.add(canopy)
+
+    this.applyTransform(group, data)
+    return group
+  }
+
+  private createChair(data: SceneObject, baseMat: THREE.MeshStandardMaterial): THREE.Group {
+    const group = new THREE.Group()
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x3a2a1a, roughness: 0.9 })
+
+    // Seat
+    const seatGeo = new THREE.BoxGeometry(0.5, 0.05, 0.5)
+    const seat = new THREE.Mesh(seatGeo, baseMat)
+    seat.position.y = 0.45
+    seat.castShadow = true
+    group.add(seat)
+
+    // Back
+    const backGeo = new THREE.BoxGeometry(0.5, 0.5, 0.05)
+    const back = new THREE.Mesh(backGeo, baseMat)
+    back.position.set(0, 0.7, -0.225)
+    back.castShadow = true
+    group.add(back)
+
+    // 4 legs
+    const legGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.45, 6)
+    const legPositions = [
+      [-0.2, 0.225, -0.2], [0.2, 0.225, -0.2],
+      [-0.2, 0.225, 0.2], [0.2, 0.225, 0.2],
+    ]
+    for (const [x, y, z] of legPositions) {
+      const leg = new THREE.Mesh(legGeo, legMat)
+      leg.position.set(x, y, z)
+      leg.castShadow = true
+      group.add(leg)
+    }
 
     this.applyTransform(group, data)
     return group

@@ -7,6 +7,7 @@ import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
 import { ObjectType } from '../types/scene'
 import { generateId } from '../engine/calc'
+import css from '../styles.module.css'
 
 const OBJECT_TYPES: { type: ObjectType; label: string; icon: string }[] = [
   { type: 'box', label: '方块', icon: '⬜' },
@@ -19,6 +20,7 @@ const OBJECT_TYPES: { type: ObjectType; label: string; icon: string }[] = [
   { type: 'building', label: '建筑', icon: '🏢' },
   { type: 'car', label: '车辆', icon: '🚗' },
   { type: 'tree', label: '树木', icon: '🌳' },
+  { type: 'chair', label: '椅子', icon: '🪑' },
   { type: 'prop', label: '道具', icon: '🎭' },
 ]
 
@@ -39,18 +41,18 @@ export const ObjectPalette: React.FC = () => {
   }
 
   return (
-    <div className="cp-object-palette">
-      <div className="cp-palette-header">物体库</div>
-      <div className="cp-palette-grid">
+    <div className={css.cpObjectPalette}>
+      <div className={css.cpPaletteHeader}>物体库</div>
+      <div className={css.cpPaletteGrid}>
         {OBJECT_TYPES.map(obj => (
           <button
             key={obj.type}
-            className="cp-palette-item"
+            className={css.cpPaletteItem}
             onClick={() => handleAdd(obj.type)}
             title={obj.label}
           >
-            <span className="cp-icon-lg">{obj.icon}</span>
-            <span className="cp-palette-label">{obj.label}</span>
+            <span className={css.cpIconLg}>{obj.icon}</span>
+            <span className={css.cpPaletteLabel}>{obj.label}</span>
           </button>
         ))}
       </div>

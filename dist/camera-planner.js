@@ -1,10 +1,10 @@
-import W, { useRef as J, useEffect as V, useCallback as Ke, useState as fe } from "react";
-import * as m from "three";
-import { Controls as Ze, Vector3 as I, MOUSE as $, TOUCH as Y, Quaternion as Pe, Spherical as Te, Vector2 as L, Ray as Xe, Plane as qe, MathUtils as Je } from "three";
-function Qe(i) {
-  return i && i.__esModule && Object.prototype.hasOwnProperty.call(i, "default") ? i.default : i;
+import W, { useRef as Q, useEffect as z, useCallback as Ze, useState as _e } from "react";
+import * as _ from "three";
+import { Controls as Xe, Vector3 as G, MOUSE as U, TOUCH as $, Quaternion as Ee, Spherical as Pe, Vector2 as L, Ray as Je, Plane as Qe, MathUtils as et } from "three";
+function tt(o) {
+  return o && o.__esModule && Object.prototype.hasOwnProperty.call(o, "default") ? o.default : o;
 }
-var be = { exports: {} }, Z = {};
+var be = { exports: {} }, X = {};
 /**
  * @license React
  * react-jsx-runtime.production.js
@@ -14,29 +14,29 @@ var be = { exports: {} }, Z = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Ce;
-function et() {
-  if (Ce) return Z;
-  Ce = 1;
-  var i = Symbol.for("react.transitional.element"), e = Symbol.for("react.fragment");
-  function t(s, n, r) {
-    var c = null;
-    if (r !== void 0 && (c = "" + r), n.key !== void 0 && (c = "" + n.key), "key" in n) {
+var Ne;
+function st() {
+  if (Ne) return X;
+  Ne = 1;
+  var o = Symbol.for("react.transitional.element"), e = Symbol.for("react.fragment");
+  function t(s, i, r) {
+    var h = null;
+    if (r !== void 0 && (h = "" + r), i.key !== void 0 && (h = "" + i.key), "key" in i) {
       r = {};
-      for (var d in n)
-        d !== "key" && (r[d] = n[d]);
-    } else r = n;
-    return n = r.ref, {
-      $$typeof: i,
+      for (var p in i)
+        p !== "key" && (r[p] = i[p]);
+    } else r = i;
+    return i = r.ref, {
+      $$typeof: o,
       type: s,
-      key: c,
-      ref: n !== void 0 ? n : null,
+      key: h,
+      ref: i !== void 0 ? i : null,
       props: r
     };
   }
-  return Z.Fragment = e, Z.jsx = t, Z.jsxs = t, Z;
+  return X.Fragment = e, X.jsx = t, X.jsxs = t, X;
 }
-var X = {};
+var J = {};
 /**
  * @license React
  * react-jsx-runtime.development.js
@@ -46,240 +46,240 @@ var X = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Oe;
-function tt() {
-  return Oe || (Oe = 1, process.env.NODE_ENV !== "production" && function() {
-    function i(u) {
-      if (u == null) return null;
-      if (typeof u == "function")
-        return u.$$typeof === $e ? null : u.displayName || u.name || null;
-      if (typeof u == "string") return u;
-      switch (u) {
-        case x:
+var Me;
+function ot() {
+  return Me || (Me = 1, process.env.NODE_ENV !== "production" && function() {
+    function o(f) {
+      if (f == null) return null;
+      if (typeof f == "function")
+        return f.$$typeof === Ue ? null : f.displayName || f.name || null;
+      if (typeof f == "string") return f;
+      switch (f) {
+        case T:
           return "Fragment";
-        case D:
+        case R:
           return "Profiler";
-        case E:
+        case C:
           return "StrictMode";
-        case S:
+        case w:
           return "Suspense";
-        case M:
+        case D:
           return "SuspenseList";
-        case Ye:
+        case $e:
           return "Activity";
       }
-      if (typeof u == "object")
-        switch (typeof u.tag == "number" && console.error(
+      if (typeof f == "object")
+        switch (typeof f.tag == "number" && console.error(
           "Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."
-        ), u.$$typeof) {
-          case _:
+        ), f.$$typeof) {
+          case y:
             return "Portal";
           case A:
-            return u.displayName || "Context";
-          case R:
-            return (u._context.displayName || "Context") + ".Consumer";
-          case z:
-            var j = u.render;
-            return u = u.displayName, u || (u = j.displayName || j.name || "", u = u !== "" ? "ForwardRef(" + u + ")" : "ForwardRef"), u;
+            return f.displayName || "Context";
+          case I:
+            return (f._context.displayName || "Context") + ".Consumer";
           case H:
-            return j = u.displayName || null, j !== null ? j : i(u.type) || "Memo";
-          case oe:
-            j = u._payload, u = u._init;
+            var j = f.render;
+            return f = f.displayName, f || (f = j.displayName || j.name || "", f = f !== "" ? "ForwardRef(" + f + ")" : "ForwardRef"), f;
+          case F:
+            return j = f.displayName || null, j !== null ? j : o(f.type) || "Memo";
+          case ae:
+            j = f._payload, f = f._init;
             try {
-              return i(u(j));
+              return o(f(j));
             } catch {
             }
         }
       return null;
     }
-    function e(u) {
-      return "" + u;
+    function e(f) {
+      return "" + f;
     }
-    function t(u) {
+    function t(f) {
       try {
-        e(u);
+        e(f);
         var j = !1;
       } catch {
         j = !0;
       }
       if (j) {
         j = console;
-        var w = j.error, C = typeof Symbol == "function" && Symbol.toStringTag && u[Symbol.toStringTag] || u.constructor.name || "Object";
-        return w.call(
+        var S = j.error, N = typeof Symbol == "function" && Symbol.toStringTag && f[Symbol.toStringTag] || f.constructor.name || "Object";
+        return S.call(
           j,
           "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.",
-          C
-        ), e(u);
+          N
+        ), e(f);
       }
     }
-    function s(u) {
-      if (u === x) return "<>";
-      if (typeof u == "object" && u !== null && u.$$typeof === oe)
+    function s(f) {
+      if (f === T) return "<>";
+      if (typeof f == "object" && f !== null && f.$$typeof === ae)
         return "<...>";
       try {
-        var j = i(u);
+        var j = o(f);
         return j ? "<" + j + ">" : "<...>";
       } catch {
         return "<...>";
       }
     }
-    function n() {
-      var u = ae.A;
-      return u === null ? null : u.getOwner();
+    function i() {
+      var f = re.A;
+      return f === null ? null : f.getOwner();
     }
     function r() {
       return Error("react-stack-top-frame");
     }
-    function c(u) {
-      if (je.call(u, "key")) {
-        var j = Object.getOwnPropertyDescriptor(u, "key").get;
+    function h(f) {
+      if (je.call(f, "key")) {
+        var j = Object.getOwnPropertyDescriptor(f, "key").get;
         if (j && j.isReactWarning) return !1;
       }
-      return u.key !== void 0;
+      return f.key !== void 0;
     }
-    function d(u, j) {
-      function w() {
-        ve || (ve = !0, console.error(
+    function p(f, j) {
+      function S() {
+        xe || (xe = !0, console.error(
           "%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)",
           j
         ));
       }
-      w.isReactWarning = !0, Object.defineProperty(u, "key", {
-        get: w,
+      S.isReactWarning = !0, Object.defineProperty(f, "key", {
+        get: S,
         configurable: !0
       });
     }
-    function a() {
-      var u = i(this.type);
-      return xe[u] || (xe[u] = !0, console.error(
+    function c() {
+      var f = o(this.type);
+      return Te[f] || (Te[f] = !0, console.error(
         "Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."
-      )), u = this.props.ref, u !== void 0 ? u : null;
+      )), f = this.props.ref, f !== void 0 ? f : null;
     }
-    function l(u, j, w, C, ee, ce) {
-      var O = w.ref;
-      return u = {
+    function m(f, j, S, N, ee, le) {
+      var M = S.ref;
+      return f = {
         $$typeof: b,
-        type: u,
+        type: f,
         key: j,
-        props: w,
-        _owner: C
-      }, (O !== void 0 ? O : null) !== null ? Object.defineProperty(u, "ref", {
+        props: S,
+        _owner: N
+      }, (M !== void 0 ? M : null) !== null ? Object.defineProperty(f, "ref", {
         enumerable: !1,
-        get: a
-      }) : Object.defineProperty(u, "ref", { enumerable: !1, value: null }), u._store = {}, Object.defineProperty(u._store, "validated", {
+        get: c
+      }) : Object.defineProperty(f, "ref", { enumerable: !1, value: null }), f._store = {}, Object.defineProperty(f._store, "validated", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: 0
-      }), Object.defineProperty(u, "_debugInfo", {
+      }), Object.defineProperty(f, "_debugInfo", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: null
-      }), Object.defineProperty(u, "_debugStack", {
+      }), Object.defineProperty(f, "_debugStack", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
         value: ee
-      }), Object.defineProperty(u, "_debugTask", {
+      }), Object.defineProperty(f, "_debugTask", {
         configurable: !1,
         enumerable: !1,
         writable: !0,
-        value: ce
-      }), Object.freeze && (Object.freeze(u.props), Object.freeze(u)), u;
+        value: le
+      }), Object.freeze && (Object.freeze(f.props), Object.freeze(f)), f;
     }
-    function h(u, j, w, C, ee, ce) {
-      var O = j.children;
-      if (O !== void 0)
-        if (C)
-          if (Be(O)) {
-            for (C = 0; C < O.length; C++)
-              p(O[C]);
-            Object.freeze && Object.freeze(O);
+    function d(f, j, S, N, ee, le) {
+      var M = j.children;
+      if (M !== void 0)
+        if (N)
+          if (Ye(M)) {
+            for (N = 0; N < M.length; N++)
+              u(M[N]);
+            Object.freeze && Object.freeze(M);
           } else
             console.error(
               "React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead."
             );
-        else p(O);
+        else u(M);
       if (je.call(j, "key")) {
-        O = i(u);
-        var F = Object.keys(j).filter(function(We) {
+        M = o(f);
+        var V = Object.keys(j).filter(function(We) {
           return We !== "key";
         });
-        C = 0 < F.length ? "{key: someKey, " + F.join(": ..., ") + ": ...}" : "{key: someKey}", Se[O + C] || (F = 0 < F.length ? "{" + F.join(": ..., ") + ": ...}" : "{}", console.error(
+        N = 0 < V.length ? "{key: someKey, " + V.join(": ..., ") + ": ...}" : "{key: someKey}", we[M + N] || (V = 0 < V.length ? "{" + V.join(": ..., ") + ": ...}" : "{}", console.error(
           `A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
   <%s key={someKey} {...props} />`,
-          C,
-          O,
-          F,
-          O
-        ), Se[O + C] = !0);
+          N,
+          M,
+          V,
+          M
+        ), we[M + N] = !0);
       }
-      if (O = null, w !== void 0 && (t(w), O = "" + w), c(j) && (t(j.key), O = "" + j.key), "key" in j) {
-        w = {};
-        for (var le in j)
-          le !== "key" && (w[le] = j[le]);
-      } else w = j;
-      return O && d(
-        w,
-        typeof u == "function" ? u.displayName || u.name || "Unknown" : u
-      ), l(
-        u,
-        O,
-        w,
-        n(),
+      if (M = null, S !== void 0 && (t(S), M = "" + S), h(j) && (t(j.key), M = "" + j.key), "key" in j) {
+        S = {};
+        for (var he in j)
+          he !== "key" && (S[he] = j[he]);
+      } else S = j;
+      return M && p(
+        S,
+        typeof f == "function" ? f.displayName || f.name || "Unknown" : f
+      ), m(
+        f,
+        M,
+        S,
+        i(),
         ee,
-        ce
+        le
       );
     }
-    function p(u) {
-      y(u) ? u._store && (u._store.validated = 1) : typeof u == "object" && u !== null && u.$$typeof === oe && (u._payload.status === "fulfilled" ? y(u._payload.value) && u._payload.value._store && (u._payload.value._store.validated = 1) : u._store && (u._store.validated = 1));
+    function u(f) {
+      g(f) ? f._store && (f._store.validated = 1) : typeof f == "object" && f !== null && f.$$typeof === ae && (f._payload.status === "fulfilled" ? g(f._payload.value) && f._payload.value._store && (f._payload.value._store.validated = 1) : f._store && (f._store.validated = 1));
     }
-    function y(u) {
-      return typeof u == "object" && u !== null && u.$$typeof === b;
+    function g(f) {
+      return typeof f == "object" && f !== null && f.$$typeof === b;
     }
-    var f = W, b = Symbol.for("react.transitional.element"), _ = Symbol.for("react.portal"), x = Symbol.for("react.fragment"), E = Symbol.for("react.strict_mode"), D = Symbol.for("react.profiler"), R = Symbol.for("react.consumer"), A = Symbol.for("react.context"), z = Symbol.for("react.forward_ref"), S = Symbol.for("react.suspense"), M = Symbol.for("react.suspense_list"), H = Symbol.for("react.memo"), oe = Symbol.for("react.lazy"), Ye = Symbol.for("react.activity"), $e = Symbol.for("react.client.reference"), ae = f.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, je = Object.prototype.hasOwnProperty, Be = Array.isArray, re = console.createTask ? console.createTask : function() {
+    var l = W, b = Symbol.for("react.transitional.element"), y = Symbol.for("react.portal"), T = Symbol.for("react.fragment"), C = Symbol.for("react.strict_mode"), R = Symbol.for("react.profiler"), I = Symbol.for("react.consumer"), A = Symbol.for("react.context"), H = Symbol.for("react.forward_ref"), w = Symbol.for("react.suspense"), D = Symbol.for("react.suspense_list"), F = Symbol.for("react.memo"), ae = Symbol.for("react.lazy"), $e = Symbol.for("react.activity"), Ue = Symbol.for("react.client.reference"), re = l.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, je = Object.prototype.hasOwnProperty, Ye = Array.isArray, ce = console.createTask ? console.createTask : function() {
       return null;
     };
-    f = {
-      react_stack_bottom_frame: function(u) {
-        return u();
+    l = {
+      react_stack_bottom_frame: function(f) {
+        return f();
       }
     };
-    var ve, xe = {}, we = f.react_stack_bottom_frame.bind(
-      f,
+    var xe, Te = {}, Se = l.react_stack_bottom_frame.bind(
+      l,
       r
-    )(), Ee = re(s(r)), Se = {};
-    X.Fragment = x, X.jsx = function(u, j, w) {
-      var C = 1e4 > ae.recentlyCreatedOwnerStacks++;
-      return h(
-        u,
+    )(), Ce = ce(s(r)), we = {};
+    J.Fragment = T, J.jsx = function(f, j, S) {
+      var N = 1e4 > re.recentlyCreatedOwnerStacks++;
+      return d(
+        f,
         j,
-        w,
+        S,
         !1,
-        C ? Error("react-stack-top-frame") : we,
-        C ? re(s(u)) : Ee
+        N ? Error("react-stack-top-frame") : Se,
+        N ? ce(s(f)) : Ce
       );
-    }, X.jsxs = function(u, j, w) {
-      var C = 1e4 > ae.recentlyCreatedOwnerStacks++;
-      return h(
-        u,
+    }, J.jsxs = function(f, j, S) {
+      var N = 1e4 > re.recentlyCreatedOwnerStacks++;
+      return d(
+        f,
         j,
-        w,
+        S,
         !0,
-        C ? Error("react-stack-top-frame") : we,
-        C ? re(s(u)) : Ee
+        N ? Error("react-stack-top-frame") : Se,
+        N ? ce(s(f)) : Ce
       );
     };
-  }()), X;
+  }()), J;
 }
-process.env.NODE_ENV === "production" ? be.exports = et() : be.exports = tt();
-var o = be.exports;
-const Ne = { type: "change" }, _e = { type: "start" }, Ve = { type: "end" }, te = new Xe(), Me = new qe(), st = Math.cos(70 * Je.DEG2RAD), N = new I(), k = 2 * Math.PI, v = {
+process.env.NODE_ENV === "production" ? be.exports = st() : be.exports = ot();
+var n = be.exports;
+const Oe = { type: "change" }, ve = { type: "start" }, Fe = { type: "end" }, te = new Je(), De = new Qe(), nt = Math.cos(70 * et.DEG2RAD), O = new G(), k = 2 * Math.PI, x = {
   NONE: -1,
   ROTATE: 0,
   DOLLY: 1,
@@ -288,10 +288,10 @@ const Ne = { type: "change" }, _e = { type: "start" }, Ve = { type: "end" }, te 
   TOUCH_PAN: 4,
   TOUCH_DOLLY_PAN: 5,
   TOUCH_DOLLY_ROTATE: 6
-}, he = 1e-6;
-class it extends Ze {
+}, pe = 1e-6;
+class it extends Xe {
   constructor(e, t = null) {
-    super(e, t), this.state = v.NONE, this.enabled = !0, this.target = new I(), this.cursor = new I(), this.minDistance = 0, this.maxDistance = 1 / 0, this.minZoom = 0, this.maxZoom = 1 / 0, this.minTargetRadius = 0, this.maxTargetRadius = 1 / 0, this.minPolarAngle = 0, this.maxPolarAngle = Math.PI, this.minAzimuthAngle = -1 / 0, this.maxAzimuthAngle = 1 / 0, this.enableDamping = !1, this.dampingFactor = 0.05, this.enableZoom = !0, this.zoomSpeed = 1, this.enableRotate = !0, this.rotateSpeed = 1, this.enablePan = !0, this.panSpeed = 1, this.screenSpacePanning = !0, this.keyPanSpeed = 7, this.zoomToCursor = !1, this.autoRotate = !1, this.autoRotateSpeed = 2, this.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" }, this.mouseButtons = { LEFT: $.ROTATE, MIDDLE: $.DOLLY, RIGHT: $.PAN }, this.touches = { ONE: Y.ROTATE, TWO: Y.DOLLY_PAN }, this.target0 = this.target.clone(), this.position0 = this.object.position.clone(), this.zoom0 = this.object.zoom, this._domElementKeyEvents = null, this._lastPosition = new I(), this._lastQuaternion = new Pe(), this._lastTargetPosition = new I(), this._quat = new Pe().setFromUnitVectors(e.up, new I(0, 1, 0)), this._quatInverse = this._quat.clone().invert(), this._spherical = new Te(), this._sphericalDelta = new Te(), this._scale = 1, this._panOffset = new I(), this._rotateStart = new L(), this._rotateEnd = new L(), this._rotateDelta = new L(), this._panStart = new L(), this._panEnd = new L(), this._panDelta = new L(), this._dollyStart = new L(), this._dollyEnd = new L(), this._dollyDelta = new L(), this._dollyDirection = new I(), this._mouse = new L(), this._performCursorZoom = !1, this._pointers = [], this._pointerPositions = {}, this._controlActive = !1, this._onPointerMove = ot.bind(this), this._onPointerDown = nt.bind(this), this._onPointerUp = at.bind(this), this._onContextMenu = pt.bind(this), this._onMouseWheel = lt.bind(this), this._onKeyDown = ht.bind(this), this._onTouchStart = dt.bind(this), this._onTouchMove = ut.bind(this), this._onMouseDown = rt.bind(this), this._onMouseMove = ct.bind(this), this._interceptControlDown = mt.bind(this), this._interceptControlUp = ft.bind(this), this.domElement !== null && this.connect(), this.update();
+    super(e, t), this.state = x.NONE, this.enabled = !0, this.target = new G(), this.cursor = new G(), this.minDistance = 0, this.maxDistance = 1 / 0, this.minZoom = 0, this.maxZoom = 1 / 0, this.minTargetRadius = 0, this.maxTargetRadius = 1 / 0, this.minPolarAngle = 0, this.maxPolarAngle = Math.PI, this.minAzimuthAngle = -1 / 0, this.maxAzimuthAngle = 1 / 0, this.enableDamping = !1, this.dampingFactor = 0.05, this.enableZoom = !0, this.zoomSpeed = 1, this.enableRotate = !0, this.rotateSpeed = 1, this.enablePan = !0, this.panSpeed = 1, this.screenSpacePanning = !0, this.keyPanSpeed = 7, this.zoomToCursor = !1, this.autoRotate = !1, this.autoRotateSpeed = 2, this.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" }, this.mouseButtons = { LEFT: U.ROTATE, MIDDLE: U.DOLLY, RIGHT: U.PAN }, this.touches = { ONE: $.ROTATE, TWO: $.DOLLY_PAN }, this.target0 = this.target.clone(), this.position0 = this.object.position.clone(), this.zoom0 = this.object.zoom, this._domElementKeyEvents = null, this._lastPosition = new G(), this._lastQuaternion = new Ee(), this._lastTargetPosition = new G(), this._quat = new Ee().setFromUnitVectors(e.up, new G(0, 1, 0)), this._quatInverse = this._quat.clone().invert(), this._spherical = new Pe(), this._sphericalDelta = new Pe(), this._scale = 1, this._panOffset = new G(), this._rotateStart = new L(), this._rotateEnd = new L(), this._rotateDelta = new L(), this._panStart = new L(), this._panEnd = new L(), this._panDelta = new L(), this._dollyStart = new L(), this._dollyEnd = new L(), this._dollyDelta = new L(), this._dollyDirection = new G(), this._mouse = new L(), this._performCursorZoom = !1, this._pointers = [], this._pointerPositions = {}, this._controlActive = !1, this._onPointerMove = rt.bind(this), this._onPointerDown = at.bind(this), this._onPointerUp = ct.bind(this), this._onContextMenu = ft.bind(this), this._onMouseWheel = pt.bind(this), this._onKeyDown = dt.bind(this), this._onTouchStart = ut.bind(this), this._onTouchMove = mt.bind(this), this._onMouseDown = lt.bind(this), this._onMouseMove = ht.bind(this), this._interceptControlDown = _t.bind(this), this._interceptControlUp = bt.bind(this), this.domElement !== null && this.connect(), this.update();
   }
   connect() {
     this.domElement.addEventListener("pointerdown", this._onPointerDown), this.domElement.addEventListener("pointercancel", this._onPointerUp), this.domElement.addEventListener("contextmenu", this._onContextMenu), this.domElement.addEventListener("wheel", this._onMouseWheel, { passive: !1 }), this.domElement.getRootNode().addEventListener("keydown", this._interceptControlDown, { passive: !0, capture: !0 }), this.domElement.style.touchAction = "none";
@@ -321,42 +321,42 @@ class it extends Ze {
     this.target0.copy(this.target), this.position0.copy(this.object.position), this.zoom0 = this.object.zoom;
   }
   reset() {
-    this.target.copy(this.target0), this.object.position.copy(this.position0), this.object.zoom = this.zoom0, this.object.updateProjectionMatrix(), this.dispatchEvent(Ne), this.update(), this.state = v.NONE;
+    this.target.copy(this.target0), this.object.position.copy(this.position0), this.object.zoom = this.zoom0, this.object.updateProjectionMatrix(), this.dispatchEvent(Oe), this.update(), this.state = x.NONE;
   }
   update(e = null) {
     const t = this.object.position;
-    N.copy(t).sub(this.target), N.applyQuaternion(this._quat), this._spherical.setFromVector3(N), this.autoRotate && this.state === v.NONE && this._rotateLeft(this._getAutoRotationAngle(e)), this.enableDamping ? (this._spherical.theta += this._sphericalDelta.theta * this.dampingFactor, this._spherical.phi += this._sphericalDelta.phi * this.dampingFactor) : (this._spherical.theta += this._sphericalDelta.theta, this._spherical.phi += this._sphericalDelta.phi);
-    let s = this.minAzimuthAngle, n = this.maxAzimuthAngle;
-    isFinite(s) && isFinite(n) && (s < -Math.PI ? s += k : s > Math.PI && (s -= k), n < -Math.PI ? n += k : n > Math.PI && (n -= k), s <= n ? this._spherical.theta = Math.max(s, Math.min(n, this._spherical.theta)) : this._spherical.theta = this._spherical.theta > (s + n) / 2 ? Math.max(s, this._spherical.theta) : Math.min(n, this._spherical.theta)), this._spherical.phi = Math.max(this.minPolarAngle, Math.min(this.maxPolarAngle, this._spherical.phi)), this._spherical.makeSafe(), this.enableDamping === !0 ? this.target.addScaledVector(this._panOffset, this.dampingFactor) : this.target.add(this._panOffset), this.target.sub(this.cursor), this.target.clampLength(this.minTargetRadius, this.maxTargetRadius), this.target.add(this.cursor);
+    O.copy(t).sub(this.target), O.applyQuaternion(this._quat), this._spherical.setFromVector3(O), this.autoRotate && this.state === x.NONE && this._rotateLeft(this._getAutoRotationAngle(e)), this.enableDamping ? (this._spherical.theta += this._sphericalDelta.theta * this.dampingFactor, this._spherical.phi += this._sphericalDelta.phi * this.dampingFactor) : (this._spherical.theta += this._sphericalDelta.theta, this._spherical.phi += this._sphericalDelta.phi);
+    let s = this.minAzimuthAngle, i = this.maxAzimuthAngle;
+    isFinite(s) && isFinite(i) && (s < -Math.PI ? s += k : s > Math.PI && (s -= k), i < -Math.PI ? i += k : i > Math.PI && (i -= k), s <= i ? this._spherical.theta = Math.max(s, Math.min(i, this._spherical.theta)) : this._spherical.theta = this._spherical.theta > (s + i) / 2 ? Math.max(s, this._spherical.theta) : Math.min(i, this._spherical.theta)), this._spherical.phi = Math.max(this.minPolarAngle, Math.min(this.maxPolarAngle, this._spherical.phi)), this._spherical.makeSafe(), this.enableDamping === !0 ? this.target.addScaledVector(this._panOffset, this.dampingFactor) : this.target.add(this._panOffset), this.target.sub(this.cursor), this.target.clampLength(this.minTargetRadius, this.maxTargetRadius), this.target.add(this.cursor);
     let r = !1;
     if (this.zoomToCursor && this._performCursorZoom || this.object.isOrthographicCamera)
       this._spherical.radius = this._clampDistance(this._spherical.radius);
     else {
-      const c = this._spherical.radius;
-      this._spherical.radius = this._clampDistance(this._spherical.radius * this._scale), r = c != this._spherical.radius;
+      const h = this._spherical.radius;
+      this._spherical.radius = this._clampDistance(this._spherical.radius * this._scale), r = h != this._spherical.radius;
     }
-    if (N.setFromSpherical(this._spherical), N.applyQuaternion(this._quatInverse), t.copy(this.target).add(N), this.object.lookAt(this.target), this.enableDamping === !0 ? (this._sphericalDelta.theta *= 1 - this.dampingFactor, this._sphericalDelta.phi *= 1 - this.dampingFactor, this._panOffset.multiplyScalar(1 - this.dampingFactor)) : (this._sphericalDelta.set(0, 0, 0), this._panOffset.set(0, 0, 0)), this.zoomToCursor && this._performCursorZoom) {
-      let c = null;
+    if (O.setFromSpherical(this._spherical), O.applyQuaternion(this._quatInverse), t.copy(this.target).add(O), this.object.lookAt(this.target), this.enableDamping === !0 ? (this._sphericalDelta.theta *= 1 - this.dampingFactor, this._sphericalDelta.phi *= 1 - this.dampingFactor, this._panOffset.multiplyScalar(1 - this.dampingFactor)) : (this._sphericalDelta.set(0, 0, 0), this._panOffset.set(0, 0, 0)), this.zoomToCursor && this._performCursorZoom) {
+      let h = null;
       if (this.object.isPerspectiveCamera) {
-        const d = N.length();
-        c = this._clampDistance(d * this._scale);
-        const a = d - c;
-        this.object.position.addScaledVector(this._dollyDirection, a), this.object.updateMatrixWorld(), r = !!a;
+        const p = O.length();
+        h = this._clampDistance(p * this._scale);
+        const c = p - h;
+        this.object.position.addScaledVector(this._dollyDirection, c), this.object.updateMatrixWorld(), r = !!c;
       } else if (this.object.isOrthographicCamera) {
-        const d = new I(this._mouse.x, this._mouse.y, 0);
-        d.unproject(this.object);
-        const a = this.object.zoom;
-        this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / this._scale)), this.object.updateProjectionMatrix(), r = a !== this.object.zoom;
-        const l = new I(this._mouse.x, this._mouse.y, 0);
-        l.unproject(this.object), this.object.position.sub(l).add(d), this.object.updateMatrixWorld(), c = N.length();
+        const p = new G(this._mouse.x, this._mouse.y, 0);
+        p.unproject(this.object);
+        const c = this.object.zoom;
+        this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / this._scale)), this.object.updateProjectionMatrix(), r = c !== this.object.zoom;
+        const m = new G(this._mouse.x, this._mouse.y, 0);
+        m.unproject(this.object), this.object.position.sub(m).add(p), this.object.updateMatrixWorld(), h = O.length();
       } else
         console.warn("WARNING: OrbitControls.js encountered an unknown camera type - zoom to cursor disabled."), this.zoomToCursor = !1;
-      c !== null && (this.screenSpacePanning ? this.target.set(0, 0, -1).transformDirection(this.object.matrix).multiplyScalar(c).add(this.object.position) : (te.origin.copy(this.object.position), te.direction.set(0, 0, -1).transformDirection(this.object.matrix), Math.abs(this.object.up.dot(te.direction)) < st ? this.object.lookAt(this.target) : (Me.setFromNormalAndCoplanarPoint(this.object.up, this.target), te.intersectPlane(Me, this.target))));
+      h !== null && (this.screenSpacePanning ? this.target.set(0, 0, -1).transformDirection(this.object.matrix).multiplyScalar(h).add(this.object.position) : (te.origin.copy(this.object.position), te.direction.set(0, 0, -1).transformDirection(this.object.matrix), Math.abs(this.object.up.dot(te.direction)) < nt ? this.object.lookAt(this.target) : (De.setFromNormalAndCoplanarPoint(this.object.up, this.target), te.intersectPlane(De, this.target))));
     } else if (this.object.isOrthographicCamera) {
-      const c = this.object.zoom;
-      this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / this._scale)), c !== this.object.zoom && (this.object.updateProjectionMatrix(), r = !0);
+      const h = this.object.zoom;
+      this.object.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.object.zoom / this._scale)), h !== this.object.zoom && (this.object.updateProjectionMatrix(), r = !0);
     }
-    return this._scale = 1, this._performCursorZoom = !1, r || this._lastPosition.distanceToSquared(this.object.position) > he || 8 * (1 - this._lastQuaternion.dot(this.object.quaternion)) > he || this._lastTargetPosition.distanceToSquared(this.target) > he ? (this.dispatchEvent(Ne), this._lastPosition.copy(this.object.position), this._lastQuaternion.copy(this.object.quaternion), this._lastTargetPosition.copy(this.target), !0) : !1;
+    return this._scale = 1, this._performCursorZoom = !1, r || this._lastPosition.distanceToSquared(this.object.position) > pe || 8 * (1 - this._lastQuaternion.dot(this.object.quaternion)) > pe || this._lastTargetPosition.distanceToSquared(this.target) > pe ? (this.dispatchEvent(Oe), this._lastPosition.copy(this.object.position), this._lastQuaternion.copy(this.object.quaternion), this._lastTargetPosition.copy(this.target), !0) : !1;
   }
   _getAutoRotationAngle(e) {
     return e !== null ? k / 60 * this.autoRotateSpeed * e : k / 60 / 60 * this.autoRotateSpeed;
@@ -372,18 +372,18 @@ class it extends Ze {
     this._sphericalDelta.phi -= e;
   }
   _panLeft(e, t) {
-    N.setFromMatrixColumn(t, 0), N.multiplyScalar(-e), this._panOffset.add(N);
+    O.setFromMatrixColumn(t, 0), O.multiplyScalar(-e), this._panOffset.add(O);
   }
   _panUp(e, t) {
-    this.screenSpacePanning === !0 ? N.setFromMatrixColumn(t, 1) : (N.setFromMatrixColumn(t, 0), N.crossVectors(this.object.up, N)), N.multiplyScalar(e), this._panOffset.add(N);
+    this.screenSpacePanning === !0 ? O.setFromMatrixColumn(t, 1) : (O.setFromMatrixColumn(t, 0), O.crossVectors(this.object.up, O)), O.multiplyScalar(e), this._panOffset.add(O);
   }
   // deltaX and deltaY are in pixels; right and down are positive
   _pan(e, t) {
     const s = this.domElement;
     if (this.object.isPerspectiveCamera) {
-      const n = this.object.position;
-      N.copy(n).sub(this.target);
-      let r = N.length();
+      const i = this.object.position;
+      O.copy(i).sub(this.target);
+      let r = O.length();
       r *= Math.tan(this.object.fov / 2 * Math.PI / 180), this._panLeft(2 * e * r / s.clientHeight, this.object.matrix), this._panUp(2 * t * r / s.clientHeight, this.object.matrix);
     } else this.object.isOrthographicCamera ? (this._panLeft(e * (this.object.right - this.object.left) / this.object.zoom / s.clientWidth, this.object.matrix), this._panUp(t * (this.object.top - this.object.bottom) / this.object.zoom / s.clientHeight, this.object.matrix)) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."), this.enablePan = !1);
   }
@@ -397,8 +397,8 @@ class it extends Ze {
     if (!this.zoomToCursor)
       return;
     this._performCursorZoom = !0;
-    const s = this.domElement.getBoundingClientRect(), n = e - s.left, r = t - s.top, c = s.width, d = s.height;
-    this._mouse.x = n / c * 2 - 1, this._mouse.y = -(r / d) * 2 + 1, this._dollyDirection.set(this._mouse.x, this._mouse.y, 1).unproject(this.object).sub(this.object.position).normalize();
+    const s = this.domElement.getBoundingClientRect(), i = e - s.left, r = t - s.top, h = s.width, p = s.height;
+    this._mouse.x = i / h * 2 - 1, this._mouse.y = -(r / p) * 2 + 1, this._dollyDirection.set(this._mouse.x, this._mouse.y, 1).unproject(this.object).sub(this.object.position).normalize();
   }
   _clampDistance(e) {
     return Math.max(this.minDistance, Math.min(this.maxDistance, e));
@@ -451,20 +451,20 @@ class it extends Ze {
     if (this._pointers.length === 1)
       this._rotateStart.set(e.pageX, e.pageY);
     else {
-      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), n = 0.5 * (e.pageY + t.y);
-      this._rotateStart.set(s, n);
+      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), i = 0.5 * (e.pageY + t.y);
+      this._rotateStart.set(s, i);
     }
   }
   _handleTouchStartPan(e) {
     if (this._pointers.length === 1)
       this._panStart.set(e.pageX, e.pageY);
     else {
-      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), n = 0.5 * (e.pageY + t.y);
-      this._panStart.set(s, n);
+      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), i = 0.5 * (e.pageY + t.y);
+      this._panStart.set(s, i);
     }
   }
   _handleTouchStartDolly(e) {
-    const t = this._getSecondPointerPosition(e), s = e.pageX - t.x, n = e.pageY - t.y, r = Math.sqrt(s * s + n * n);
+    const t = this._getSecondPointerPosition(e), s = e.pageX - t.x, i = e.pageY - t.y, r = Math.sqrt(s * s + i * i);
     this._dollyStart.set(0, r);
   }
   _handleTouchStartDollyPan(e) {
@@ -477,8 +477,8 @@ class it extends Ze {
     if (this._pointers.length == 1)
       this._rotateEnd.set(e.pageX, e.pageY);
     else {
-      const s = this._getSecondPointerPosition(e), n = 0.5 * (e.pageX + s.x), r = 0.5 * (e.pageY + s.y);
-      this._rotateEnd.set(n, r);
+      const s = this._getSecondPointerPosition(e), i = 0.5 * (e.pageX + s.x), r = 0.5 * (e.pageY + s.y);
+      this._rotateEnd.set(i, r);
     }
     this._rotateDelta.subVectors(this._rotateEnd, this._rotateStart).multiplyScalar(this.rotateSpeed);
     const t = this.domElement;
@@ -488,16 +488,16 @@ class it extends Ze {
     if (this._pointers.length === 1)
       this._panEnd.set(e.pageX, e.pageY);
     else {
-      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), n = 0.5 * (e.pageY + t.y);
-      this._panEnd.set(s, n);
+      const t = this._getSecondPointerPosition(e), s = 0.5 * (e.pageX + t.x), i = 0.5 * (e.pageY + t.y);
+      this._panEnd.set(s, i);
     }
     this._panDelta.subVectors(this._panEnd, this._panStart).multiplyScalar(this.panSpeed), this._pan(this._panDelta.x, this._panDelta.y), this._panStart.copy(this._panEnd);
   }
   _handleTouchMoveDolly(e) {
-    const t = this._getSecondPointerPosition(e), s = e.pageX - t.x, n = e.pageY - t.y, r = Math.sqrt(s * s + n * n);
+    const t = this._getSecondPointerPosition(e), s = e.pageX - t.x, i = e.pageY - t.y, r = Math.sqrt(s * s + i * i);
     this._dollyEnd.set(0, r), this._dollyDelta.set(0, Math.pow(this._dollyEnd.y / this._dollyStart.y, this.zoomSpeed)), this._dollyOut(this._dollyDelta.y), this._dollyStart.copy(this._dollyEnd);
-    const c = (e.pageX + t.x) * 0.5, d = (e.pageY + t.y) * 0.5;
-    this._updateZoomParameters(c, d);
+    const h = (e.pageX + t.x) * 0.5, p = (e.pageY + t.y) * 0.5;
+    this._updateZoomParameters(h, p);
   }
   _handleTouchMoveDollyPan(e) {
     this.enableZoom && this._handleTouchMoveDolly(e), this.enablePan && this._handleTouchMovePan(e);
@@ -548,16 +548,16 @@ class it extends Ze {
     return e.ctrlKey && !this._controlActive && (s.deltaY *= 10), s;
   }
 }
-function nt(i) {
-  this.enabled !== !1 && (this._pointers.length === 0 && (this.domElement.setPointerCapture(i.pointerId), this.domElement.addEventListener("pointermove", this._onPointerMove), this.domElement.addEventListener("pointerup", this._onPointerUp)), !this._isTrackingPointer(i) && (this._addPointer(i), i.pointerType === "touch" ? this._onTouchStart(i) : this._onMouseDown(i)));
+function at(o) {
+  this.enabled !== !1 && (this._pointers.length === 0 && (this.domElement.setPointerCapture(o.pointerId), this.domElement.addEventListener("pointermove", this._onPointerMove), this.domElement.addEventListener("pointerup", this._onPointerUp)), !this._isTrackingPointer(o) && (this._addPointer(o), o.pointerType === "touch" ? this._onTouchStart(o) : this._onMouseDown(o)));
 }
-function ot(i) {
-  this.enabled !== !1 && (i.pointerType === "touch" ? this._onTouchMove(i) : this._onMouseMove(i));
+function rt(o) {
+  this.enabled !== !1 && (o.pointerType === "touch" ? this._onTouchMove(o) : this._onMouseMove(o));
 }
-function at(i) {
-  switch (this._removePointer(i), this._pointers.length) {
+function ct(o) {
+  switch (this._removePointer(o), this._pointers.length) {
     case 0:
-      this.domElement.releasePointerCapture(i.pointerId), this.domElement.removeEventListener("pointermove", this._onPointerMove), this.domElement.removeEventListener("pointerup", this._onPointerUp), this.dispatchEvent(Ve), this.state = v.NONE;
+      this.domElement.releasePointerCapture(o.pointerId), this.domElement.removeEventListener("pointermove", this._onPointerMove), this.domElement.removeEventListener("pointerup", this._onPointerUp), this.dispatchEvent(Fe), this.state = x.NONE;
       break;
     case 1:
       const e = this._pointers[0], t = this._pointerPositions[e];
@@ -565,9 +565,9 @@ function at(i) {
       break;
   }
 }
-function rt(i) {
+function lt(o) {
   let e;
-  switch (i.button) {
+  switch (o.button) {
     case 0:
       e = this.mouseButtons.LEFT;
       break;
@@ -581,142 +581,142 @@ function rt(i) {
       e = -1;
   }
   switch (e) {
-    case $.DOLLY:
+    case U.DOLLY:
       if (this.enableZoom === !1) return;
-      this._handleMouseDownDolly(i), this.state = v.DOLLY;
+      this._handleMouseDownDolly(o), this.state = x.DOLLY;
       break;
-    case $.ROTATE:
-      if (i.ctrlKey || i.metaKey || i.shiftKey) {
+    case U.ROTATE:
+      if (o.ctrlKey || o.metaKey || o.shiftKey) {
         if (this.enablePan === !1) return;
-        this._handleMouseDownPan(i), this.state = v.PAN;
+        this._handleMouseDownPan(o), this.state = x.PAN;
       } else {
         if (this.enableRotate === !1) return;
-        this._handleMouseDownRotate(i), this.state = v.ROTATE;
+        this._handleMouseDownRotate(o), this.state = x.ROTATE;
       }
       break;
-    case $.PAN:
-      if (i.ctrlKey || i.metaKey || i.shiftKey) {
+    case U.PAN:
+      if (o.ctrlKey || o.metaKey || o.shiftKey) {
         if (this.enableRotate === !1) return;
-        this._handleMouseDownRotate(i), this.state = v.ROTATE;
+        this._handleMouseDownRotate(o), this.state = x.ROTATE;
       } else {
         if (this.enablePan === !1) return;
-        this._handleMouseDownPan(i), this.state = v.PAN;
+        this._handleMouseDownPan(o), this.state = x.PAN;
       }
       break;
     default:
-      this.state = v.NONE;
+      this.state = x.NONE;
   }
-  this.state !== v.NONE && this.dispatchEvent(_e);
+  this.state !== x.NONE && this.dispatchEvent(ve);
 }
-function ct(i) {
+function ht(o) {
   switch (this.state) {
-    case v.ROTATE:
+    case x.ROTATE:
       if (this.enableRotate === !1) return;
-      this._handleMouseMoveRotate(i);
+      this._handleMouseMoveRotate(o);
       break;
-    case v.DOLLY:
+    case x.DOLLY:
       if (this.enableZoom === !1) return;
-      this._handleMouseMoveDolly(i);
+      this._handleMouseMoveDolly(o);
       break;
-    case v.PAN:
+    case x.PAN:
       if (this.enablePan === !1) return;
-      this._handleMouseMovePan(i);
+      this._handleMouseMovePan(o);
       break;
   }
 }
-function lt(i) {
-  this.enabled === !1 || this.enableZoom === !1 || this.state !== v.NONE || (i.preventDefault(), this.dispatchEvent(_e), this._handleMouseWheel(this._customWheelEvent(i)), this.dispatchEvent(Ve));
+function pt(o) {
+  this.enabled === !1 || this.enableZoom === !1 || this.state !== x.NONE || (o.preventDefault(), this.dispatchEvent(ve), this._handleMouseWheel(this._customWheelEvent(o)), this.dispatchEvent(Fe));
 }
-function ht(i) {
-  this.enabled === !1 || this.enablePan === !1 || this._handleKeyDown(i);
+function dt(o) {
+  this.enabled === !1 || this.enablePan === !1 || this._handleKeyDown(o);
 }
-function dt(i) {
-  switch (this._trackPointer(i), this._pointers.length) {
+function ut(o) {
+  switch (this._trackPointer(o), this._pointers.length) {
     case 1:
       switch (this.touches.ONE) {
-        case Y.ROTATE:
+        case $.ROTATE:
           if (this.enableRotate === !1) return;
-          this._handleTouchStartRotate(i), this.state = v.TOUCH_ROTATE;
+          this._handleTouchStartRotate(o), this.state = x.TOUCH_ROTATE;
           break;
-        case Y.PAN:
+        case $.PAN:
           if (this.enablePan === !1) return;
-          this._handleTouchStartPan(i), this.state = v.TOUCH_PAN;
+          this._handleTouchStartPan(o), this.state = x.TOUCH_PAN;
           break;
         default:
-          this.state = v.NONE;
+          this.state = x.NONE;
       }
       break;
     case 2:
       switch (this.touches.TWO) {
-        case Y.DOLLY_PAN:
+        case $.DOLLY_PAN:
           if (this.enableZoom === !1 && this.enablePan === !1) return;
-          this._handleTouchStartDollyPan(i), this.state = v.TOUCH_DOLLY_PAN;
+          this._handleTouchStartDollyPan(o), this.state = x.TOUCH_DOLLY_PAN;
           break;
-        case Y.DOLLY_ROTATE:
+        case $.DOLLY_ROTATE:
           if (this.enableZoom === !1 && this.enableRotate === !1) return;
-          this._handleTouchStartDollyRotate(i), this.state = v.TOUCH_DOLLY_ROTATE;
+          this._handleTouchStartDollyRotate(o), this.state = x.TOUCH_DOLLY_ROTATE;
           break;
         default:
-          this.state = v.NONE;
+          this.state = x.NONE;
       }
       break;
     default:
-      this.state = v.NONE;
+      this.state = x.NONE;
   }
-  this.state !== v.NONE && this.dispatchEvent(_e);
+  this.state !== x.NONE && this.dispatchEvent(ve);
 }
-function ut(i) {
-  switch (this._trackPointer(i), this.state) {
-    case v.TOUCH_ROTATE:
+function mt(o) {
+  switch (this._trackPointer(o), this.state) {
+    case x.TOUCH_ROTATE:
       if (this.enableRotate === !1) return;
-      this._handleTouchMoveRotate(i), this.update();
+      this._handleTouchMoveRotate(o), this.update();
       break;
-    case v.TOUCH_PAN:
+    case x.TOUCH_PAN:
       if (this.enablePan === !1) return;
-      this._handleTouchMovePan(i), this.update();
+      this._handleTouchMovePan(o), this.update();
       break;
-    case v.TOUCH_DOLLY_PAN:
+    case x.TOUCH_DOLLY_PAN:
       if (this.enableZoom === !1 && this.enablePan === !1) return;
-      this._handleTouchMoveDollyPan(i), this.update();
+      this._handleTouchMoveDollyPan(o), this.update();
       break;
-    case v.TOUCH_DOLLY_ROTATE:
+    case x.TOUCH_DOLLY_ROTATE:
       if (this.enableZoom === !1 && this.enableRotate === !1) return;
-      this._handleTouchMoveDollyRotate(i), this.update();
+      this._handleTouchMoveDollyRotate(o), this.update();
       break;
     default:
-      this.state = v.NONE;
+      this.state = x.NONE;
   }
 }
-function pt(i) {
-  this.enabled !== !1 && i.preventDefault();
+function ft(o) {
+  this.enabled !== !1 && o.preventDefault();
 }
-function mt(i) {
-  i.key === "Control" && (this._controlActive = !0, this.domElement.getRootNode().addEventListener("keyup", this._interceptControlUp, { passive: !0, capture: !0 }));
+function _t(o) {
+  o.key === "Control" && (this._controlActive = !0, this.domElement.getRootNode().addEventListener("keyup", this._interceptControlUp, { passive: !0, capture: !0 }));
 }
-function ft(i) {
-  i.key === "Control" && (this._controlActive = !1, this.domElement.getRootNode().removeEventListener("keyup", this._interceptControlUp, { passive: !0, capture: !0 }));
+function bt(o) {
+  o.key === "Control" && (this._controlActive = !1, this.domElement.getRootNode().removeEventListener("keyup", this._interceptControlUp, { passive: !0, capture: !0 }));
 }
-class bt {
+class yt {
   constructor(e) {
     this.animationId = null, this.gridHelper = null, this.axesHelper = null, this.frameCallbacks = [];
     const {
       container: t,
       antialias: s = !0,
-      shadows: n = !0,
+      shadows: i = !0,
       backgroundColor: r = 657940,
-      gridSize: c = 20,
-      showGrid: d = !0,
-      showAxes: a = !0
+      gridSize: h = 20,
+      showGrid: p = !0,
+      showAxes: c = !0
     } = e;
-    this.container = t, this.clock = new m.Clock(), this.scene = new m.Scene(), this.scene.background = new m.Color(r), this.scene.fog = new m.FogExp2(r, 0.015);
-    const l = t.clientWidth / t.clientHeight || 1;
-    this.camera = new m.PerspectiveCamera(55, l, 0.1, 500), this.camera.position.set(12, 10, 12), this.camera.lookAt(0, 0, 0), this.renderer = new m.WebGLRenderer({
+    this.container = t, this.clock = new _.Clock(), this.scene = new _.Scene(), this.scene.background = new _.Color(r), this.scene.fog = new _.FogExp2(r, 0.015);
+    const m = t.clientWidth / t.clientHeight || 1;
+    this.camera = new _.PerspectiveCamera(55, m, 0.1, 500), this.camera.position.set(12, 10, 12), this.camera.lookAt(0, 0, 0), this.renderer = new _.WebGLRenderer({
       antialias: s,
       preserveDrawingBuffer: !0
       // needed for PNG export
-    }), this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)), this.renderer.setSize(t.clientWidth, t.clientHeight), n && (this.renderer.shadowMap.enabled = !0, this.renderer.shadowMap.type = m.PCFSoftShadowMap), t.appendChild(this.renderer.domElement), this.controls = new it(this.camera, this.renderer.domElement), this.controls.enableDamping = !0, this.controls.dampingFactor = 0.08, this.controls.maxPolarAngle = Math.PI * 0.48, this.controls.minDistance = 2, this.controls.maxDistance = 80, d && (this.gridHelper = new m.GridHelper(c, c, 1973816, 1315882), this.scene.add(this.gridHelper)), a && (this.axesHelper = new m.AxesHelper(3), this.scene.add(this.axesHelper));
-    const h = new m.AmbientLight(4210784, 0.3);
-    this.scene.add(h), this.resizeObserver = new ResizeObserver(() => this.onResize()), this.resizeObserver.observe(t);
+    }), this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)), this.renderer.setSize(t.clientWidth, t.clientHeight), i && (this.renderer.shadowMap.enabled = !0, this.renderer.shadowMap.type = _.PCFSoftShadowMap), t.appendChild(this.renderer.domElement), this.controls = new it(this.camera, this.renderer.domElement), this.controls.enableDamping = !0, this.controls.dampingFactor = 0.08, this.controls.maxPolarAngle = Math.PI * 0.48, this.controls.minDistance = 2, this.controls.maxDistance = 80, p && (this.gridHelper = new _.GridHelper(h, h, 1973816, 1315882), this.scene.add(this.gridHelper)), c && (this.axesHelper = new _.AxesHelper(3), this.scene.add(this.axesHelper));
+    const d = new _.AmbientLight(4210784, 0.3);
+    this.scene.add(d), this.resizeObserver = new ResizeObserver(() => this.onResize()), this.resizeObserver.observe(t);
   }
   /** Start the animation loop */
   start() {
@@ -765,7 +765,7 @@ class bt {
   /** Clean up all resources */
   dispose() {
     this.stop(), this.resizeObserver.disconnect(), this.controls.dispose(), this.renderer.dispose(), this.frameCallbacks = [], this.renderer.domElement.parentElement && this.renderer.domElement.parentElement.removeChild(this.renderer.domElement), this.scene.traverse((e) => {
-      e instanceof m.Mesh && (e.geometry.dispose(), Array.isArray(e.material) ? e.material.forEach((t) => t.dispose()) : e.material.dispose());
+      e instanceof _.Mesh && (e.geometry.dispose(), Array.isArray(e.material) ? e.material.forEach((t) => t.dispose()) : e.material.dispose());
     });
   }
   onResize() {
@@ -773,7 +773,7 @@ class bt {
     e === 0 || t === 0 || (this.camera.aspect = e / t, this.camera.updateProjectionMatrix(), this.renderer.setSize(e, t));
   }
 }
-const B = [
+const Y = [
   { name: "full_frame", label: "全画幅 (Full Frame)", w: 36, h: 24 },
   { name: "arri_alexa35", label: "ARRI Alexa 35", w: 29.9, h: 22.2 },
   { name: "red_raptor", label: "RED V-Raptor", w: 40.96, h: 21.6 },
@@ -782,50 +782,50 @@ const B = [
   { name: "bmpcc_6k", label: "BMPCC 6K (Super35)", w: 23.1, h: 12.95 },
   { name: "mft", label: "MFT (Micro Four Thirds)", w: 17.3, h: 13 }
 ];
-function ne(i, e) {
-  return e <= 0 || i <= 0 ? 0 : 2 * Math.atan(i / (2 * e)) * (180 / Math.PI);
+function ie(o, e) {
+  return e <= 0 || o <= 0 ? 0 : 2 * Math.atan(o / (2 * e)) * (180 / Math.PI);
 }
-function ye(i, e, t, s, n = 0.03) {
-  if (i <= 0 || e <= 0 || t <= 0 || s <= 0)
+function ye(o, e, t, s, i = 0.03) {
+  if (o <= 0 || e <= 0 || t <= 0 || s <= 0)
     return { near: 0, far: 1 / 0, range: 1 / 0 };
-  const r = 24 / s, c = n / r, d = i * i / (e * c * 1e3), a = i / 1e3, l = t * (d - a) / (d + t - 2 * a), h = t * (d - a) / (d - t);
+  const r = 24 / s, h = i / r, p = o * o / (e * h * 1e3), c = o / 1e3, m = t * (p - c) / (p + t - 2 * c), d = t * (p - c) / (p - t);
   return {
-    near: Math.max(0, l),
-    far: h < 0 ? 1 / 0 : h,
+    near: Math.max(0, m),
+    far: d < 0 ? 1 / 0 : d,
     // negative means beyond hyperfocal
-    range: h < 0 ? 1 / 0 : h - l
+    range: d < 0 ? 1 / 0 : d - m
   };
 }
-function us(i, e) {
-  const t = B.find((s) => s.name === i);
-  return t ? ne(t.h, e) : 0;
+function Jo(o, e) {
+  const t = Y.find((s) => s.name === o);
+  return t ? ie(t.h, e) : 0;
 }
-function G(i) {
-  return i * (Math.PI / 180);
+function q(o) {
+  return o * (Math.PI / 180);
 }
-function ps(i) {
-  return i * (180 / Math.PI);
+function Qo(o) {
+  return o * (180 / Math.PI);
 }
-function K() {
+function Z() {
   return Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
 }
-function yt(i, e, t) {
-  return Math.max(e, Math.min(t, i));
+function gt(o, e, t) {
+  return Math.max(e, Math.min(t, o));
 }
-function U(i, e, t) {
-  return i + (e - i) * yt(t, 0, 1);
+function K(o, e, t) {
+  return o + (e - o) * gt(t, 0, 1);
 }
-function gt(i) {
-  return i < 0.5 ? 4 * i * i * i : 1 - Math.pow(-2 * i + 2, 3) / 2;
+function vt(o) {
+  return o < 0.5 ? 4 * o * o * o : 1 - Math.pow(-2 * o + 2, 3) / 2;
 }
-const _t = 8160255, jt = 16767293;
-class vt {
+const jt = 8160255, xt = 16767293;
+class Tt {
   constructor(e) {
     this.cameras = /* @__PURE__ */ new Map(), this.selectedId = null, this.scene = e;
   }
   /** Add a new camera to the scene */
   addCamera(e = {}) {
-    const t = e.id || K(), s = B.find((c) => c.name === "full_frame"), n = {
+    const t = e.id || Z(), s = Y.find((h) => h.name === "full_frame"), i = {
       id: t,
       name: e.name || `CAM-${this.cameras.size + 1}`,
       focal: e.focal || 50,
@@ -838,18 +838,18 @@ class vt {
       rotation: e.rotation || { yaw: 0, pitch: 0, roll: 0 },
       fov: 0,
       dof: { near: 0, far: 1 / 0, range: 1 / 0 },
-      color: e.color || _t,
+      color: e.color || jt,
       movement: e.movement,
       script: e.script
     };
-    n.fov = ne(n.sensorH, n.focal), n.dof = ye(n.focal, n.fstop, n.focusDist, n.sensorH);
-    const r = this.createCameraMesh(n);
-    return this.scene.add(r), this.cameras.set(t, { camera: n, group: r }), n;
+    i.fov = ie(i.sensorH, i.focal), i.dof = ye(i.focal, i.fstop, i.focusDist, i.sensorH);
+    const r = this.createCameraMesh(i);
+    return this.scene.add(r), this.cameras.set(t, { camera: i, group: r }), i;
   }
   /** Update camera parameters and refresh 3D visualization */
   updateCamera(e, t) {
     const s = this.cameras.get(e);
-    return s ? (Object.assign(s.camera, t), s.camera.fov = ne(s.camera.sensorH, s.camera.focal), s.camera.dof = ye(
+    return s ? (Object.assign(s.camera, t), s.camera.fov = ie(s.camera.sensorH, s.camera.focal), s.camera.dof = ye(
       s.camera.focal,
       s.camera.fstop,
       s.camera.focusDist,
@@ -860,7 +860,7 @@ class vt {
   deleteCamera(e) {
     const t = this.cameras.get(e);
     return t ? (this.scene.remove(t.group), t.group.traverse((s) => {
-      s instanceof m.Mesh && (s.geometry.dispose(), Array.isArray(s.material) ? s.material.forEach((n) => n.dispose()) : s.material.dispose());
+      s instanceof _.Mesh && (s.geometry.dispose(), Array.isArray(s.material) ? s.material.forEach((i) => i.dispose()) : s.material.dispose());
     }), this.cameras.delete(e), this.selectedId === e && (this.selectedId = null), !0) : !1;
   }
   /** Select a camera by ID */
@@ -898,9 +898,9 @@ class vt {
   setCameraRotation(e, t) {
     const s = this.cameras.get(e);
     s && (s.camera.rotation = t, s.group.rotation.set(
-      G(t.pitch),
-      G(t.yaw),
-      G(t.roll)
+      q(t.pitch),
+      q(t.yaw),
+      q(t.roll)
     ));
   }
   /** Clear all cameras */
@@ -910,78 +910,78 @@ class vt {
   }
   // --- Private helpers ---
   createCameraMesh(e) {
-    const t = new m.Group();
+    const t = new _.Group();
     t.userData = { cameraId: e.id };
-    const s = new m.BoxGeometry(0.3, 0.2, 0.4), n = new m.MeshStandardMaterial({
+    const s = new _.BoxGeometry(0.3, 0.2, 0.4), i = new _.MeshStandardMaterial({
       color: e.color,
       metalness: 0.6,
       roughness: 0.3
-    }), r = new m.Mesh(s, n);
+    }), r = new _.Mesh(s, i);
     r.castShadow = !0, r.userData = { cameraId: e.id, part: "body" }, t.add(r);
-    const c = new m.CylinderGeometry(0.08, 0.12, 0.2, 16), d = new m.MeshStandardMaterial({
+    const h = new _.CylinderGeometry(0.08, 0.12, 0.2, 16), p = new _.MeshStandardMaterial({
       color: 2236962,
       metalness: 0.8,
       roughness: 0.2
-    }), a = new m.Mesh(c, d);
-    a.rotation.x = Math.PI / 2, a.position.z = 0.3, a.userData = { cameraId: e.id, part: "lens" }, t.add(a);
-    const l = G(e.fov / 2), h = 3, p = h * Math.tan(l), y = new m.ConeGeometry(p, h, 4, 1, !0), f = new m.MeshBasicMaterial({
+    }), c = new _.Mesh(h, p);
+    c.rotation.x = Math.PI / 2, c.position.z = 0.3, c.userData = { cameraId: e.id, part: "lens" }, t.add(c);
+    const m = q(e.fov / 2), d = 3, u = d * Math.tan(m), g = new _.ConeGeometry(u, d, 4, 1, !0), l = new _.MeshBasicMaterial({
       color: e.color,
       transparent: !0,
       opacity: 0.08,
-      side: m.DoubleSide,
+      side: _.DoubleSide,
       depthWrite: !1
-    }), b = new m.Mesh(y, f);
-    b.rotation.x = Math.PI / 2, b.position.z = h / 2 + 0.3, b.userData = { cameraId: e.id, part: "cone" }, t.add(b);
-    const _ = new m.ConeGeometry(p, h, 4, 1, !0), x = new m.MeshBasicMaterial({
+    }), b = new _.Mesh(g, l);
+    b.rotation.x = Math.PI / 2, b.position.z = d / 2 + 0.3, b.userData = { cameraId: e.id, part: "cone" }, t.add(b);
+    const y = new _.ConeGeometry(u, d, 4, 1, !0), T = new _.MeshBasicMaterial({
       color: e.color,
       wireframe: !0,
       transparent: !0,
       opacity: 0.3
-    }), E = new m.Mesh(_, x);
-    return E.rotation.x = Math.PI / 2, E.position.z = h / 2 + 0.3, E.userData = { cameraId: e.id, part: "wire" }, t.add(E), t.position.set(e.position.x, e.position.y, e.position.z), t.rotation.set(
-      G(e.rotation.pitch),
-      G(e.rotation.yaw),
-      G(e.rotation.roll)
+    }), C = new _.Mesh(y, T);
+    return C.rotation.x = Math.PI / 2, C.position.z = d / 2 + 0.3, C.userData = { cameraId: e.id, part: "wire" }, t.add(C), t.position.set(e.position.x, e.position.y, e.position.z), t.rotation.set(
+      q(e.rotation.pitch),
+      q(e.rotation.yaw),
+      q(e.rotation.roll)
     ), t;
   }
   highlightCamera(e, t = !0) {
     const s = this.cameras.get(e);
     if (!s) return;
-    const n = t ? jt : s.camera.color;
+    const i = t ? xt : s.camera.color;
     s.group.traverse((r) => {
-      r instanceof m.Mesh && r.userData.part === "body" && r.material.color.setHex(n), r instanceof m.Mesh && (r.userData.part === "cone" || r.userData.part === "wire") && r.material.color.setHex(n);
+      r instanceof _.Mesh && r.userData.part === "body" && r.material.color.setHex(i), r instanceof _.Mesh && (r.userData.part === "cone" || r.userData.part === "wire") && r.material.color.setHex(i);
     });
   }
 }
-class xt {
+class St {
   constructor(e) {
     this.objects = /* @__PURE__ */ new Map(), this.scene = e;
   }
   /** Add an object to the scene */
   addObject(e) {
-    const t = e.id || K(), s = {
+    const t = e.id || Z(), s = {
       id: t,
       type: e.type,
       position: e.position || { x: 0, y: 0, z: 0 },
       rotation: e.rotation || { yaw: 0, pitch: 0, roll: 0 },
       scale: e.scale || { x: 1, y: 1, z: 1 },
       color: e.color || 8947848
-    }, n = this.createMesh(s);
-    return n.userData = { objectId: t, objectType: s.type }, this.scene.add(n), this.objects.set(t, { data: s, mesh: n }), s;
+    }, i = this.createMesh(s);
+    return i.userData = { objectId: t, objectType: s.type }, this.scene.add(i), this.objects.set(t, { data: s, mesh: i }), s;
   }
   /** Update an existing object */
   updateObject(e, t) {
     const s = this.objects.get(e);
     if (!s) return null;
     Object.assign(s.data, t), this.scene.remove(s.mesh);
-    const n = this.createMesh(s.data);
-    return n.userData = { objectId: e, objectType: s.data.type }, this.scene.add(n), s.mesh = n, s.data;
+    const i = this.createMesh(s.data);
+    return i.userData = { objectId: e, objectType: s.data.type }, this.scene.add(i), s.mesh = i, s.data;
   }
   /** Delete an object */
   deleteObject(e) {
     const t = this.objects.get(e);
     return t ? (this.scene.remove(t.mesh), t.mesh.traverse((s) => {
-      s instanceof m.Mesh && (s.geometry.dispose(), Array.isArray(s.material) ? s.material.forEach((n) => n.dispose()) : s.material.dispose());
+      s instanceof _.Mesh && (s.geometry.dispose(), Array.isArray(s.material) ? s.material.forEach((i) => i.dispose()) : s.material.dispose());
     }), this.objects.delete(e), !0) : !1;
   }
   /** Get all objects */
@@ -1009,7 +1009,7 @@ class xt {
   }
   // --- Private: mesh factory ---
   createMesh(e) {
-    const t = new m.MeshStandardMaterial({
+    const t = new _.MeshStandardMaterial({
       color: e.color,
       roughness: 0.7,
       metalness: 0.1
@@ -1017,22 +1017,22 @@ class xt {
     let s;
     switch (e.type) {
       case "box":
-        s = new m.BoxGeometry(1, 1, 1);
+        s = new _.BoxGeometry(1, 1, 1);
         break;
       case "sphere":
-        s = new m.SphereGeometry(0.5, 24, 24);
+        s = new _.SphereGeometry(0.5, 24, 24);
         break;
       case "cone":
-        s = new m.ConeGeometry(0.5, 1, 16);
+        s = new _.ConeGeometry(0.5, 1, 16);
         break;
       case "cylinder":
-        s = new m.CylinderGeometry(0.5, 0.5, 1, 16);
+        s = new _.CylinderGeometry(0.5, 0.5, 1, 16);
         break;
       case "torus":
-        s = new m.TorusGeometry(0.5, 0.15, 12, 32);
+        s = new _.TorusGeometry(0.5, 0.15, 12, 32);
         break;
       case "plane":
-        s = new m.PlaneGeometry(1, 1);
+        s = new _.PlaneGeometry(1, 1);
         break;
       case "person":
         return this.createPerson(e, t);
@@ -1042,64 +1042,83 @@ class xt {
         return this.createCar(e, t);
       case "tree":
         return this.createTree(e, t);
+      case "chair":
+        return this.createChair(e, t);
       case "prop":
-        s = new m.BoxGeometry(0.3, 0.3, 0.3);
+        s = new _.BoxGeometry(0.3, 0.3, 0.3);
         break;
       default:
-        s = new m.BoxGeometry(1, 1, 1);
+        s = new _.BoxGeometry(1, 1, 1);
     }
-    const n = new m.Mesh(s, t);
-    return n.castShadow = !0, n.receiveShadow = !0, this.applyTransform(n, e), n;
+    const i = new _.Mesh(s, t);
+    return i.castShadow = !0, i.receiveShadow = !0, this.applyTransform(i, e), i;
   }
   createPerson(e, t) {
-    const s = new m.Group(), n = new m.CylinderGeometry(0.25, 0.2, 1.2, 8), r = new m.Mesh(n, t);
+    const s = new _.Group(), i = new _.CylinderGeometry(0.25, 0.2, 1.2, 8), r = new _.Mesh(i, t);
     r.position.y = 0.6, r.castShadow = !0, s.add(r);
-    const c = new m.MeshStandardMaterial({ color: 14731424, roughness: 0.8 }), d = new m.SphereGeometry(0.15, 16, 16), a = new m.Mesh(d, c);
-    return a.position.y = 1.35, a.castShadow = !0, s.add(a), this.applyTransform(s, e), s;
+    const h = new _.MeshStandardMaterial({ color: 14731424, roughness: 0.8 }), p = new _.SphereGeometry(0.15, 16, 16), c = new _.Mesh(p, h);
+    return c.position.y = 1.35, c.castShadow = !0, s.add(c), this.applyTransform(s, e), s;
   }
   createBuilding(e, t) {
-    const s = new m.Group(), n = new m.BoxGeometry(1, 1, 1), r = new m.Mesh(n, t);
+    const s = new _.Group(), i = new _.BoxGeometry(1, 1, 1), r = new _.Mesh(i, t);
     r.position.y = 0.5, r.castShadow = !0, r.receiveShadow = !0, s.add(r);
-    const c = new m.MeshStandardMaterial({ color: 3359829, metalness: 0.5 });
-    for (let d = 0; d < 3; d++)
-      for (let a = 0; a < 2; a++) {
-        const l = new m.BoxGeometry(0.2, 0.15, 0.02), h = new m.Mesh(l, c);
-        h.position.set(-0.15 + a * 0.3, 0.2 + d * 0.25, 0.51), s.add(h);
+    const h = new _.MeshStandardMaterial({ color: 3359829, metalness: 0.5 });
+    for (let p = 0; p < 3; p++)
+      for (let c = 0; c < 2; c++) {
+        const m = new _.BoxGeometry(0.2, 0.15, 0.02), d = new _.Mesh(m, h);
+        d.position.set(-0.15 + c * 0.3, 0.2 + p * 0.25, 0.51), s.add(d);
       }
     return this.applyTransform(s, e), s;
   }
   createCar(e, t) {
-    const s = new m.Group(), n = new m.BoxGeometry(2, 0.6, 1), r = new m.Mesh(n, t);
+    const s = new _.Group(), i = new _.BoxGeometry(2, 0.6, 1), r = new _.Mesh(i, t);
     r.position.y = 0.4, r.castShadow = !0, s.add(r);
-    const c = new m.BoxGeometry(1.2, 0.5, 0.9), d = new m.MeshStandardMaterial({ color: 8956620, metalness: 0.3, roughness: 0.2 }), a = new m.Mesh(c, d);
-    a.position.set(-0.1, 0.9, 0), s.add(a);
-    const l = new m.MeshStandardMaterial({ color: 2236962 }), h = new m.CylinderGeometry(0.2, 0.2, 0.1, 16), p = [
+    const h = new _.BoxGeometry(1.2, 0.5, 0.9), p = new _.MeshStandardMaterial({ color: 8956620, metalness: 0.3, roughness: 0.2 }), c = new _.Mesh(h, p);
+    c.position.set(-0.1, 0.9, 0), s.add(c);
+    const m = new _.MeshStandardMaterial({ color: 2236962 }), d = new _.CylinderGeometry(0.2, 0.2, 0.1, 16), u = [
       [-0.6, 0.2, 0.55],
       [0.6, 0.2, 0.55],
       [-0.6, 0.2, -0.55],
       [0.6, 0.2, -0.55]
     ];
-    for (const [y, f, b] of p) {
-      const _ = new m.Mesh(h, l);
-      _.position.set(y, f, b), _.rotation.x = Math.PI / 2, s.add(_);
+    for (const [g, l, b] of u) {
+      const y = new _.Mesh(d, m);
+      y.position.set(g, l, b), y.rotation.x = Math.PI / 2, s.add(y);
     }
     return this.applyTransform(s, e), s;
   }
   createTree(e, t) {
-    const s = new m.Group(), n = new m.MeshStandardMaterial({ color: 7029286, roughness: 0.9 }), r = new m.CylinderGeometry(0.1, 0.15, 1.5, 8), c = new m.Mesh(r, n);
-    c.position.y = 0.75, c.castShadow = !0, s.add(c);
-    const d = new m.SphereGeometry(0.8, 12, 12), a = new m.Mesh(d, t);
-    return a.position.y = 2, a.castShadow = !0, s.add(a), this.applyTransform(s, e), s;
+    const s = new _.Group(), i = new _.MeshStandardMaterial({ color: 7029286, roughness: 0.9 }), r = new _.CylinderGeometry(0.1, 0.15, 1.5, 8), h = new _.Mesh(r, i);
+    h.position.y = 0.75, h.castShadow = !0, s.add(h);
+    const p = new _.SphereGeometry(0.8, 12, 12), c = new _.Mesh(p, t);
+    return c.position.y = 2, c.castShadow = !0, s.add(c), this.applyTransform(s, e), s;
+  }
+  createChair(e, t) {
+    const s = new _.Group(), i = new _.MeshStandardMaterial({ color: 3811866, roughness: 0.9 }), r = new _.BoxGeometry(0.5, 0.05, 0.5), h = new _.Mesh(r, t);
+    h.position.y = 0.45, h.castShadow = !0, s.add(h);
+    const p = new _.BoxGeometry(0.5, 0.5, 0.05), c = new _.Mesh(p, t);
+    c.position.set(0, 0.7, -0.225), c.castShadow = !0, s.add(c);
+    const m = new _.CylinderGeometry(0.02, 0.02, 0.45, 6), d = [
+      [-0.2, 0.225, -0.2],
+      [0.2, 0.225, -0.2],
+      [-0.2, 0.225, 0.2],
+      [0.2, 0.225, 0.2]
+    ];
+    for (const [u, g, l] of d) {
+      const b = new _.Mesh(m, i);
+      b.position.set(u, g, l), b.castShadow = !0, s.add(b);
+    }
+    return this.applyTransform(s, e), s;
   }
   applyTransform(e, t) {
     e.position.set(t.position.x, t.position.y, t.position.z), e.rotation.set(
-      G(t.rotation.pitch),
-      G(t.rotation.yaw),
-      G(t.rotation.roll)
+      q(t.rotation.pitch),
+      q(t.rotation.yaw),
+      q(t.rotation.roll)
     ), e.scale.set(t.scale.x, t.scale.y, t.scale.z);
   }
 }
-const wt = [
+const Ct = [
   {
     name: "daylight",
     label: "日光",
@@ -1136,9 +1155,9 @@ const wt = [
     position: { x: -8, y: 6, z: -3 }
   }
 ];
-class Et {
+class wt {
   constructor(e) {
-    this.helper = null, this.scene = e, this.mainLight = new m.DirectionalLight(16774624, 1.2), this.mainLight.position.set(10, 20, 10), this.mainLight.castShadow = !0, this.mainLight.shadow.mapSize.width = 2048, this.mainLight.shadow.mapSize.height = 2048, this.mainLight.shadow.camera.near = 0.5, this.mainLight.shadow.camera.far = 60, this.mainLight.shadow.camera.left = -20, this.mainLight.shadow.camera.right = 20, this.mainLight.shadow.camera.top = 20, this.mainLight.shadow.camera.bottom = -20, e.add(this.mainLight), this.fillLight = new m.PointLight(6719692, 0.3, 50), this.fillLight.position.set(-8, 8, -8), e.add(this.fillLight), this.config = {
+    this.helper = null, this.scene = e, this.mainLight = new _.DirectionalLight(16774624, 1.2), this.mainLight.position.set(10, 20, 10), this.mainLight.castShadow = !0, this.mainLight.shadow.mapSize.width = 2048, this.mainLight.shadow.mapSize.height = 2048, this.mainLight.shadow.camera.near = 0.5, this.mainLight.shadow.camera.far = 60, this.mainLight.shadow.camera.left = -20, this.mainLight.shadow.camera.right = 20, this.mainLight.shadow.camera.top = 20, this.mainLight.shadow.camera.bottom = -20, e.add(this.mainLight), this.fillLight = new _.PointLight(6719692, 0.3, 50), this.fillLight.position.set(-8, 8, -8), e.add(this.fillLight), this.config = {
       position: { x: 10, y: 20, z: 10 },
       intensity: 1.2,
       color: 16774624,
@@ -1147,7 +1166,7 @@ class Et {
   }
   /** Apply a named preset */
   applyPreset(e) {
-    const t = wt.find((s) => s.name === e);
+    const t = Ct.find((s) => s.name === e);
     t && (this.config = {
       position: { ...t.position },
       intensity: t.intensity,
@@ -1165,21 +1184,21 @@ class Et {
   }
   /** Show/hide light helper in scene */
   setHelperVisible(e) {
-    e && !this.helper && (this.helper = new m.DirectionalLightHelper(this.mainLight, 2), this.scene.add(this.helper)), this.helper && (this.helper.visible = e);
+    e && !this.helper && (this.helper = new _.DirectionalLightHelper(this.mainLight, 2), this.scene.add(this.helper)), this.helper && (this.helper.visible = e);
   }
   /** Clean up */
   dispose() {
     this.helper && (this.scene.remove(this.helper), this.helper.dispose()), this.scene.remove(this.mainLight), this.scene.remove(this.fillLight);
   }
 }
-class St {
+class Et {
   constructor(e) {
     this.keyframes = [], this.line = null, this.markers = [], this.scene = e;
   }
   /** Add a keyframe */
   addKeyframe(e) {
     const t = {
-      id: e.id || K(),
+      id: e.id || Z(),
       position: e.position,
       rotation: e.rotation || { yaw: 0, pitch: 0, roll: 0 },
       cameraId: e.cameraId,
@@ -1203,22 +1222,22 @@ class St {
   /** Get interpolated position and rotation at time t (0-1) */
   sample(e) {
     if (this.keyframes.length < 2) return null;
-    const t = gt(e);
+    const t = vt(e);
     let s = 0;
     for (; s < this.keyframes.length - 1 && !(this.keyframes[s + 1].t >= t); s++)
       ;
     s = Math.min(s, this.keyframes.length - 2);
-    const n = this.keyframes[s], r = this.keyframes[s + 1], c = r.t - n.t > 0 ? (t - n.t) / (r.t - n.t) : 0;
+    const i = this.keyframes[s], r = this.keyframes[s + 1], h = r.t - i.t > 0 ? (t - i.t) / (r.t - i.t) : 0;
     return {
       position: {
-        x: U(n.position.x, r.position.x, c),
-        y: U(n.position.y, r.position.y, c),
-        z: U(n.position.z, r.position.z, c)
+        x: K(i.position.x, r.position.x, h),
+        y: K(i.position.y, r.position.y, h),
+        z: K(i.position.z, r.position.z, h)
       },
       rotation: {
-        yaw: U(n.rotation.yaw, r.rotation.yaw, c),
-        pitch: U(n.rotation.pitch, r.rotation.pitch, c),
-        roll: U(n.rotation.roll, r.rotation.roll, c)
+        yaw: K(i.rotation.yaw, r.rotation.yaw, h),
+        pitch: K(i.rotation.pitch, r.rotation.pitch, h),
+        roll: K(i.rotation.roll, r.rotation.roll, h)
       }
     };
   }
@@ -1234,31 +1253,31 @@ class St {
     });
   }
   refreshVisualization() {
-    var s, n;
+    var s, i;
     if (this.line) {
       this.scene.remove(this.line), (s = this.line.geometry) == null || s.dispose();
       const r = this.line.material;
-      Array.isArray(r) ? r.forEach((c) => c.dispose()) : r == null || r.dispose(), this.line = null;
+      Array.isArray(r) ? r.forEach((h) => h.dispose()) : r == null || r.dispose(), this.line = null;
     }
     for (const r of this.markers) {
-      this.scene.remove(r), (n = r.geometry) == null || n.dispose();
-      const c = r.material;
-      Array.isArray(c) ? c.forEach((d) => d.dispose()) : c == null || c.dispose();
+      this.scene.remove(r), (i = r.geometry) == null || i.dispose();
+      const h = r.material;
+      Array.isArray(h) ? h.forEach((p) => p.dispose()) : h == null || h.dispose();
     }
     if (this.markers = [], this.keyframes.length < 1) return;
-    const e = new m.SphereGeometry(0.12, 8, 8), t = new m.MeshBasicMaterial({ color: 16739125 });
+    const e = new _.SphereGeometry(0.12, 8, 8), t = new _.MeshBasicMaterial({ color: 16739125 });
     for (const r of this.keyframes) {
-      const c = new m.Mesh(e, t);
-      c.position.set(r.position.x, r.position.y, r.position.z), this.scene.add(c), this.markers.push(c);
+      const h = new _.Mesh(e, t);
+      h.position.set(r.position.x, r.position.y, r.position.z), this.scene.add(h), this.markers.push(h);
     }
     if (this.keyframes.length >= 2) {
       const r = this.keyframes.map(
-        (a) => new m.Vector3(a.position.x, a.position.y, a.position.z)
-      ), c = new m.BufferGeometry().setFromPoints(r), d = new m.LineBasicMaterial({
+        (c) => new _.Vector3(c.position.x, c.position.y, c.position.z)
+      ), h = new _.BufferGeometry().setFromPoints(r), p = new _.LineBasicMaterial({
         color: 16739125,
         linewidth: 2
       });
-      this.line = new m.Line(c, d), this.scene.add(this.line);
+      this.line = new _.Line(h, p), this.scene.add(this.line);
     }
   }
   /** Clean up */
@@ -1270,36 +1289,36 @@ class Pt {
   constructor(e, t) {
     this.onPickCallback = null, this.onHoverCallback = null, this.isDragging = !1, this.dragTarget = null, this.cameraGroups = [], this.objectMeshes = [], this.onPointerDown = (s) => {
       this.updateMouse(s);
-      const n = this.raycast();
-      if (n.target === "camera" || n.target === "object") {
+      const i = this.raycast();
+      if (i.target === "camera" || i.target === "object") {
         this.isDragging = !0, this.dragTarget = {
-          type: n.target,
-          id: n.id
+          type: i.target,
+          id: i.id
         };
-        const r = this.getWorldPosition(n.target, n.id);
+        const r = this.getWorldPosition(i.target, i.id);
         if (r) {
-          this.dragPlane.set(new m.Vector3(0, 1, 0), -r.y);
-          const c = new m.Vector3();
-          this.raycaster.ray.intersectPlane(this.dragPlane, c), this.dragOffset.copy(r).sub(c);
+          this.dragPlane.set(new _.Vector3(0, 1, 0), -r.y);
+          const h = new _.Vector3();
+          this.raycaster.ray.intersectPlane(this.dragPlane, h), this.dragOffset.copy(r).sub(h);
         }
       }
-      this.onPickCallback && this.onPickCallback(n);
+      this.onPickCallback && this.onPickCallback(i);
     }, this.onPointerMove = (s) => {
       if (this.updateMouse(s), this.isDragging && this.dragTarget) {
-        const r = new m.Vector3();
+        const r = new _.Vector3();
         this.raycaster.ray.intersectPlane(this.dragPlane, r), r.add(this.dragOffset), this.onPickCallback && this.onPickCallback({
           target: this.dragTarget.type,
           id: this.dragTarget.id,
           point: r.clone(),
-          groundPoint: new m.Vector3(r.x, 0, r.z)
+          groundPoint: new _.Vector3(r.x, 0, r.z)
         });
         return;
       }
-      const n = this.raycast();
-      this.onHoverCallback && this.onHoverCallback(n.target ? n : null);
+      const i = this.raycast();
+      this.onHoverCallback && this.onHoverCallback(i.target ? i : null);
     }, this.onPointerUp = (s) => {
       this.isDragging = !1, this.dragTarget = null;
-    }, this.camera = e, this.scene = t, this.raycaster = new m.Raycaster(), this.mouse = new m.Vector2(), this.groundPlane = new m.Plane(new m.Vector3(0, 1, 0), 0), this.dragPlane = new m.Plane(new m.Vector3(0, 1, 0), 0), this.dragOffset = new m.Vector3();
+    }, this.camera = e, this.scene = t, this.raycaster = new _.Raycaster(), this.mouse = new _.Vector2(), this.groundPlane = new _.Plane(new _.Vector3(0, 1, 0), 0), this.dragPlane = new _.Plane(new _.Vector3(0, 1, 0), 0), this.dragOffset = new _.Vector3();
   }
   /** Set the camera groups that can be picked */
   setCameraGroups(e) {
@@ -1326,75 +1345,75 @@ class Pt {
     this.onHoverCallback = e;
   }
   updateMouse(e) {
-    var s, n;
-    const t = (n = (s = e.target).getBoundingClientRect) == null ? void 0 : n.call(s);
+    var s, i;
+    const t = (i = (s = e.target).getBoundingClientRect) == null ? void 0 : i.call(s);
     t && (this.mouse.x = (e.clientX - t.left) / t.width * 2 - 1, this.mouse.y = -((e.clientY - t.top) / t.height) * 2 + 1, this.raycaster.setFromCamera(this.mouse, this.camera));
   }
   raycast() {
     const e = {
       target: null,
       id: null,
-      point: new m.Vector3(),
+      point: new _.Vector3(),
       groundPoint: null
     }, t = [];
-    for (const c of this.cameraGroups)
-      c.traverse((d) => {
-        d instanceof m.Mesh && t.push(d);
+    for (const h of this.cameraGroups)
+      h.traverse((p) => {
+        p instanceof _.Mesh && t.push(p);
       });
-    for (const c of this.objectMeshes)
-      c.traverse((d) => {
-        d instanceof m.Mesh && t.push(d);
+    for (const h of this.objectMeshes)
+      h.traverse((p) => {
+        p instanceof _.Mesh && t.push(p);
       });
     const s = this.raycaster.intersectObjects(t, !1);
     if (s.length > 0) {
-      const c = s[0], d = c.object.userData, a = new m.Vector3();
-      if (this.raycaster.ray.intersectPlane(this.groundPlane, a), d.cameraId)
+      const h = s[0], p = h.object.userData, c = new _.Vector3();
+      if (this.raycaster.ray.intersectPlane(this.groundPlane, c), p.cameraId)
         return {
           target: "camera",
-          id: d.cameraId,
-          point: c.point.clone(),
-          groundPoint: a
+          id: p.cameraId,
+          point: h.point.clone(),
+          groundPoint: c
         };
-      if (d.objectId)
+      if (p.objectId)
         return {
           target: "object",
-          id: d.objectId,
-          point: c.point.clone(),
-          groundPoint: a
+          id: p.objectId,
+          point: h.point.clone(),
+          groundPoint: c
         };
     }
-    const n = new m.Vector3();
-    return this.raycaster.ray.intersectPlane(this.groundPlane, n) ? {
+    const i = new _.Vector3();
+    return this.raycaster.ray.intersectPlane(this.groundPlane, i) ? {
       target: "ground",
       id: null,
-      point: n.clone(),
-      groundPoint: n.clone()
+      point: i.clone(),
+      groundPoint: i.clone()
     } : e;
   }
   getWorldPosition(e, t) {
     if (e === "camera") {
-      const n = this.cameraGroups.find((r) => r.userData.cameraId === t);
-      return n ? n.position.clone() : null;
+      const i = this.cameraGroups.find((r) => r.userData.cameraId === t);
+      return i ? i.position.clone() : null;
     }
-    const s = this.objectMeshes.find((n) => n.userData.objectId === t);
+    const s = this.objectMeshes.find((i) => i.userData.objectId === t);
     return s ? s.position.clone() : null;
   }
 }
-const Tt = {}, ke = (i) => {
+const Nt = {}, ke = (o) => {
   let e;
-  const t = /* @__PURE__ */ new Set(), s = (h, p) => {
-    const y = typeof h == "function" ? h(e) : h;
-    if (!Object.is(y, e)) {
-      const f = e;
-      e = p ?? (typeof y != "object" || y === null) ? y : Object.assign({}, e, y), t.forEach((b) => b(e, f));
+  const t = /* @__PURE__ */ new Set(), s = (d, u) => {
+    const g = typeof d == "function" ? d(e) : d;
+    if (!Object.is(g, e)) {
+      const l = e;
+      e = u ?? (typeof g != "object" || g === null) ? g : Object.assign({}, e, g), t.forEach((b) => b(e, l));
     }
-  }, n = () => e, a = { setState: s, getState: n, getInitialState: () => l, subscribe: (h) => (t.add(h), () => t.delete(h)), destroy: () => {
-    (Tt ? "production" : void 0) !== "production" && console.warn(
+  }, i = () => e, c = { setState: s, getState: i, getInitialState: () => m, subscribe: (d) => (t.add(d), () => t.delete(d)), destroy: () => {
+    (Nt ? "production" : void 0) !== "production" && console.warn(
       "[DEPRECATED] The `destroy` method will be unsupported in a future version. Instead use unsubscribe function returned by subscribe. Everything will be garbage-collected if store is garbage-collected."
     ), t.clear();
-  } }, l = e = i(s, n, a);
-  return a;
-}, Ct = (i) => i ? ke(i) : ke;
+  } }, m = e = o(s, i, c);
+  return c;
+}, Mt = (o) => o ? ke(o) : ke;
 var ge = { exports: {} }, de = {}, se = { exports: {} }, ue = {};
 /**
  * @license React
@@ -1405,48 +1424,48 @@ var ge = { exports: {} }, de = {}, se = { exports: {} }, ue = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var De;
+var Re;
 function Ot() {
-  if (De) return ue;
-  De = 1;
-  var i = W;
-  function e(p, y) {
-    return p === y && (p !== 0 || 1 / p === 1 / y) || p !== p && y !== y;
+  if (Re) return ue;
+  Re = 1;
+  var o = W;
+  function e(u, g) {
+    return u === g && (u !== 0 || 1 / u === 1 / g) || u !== u && g !== g;
   }
-  var t = typeof Object.is == "function" ? Object.is : e, s = i.useState, n = i.useEffect, r = i.useLayoutEffect, c = i.useDebugValue;
-  function d(p, y) {
-    var f = y(), b = s({ inst: { value: f, getSnapshot: y } }), _ = b[0].inst, x = b[1];
+  var t = typeof Object.is == "function" ? Object.is : e, s = o.useState, i = o.useEffect, r = o.useLayoutEffect, h = o.useDebugValue;
+  function p(u, g) {
+    var l = g(), b = s({ inst: { value: l, getSnapshot: g } }), y = b[0].inst, T = b[1];
     return r(
       function() {
-        _.value = f, _.getSnapshot = y, a(_) && x({ inst: _ });
+        y.value = l, y.getSnapshot = g, c(y) && T({ inst: y });
       },
-      [p, f, y]
-    ), n(
+      [u, l, g]
+    ), i(
       function() {
-        return a(_) && x({ inst: _ }), p(function() {
-          a(_) && x({ inst: _ });
+        return c(y) && T({ inst: y }), u(function() {
+          c(y) && T({ inst: y });
         });
       },
-      [p]
-    ), c(f), f;
+      [u]
+    ), h(l), l;
   }
-  function a(p) {
-    var y = p.getSnapshot;
-    p = p.value;
+  function c(u) {
+    var g = u.getSnapshot;
+    u = u.value;
     try {
-      var f = y();
-      return !t(p, f);
+      var l = g();
+      return !t(u, l);
     } catch {
       return !0;
     }
   }
-  function l(p, y) {
-    return y();
+  function m(u, g) {
+    return g();
   }
-  var h = typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u" ? l : d;
-  return ue.useSyncExternalStore = i.useSyncExternalStore !== void 0 ? i.useSyncExternalStore : h, ue;
+  var d = typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u" ? m : p;
+  return ue.useSyncExternalStore = o.useSyncExternalStore !== void 0 ? o.useSyncExternalStore : d, ue;
 }
-var pe = {};
+var me = {};
 /**
  * @license React
  * use-sync-external-store-shim.development.js
@@ -1456,62 +1475,62 @@ var pe = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Re;
-function Nt() {
-  return Re || (Re = 1, process.env.NODE_ENV !== "production" && function() {
-    function i(f, b) {
-      return f === b && (f !== 0 || 1 / f === 1 / b) || f !== f && b !== b;
+var Ie;
+function Dt() {
+  return Ie || (Ie = 1, process.env.NODE_ENV !== "production" && function() {
+    function o(l, b) {
+      return l === b && (l !== 0 || 1 / l === 1 / b) || l !== l && b !== b;
     }
-    function e(f, b) {
-      h || n.startTransition === void 0 || (h = !0, console.error(
+    function e(l, b) {
+      d || i.startTransition === void 0 || (d = !0, console.error(
         "You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."
       ));
-      var _ = b();
-      if (!p) {
-        var x = b();
-        r(_, x) || (console.error(
+      var y = b();
+      if (!u) {
+        var T = b();
+        r(y, T) || (console.error(
           "The result of getSnapshot should be cached to avoid an infinite loop"
-        ), p = !0);
+        ), u = !0);
       }
-      x = c({
-        inst: { value: _, getSnapshot: b }
+      T = h({
+        inst: { value: y, getSnapshot: b }
       });
-      var E = x[0].inst, D = x[1];
-      return a(
+      var C = T[0].inst, R = T[1];
+      return c(
         function() {
-          E.value = _, E.getSnapshot = b, t(E) && D({ inst: E });
+          C.value = y, C.getSnapshot = b, t(C) && R({ inst: C });
         },
-        [f, _, b]
-      ), d(
+        [l, y, b]
+      ), p(
         function() {
-          return t(E) && D({ inst: E }), f(function() {
-            t(E) && D({ inst: E });
+          return t(C) && R({ inst: C }), l(function() {
+            t(C) && R({ inst: C });
           });
         },
-        [f]
-      ), l(_), _;
+        [l]
+      ), m(y), y;
     }
-    function t(f) {
-      var b = f.getSnapshot;
-      f = f.value;
+    function t(l) {
+      var b = l.getSnapshot;
+      l = l.value;
       try {
-        var _ = b();
-        return !r(f, _);
+        var y = b();
+        return !r(l, y);
       } catch {
         return !0;
       }
     }
-    function s(f, b) {
+    function s(l, b) {
       return b();
     }
     typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-    var n = W, r = typeof Object.is == "function" ? Object.is : i, c = n.useState, d = n.useEffect, a = n.useLayoutEffect, l = n.useDebugValue, h = !1, p = !1, y = typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u" ? s : e;
-    pe.useSyncExternalStore = n.useSyncExternalStore !== void 0 ? n.useSyncExternalStore : y, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
-  }()), pe;
+    var i = W, r = typeof Object.is == "function" ? Object.is : o, h = i.useState, p = i.useEffect, c = i.useLayoutEffect, m = i.useDebugValue, d = !1, u = !1, g = typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u" ? s : e;
+    me.useSyncExternalStore = i.useSyncExternalStore !== void 0 ? i.useSyncExternalStore : g, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
+  }()), me;
 }
 var Ae;
-function Fe() {
-  return Ae || (Ae = 1, process.env.NODE_ENV === "production" ? se.exports = Ot() : se.exports = Nt()), se.exports;
+function ze() {
+  return Ae || (Ae = 1, process.env.NODE_ENV === "production" ? se.exports = Ot() : se.exports = Dt()), se.exports;
 }
 /**
  * @license React
@@ -1523,57 +1542,57 @@ function Fe() {
  * LICENSE file in the root directory of this source tree.
  */
 var Le;
-function Mt() {
+function kt() {
   if (Le) return de;
   Le = 1;
-  var i = W, e = Fe();
-  function t(l, h) {
-    return l === h && (l !== 0 || 1 / l === 1 / h) || l !== l && h !== h;
+  var o = W, e = ze();
+  function t(m, d) {
+    return m === d && (m !== 0 || 1 / m === 1 / d) || m !== m && d !== d;
   }
-  var s = typeof Object.is == "function" ? Object.is : t, n = e.useSyncExternalStore, r = i.useRef, c = i.useEffect, d = i.useMemo, a = i.useDebugValue;
-  return de.useSyncExternalStoreWithSelector = function(l, h, p, y, f) {
+  var s = typeof Object.is == "function" ? Object.is : t, i = e.useSyncExternalStore, r = o.useRef, h = o.useEffect, p = o.useMemo, c = o.useDebugValue;
+  return de.useSyncExternalStoreWithSelector = function(m, d, u, g, l) {
     var b = r(null);
     if (b.current === null) {
-      var _ = { hasValue: !1, value: null };
-      b.current = _;
-    } else _ = b.current;
-    b = d(
+      var y = { hasValue: !1, value: null };
+      b.current = y;
+    } else y = b.current;
+    b = p(
       function() {
-        function E(S) {
-          if (!D) {
-            if (D = !0, R = S, S = y(S), f !== void 0 && _.hasValue) {
-              var M = _.value;
-              if (f(M, S))
-                return A = M;
+        function C(w) {
+          if (!R) {
+            if (R = !0, I = w, w = g(w), l !== void 0 && y.hasValue) {
+              var D = y.value;
+              if (l(D, w))
+                return A = D;
             }
-            return A = S;
+            return A = w;
           }
-          if (M = A, s(R, S)) return M;
-          var H = y(S);
-          return f !== void 0 && f(M, H) ? (R = S, M) : (R = S, A = H);
+          if (D = A, s(I, w)) return D;
+          var F = g(w);
+          return l !== void 0 && l(D, F) ? (I = w, D) : (I = w, A = F);
         }
-        var D = !1, R, A, z = p === void 0 ? null : p;
+        var R = !1, I, A, H = u === void 0 ? null : u;
         return [
           function() {
-            return E(h());
+            return C(d());
           },
-          z === null ? void 0 : function() {
-            return E(z());
+          H === null ? void 0 : function() {
+            return C(H());
           }
         ];
       },
-      [h, p, y, f]
+      [d, u, g, l]
     );
-    var x = n(l, b[0], b[1]);
-    return c(
+    var T = i(m, b[0], b[1]);
+    return h(
       function() {
-        _.hasValue = !0, _.value = x;
+        y.hasValue = !0, y.value = T;
       },
-      [x]
-    ), a(x), x;
+      [T]
+    ), c(T), T;
   }, de;
 }
-var me = {};
+var fe = {};
 /**
  * @license React
  * use-sync-external-store-shim/with-selector.development.js
@@ -1583,84 +1602,84 @@ var me = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Ie;
-function kt() {
-  return Ie || (Ie = 1, process.env.NODE_ENV !== "production" && function() {
-    function i(l, h) {
-      return l === h && (l !== 0 || 1 / l === 1 / h) || l !== l && h !== h;
+var Ge;
+function Rt() {
+  return Ge || (Ge = 1, process.env.NODE_ENV !== "production" && function() {
+    function o(m, d) {
+      return m === d && (m !== 0 || 1 / m === 1 / d) || m !== m && d !== d;
     }
     typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-    var e = W, t = Fe(), s = typeof Object.is == "function" ? Object.is : i, n = t.useSyncExternalStore, r = e.useRef, c = e.useEffect, d = e.useMemo, a = e.useDebugValue;
-    me.useSyncExternalStoreWithSelector = function(l, h, p, y, f) {
+    var e = W, t = ze(), s = typeof Object.is == "function" ? Object.is : o, i = t.useSyncExternalStore, r = e.useRef, h = e.useEffect, p = e.useMemo, c = e.useDebugValue;
+    fe.useSyncExternalStoreWithSelector = function(m, d, u, g, l) {
       var b = r(null);
       if (b.current === null) {
-        var _ = { hasValue: !1, value: null };
-        b.current = _;
-      } else _ = b.current;
-      b = d(
+        var y = { hasValue: !1, value: null };
+        b.current = y;
+      } else y = b.current;
+      b = p(
         function() {
-          function E(S) {
-            if (!D) {
-              if (D = !0, R = S, S = y(S), f !== void 0 && _.hasValue) {
-                var M = _.value;
-                if (f(M, S))
-                  return A = M;
+          function C(w) {
+            if (!R) {
+              if (R = !0, I = w, w = g(w), l !== void 0 && y.hasValue) {
+                var D = y.value;
+                if (l(D, w))
+                  return A = D;
               }
-              return A = S;
+              return A = w;
             }
-            if (M = A, s(R, S))
-              return M;
-            var H = y(S);
-            return f !== void 0 && f(M, H) ? (R = S, M) : (R = S, A = H);
+            if (D = A, s(I, w))
+              return D;
+            var F = g(w);
+            return l !== void 0 && l(D, F) ? (I = w, D) : (I = w, A = F);
           }
-          var D = !1, R, A, z = p === void 0 ? null : p;
+          var R = !1, I, A, H = u === void 0 ? null : u;
           return [
             function() {
-              return E(h());
+              return C(d());
             },
-            z === null ? void 0 : function() {
-              return E(z());
+            H === null ? void 0 : function() {
+              return C(H());
             }
           ];
         },
-        [h, p, y, f]
+        [d, u, g, l]
       );
-      var x = n(l, b[0], b[1]);
-      return c(
+      var T = i(m, b[0], b[1]);
+      return h(
         function() {
-          _.hasValue = !0, _.value = x;
+          y.hasValue = !0, y.value = T;
         },
-        [x]
-      ), a(x), x;
+        [T]
+      ), c(T), T;
     }, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
-  }()), me;
+  }()), fe;
 }
-process.env.NODE_ENV === "production" ? ge.exports = Mt() : ge.exports = kt();
-var Dt = ge.exports;
-const Rt = /* @__PURE__ */ Qe(Dt), Ue = {}, { useDebugValue: At } = W, { useSyncExternalStoreWithSelector: Lt } = Rt;
-let Ge = !1;
-const It = (i) => i;
-function Gt(i, e = It, t) {
-  (Ue ? "production" : void 0) !== "production" && t && !Ge && (console.warn(
+process.env.NODE_ENV === "production" ? ge.exports = kt() : ge.exports = Rt();
+var It = ge.exports;
+const At = /* @__PURE__ */ tt(It), Ve = {}, { useDebugValue: Lt } = W, { useSyncExternalStoreWithSelector: Gt } = At;
+let qe = !1;
+const qt = (o) => o;
+function Bt(o, e = qt, t) {
+  (Ve ? "production" : void 0) !== "production" && t && !qe && (console.warn(
     "[DEPRECATED] Use `createWithEqualityFn` instead of `create` or use `useStoreWithEqualityFn` instead of `useStore`. They can be imported from 'zustand/traditional'. https://github.com/pmndrs/zustand/discussions/1937"
-  ), Ge = !0);
-  const s = Lt(
-    i.subscribe,
-    i.getState,
-    i.getServerState || i.getInitialState,
+  ), qe = !0);
+  const s = Gt(
+    o.subscribe,
+    o.getState,
+    o.getServerState || o.getInitialState,
     e,
     t
   );
-  return At(s), s;
+  return Lt(s), s;
 }
-const ze = (i) => {
-  (Ue ? "production" : void 0) !== "production" && typeof i != "function" && console.warn(
+const Be = (o) => {
+  (Ve ? "production" : void 0) !== "production" && typeof o != "function" && console.warn(
     "[DEPRECATED] Passing a vanilla store will be unsupported in a future version. Instead use `import { useStore } from 'zustand'`."
   );
-  const e = typeof i == "function" ? Ct(i) : i, t = (s, n) => Gt(e, s, n);
+  const e = typeof o == "function" ? Mt(o) : o, t = (s, i) => Bt(e, s, i);
   return Object.assign(t, e), t;
-}, zt = (i) => i ? ze(i) : ze;
-function Ht() {
+}, Ht = (o) => o ? Be(o) : Be;
+function Ft() {
   return {
     version: "3.0",
     cameras: [],
@@ -1687,9 +1706,9 @@ function Ht() {
     }
   };
 }
-const Q = [], ie = [], Vt = 50, g = zt((i, e) => ({
+const B = [], ne = [], Ke = 50, v = Ht((o, e) => ({
   // Initial state
-  project: Ht(),
+  project: Ft(),
   mode: "select",
   tool: "camera",
   sideTab: "cameras",
@@ -1700,38 +1719,38 @@ const Q = [], ie = [], Vt = 50, g = zt((i, e) => ({
   showAxes: !0,
   showFovCones: !0,
   // --- Camera actions ---
-  addCamera: (t) => i((s) => (q(s.project), {
+  addCamera: (t) => o((s) => (oe(s.project), {
     project: {
       ...s.project,
       cameras: [...s.project.cameras, t]
     }
   })),
-  updateCamera: (t, s) => i((n) => (q(n.project), {
+  updateCamera: (t, s) => o((i) => (oe(i.project), {
     project: {
-      ...n.project,
-      cameras: n.project.cameras.map(
+      ...i.project,
+      cameras: i.project.cameras.map(
         (r) => r.id === t ? { ...r, ...s } : r
       )
     }
   })),
-  deleteCamera: (t) => i((s) => (q(s.project), {
+  deleteCamera: (t) => o((s) => (oe(s.project), {
     project: {
       ...s.project,
-      cameras: s.project.cameras.filter((n) => n.id !== t)
+      cameras: s.project.cameras.filter((i) => i.id !== t)
     },
     selectedCameraId: s.selectedCameraId === t ? null : s.selectedCameraId
   })),
-  selectCamera: (t) => i({ selectedCameraId: t, selectedObjectId: null }),
-  setCameraMovement: (t, s) => i((n) => ({
+  selectCamera: (t) => o({ selectedCameraId: t, selectedObjectId: null }),
+  setCameraMovement: (t, s) => o((i) => ({
     project: {
-      ...n.project,
-      cameras: n.project.cameras.map(
+      ...i.project,
+      cameras: i.project.cameras.map(
         (r) => r.id === t ? { ...r, movement: s } : r
       )
     }
   })),
   // --- Object actions ---
-  addObject: (t) => i((s) => (q(s.project), {
+  addObject: (t) => o((s) => (oe(s.project), {
     project: {
       ...s.project,
       scene: {
@@ -1740,36 +1759,36 @@ const Q = [], ie = [], Vt = 50, g = zt((i, e) => ({
       }
     }
   })),
-  updateObject: (t, s) => i((n) => ({
+  updateObject: (t, s) => o((i) => ({
     project: {
-      ...n.project,
+      ...i.project,
       scene: {
-        ...n.project.scene,
-        objects: n.project.scene.objects.map(
+        ...i.project.scene,
+        objects: i.project.scene.objects.map(
           (r) => r.id === t ? { ...r, ...s } : r
         )
       }
     }
   })),
-  deleteObject: (t) => i((s) => ({
+  deleteObject: (t) => o((s) => ({
     project: {
       ...s.project,
       scene: {
         ...s.project.scene,
-        objects: s.project.scene.objects.filter((n) => n.id !== t)
+        objects: s.project.scene.objects.filter((i) => i.id !== t)
       }
     },
     selectedObjectId: s.selectedObjectId === t ? null : s.selectedObjectId
   })),
-  selectObject: (t) => i({ selectedObjectId: t, selectedCameraId: null }),
+  selectObject: (t) => o({ selectedObjectId: t, selectedCameraId: null }),
   // --- Scene actions ---
-  setSceneConfig: (t) => i((s) => ({
+  setSceneConfig: (t) => o((s) => ({
     project: {
       ...s.project,
       scene: { ...s.project.scene, ...t }
     }
   })),
-  setLighting: (t) => i((s) => ({
+  setLighting: (t) => o((s) => ({
     project: {
       ...s.project,
       scene: {
@@ -1779,54 +1798,54 @@ const Q = [], ie = [], Vt = 50, g = zt((i, e) => ({
     }
   })),
   // --- Path actions ---
-  setPath: (t) => i((s) => ({
+  setPath: (t) => o((s) => ({
     project: { ...s.project, path: t }
   })),
-  addPathPoint: (t) => i((s) => ({
+  addPathPoint: (t) => o((s) => ({
     project: { ...s.project, path: [...s.project.path, t] }
   })),
-  removePathPoint: (t) => i((s) => ({
-    project: { ...s.project, path: s.project.path.filter((n) => n.id !== t) }
+  removePathPoint: (t) => o((s) => ({
+    project: { ...s.project, path: s.project.path.filter((i) => i.id !== t) }
   })),
   // --- Timeline actions ---
-  setTimelineTime: (t) => i((s) => ({
+  setTimelineTime: (t) => o((s) => ({
     project: {
       ...s.project,
       timeline: { ...s.project.timeline, currentTime: t }
     }
   })),
-  setTimelinePlaying: (t) => i((s) => ({
+  setTimelinePlaying: (t) => o((s) => ({
     project: {
       ...s.project,
       timeline: { ...s.project.timeline, playing: t }
     }
   })),
   // --- Storyboard actions ---
-  setStoryboardGrid: (t) => i((s) => ({
+  setStoryboardGrid: (t) => o((s) => ({
     project: {
       ...s.project,
       storyboard: { ...s.project.storyboard, grid: t }
     }
   })),
-  setStoryboardCell: (t, s) => i((n) => {
-    const r = [...n.project.storyboard.cells], c = r.findIndex((d) => d.index === t);
-    return c >= 0 ? r[c] = { ...r[c], cameraId: s ?? void 0 } : r.push({ index: t, cameraId: s ?? void 0 }), {
+  setStoryboardCell: (t, s) => o((i) => {
+    const r = [...i.project.storyboard.cells], h = r.findIndex((p) => p.index === t);
+    return h >= 0 ? r[h] = { ...r[h], cameraId: s ?? void 0 } : r.push({ index: t, cameraId: s ?? void 0 }), {
       project: {
-        ...n.project,
-        storyboard: { ...n.project.storyboard, cells: r }
+        ...i.project,
+        storyboard: { ...i.project.storyboard, cells: r }
       }
     };
   }),
   // --- Editor actions ---
-  setMode: (t) => i({ mode: t }),
-  setTool: (t) => i({ tool: t }),
-  setSideTab: (t) => i({ sideTab: t }),
-  setBottomTab: (t) => i({ bottomTab: t }),
-  toggleGrid: () => i((t) => ({ showGrid: !t.showGrid })),
-  toggleAxes: () => i((t) => ({ showAxes: !t.showAxes })),
-  toggleFovCones: () => i((t) => ({ showFovCones: !t.showFovCones })),
+  setMode: (t) => o({ mode: t }),
+  setTool: (t) => o({ tool: t }),
+  setSideTab: (t) => o({ sideTab: t }),
+  setBottomTab: (t) => o({ bottomTab: t }),
+  toggleGrid: () => o((t) => ({ showGrid: !t.showGrid })),
+  toggleAxes: () => o((t) => ({ showAxes: !t.showAxes })),
+  toggleFovCones: () => o((t) => ({ showFovCones: !t.showFovCones })),
   // --- Project actions ---
-  loadProject: (t) => i({
+  loadProject: (t) => o({
     project: t,
     selectedCameraId: null,
     selectedObjectId: null
@@ -1834,205 +1853,298 @@ const Q = [], ie = [], Vt = 50, g = zt((i, e) => ({
   getProjectData: () => e().project,
   // --- Undo/Redo ---
   undo: () => {
-    if (Q.length === 0) return;
-    const t = Q.pop();
-    ie.push(e().project), i({ project: t });
+    if (B.length === 0) return;
+    const t = B.pop();
+    ne.push(structuredClone(e().project)), o({ project: t });
   },
   redo: () => {
-    if (ie.length === 0) return;
-    const t = ie.pop();
-    q(e().project), i({ project: t });
+    if (ne.length === 0) return;
+    const t = ne.pop();
+    B.push(structuredClone(e().project)), B.length > Ke && B.shift(), o({ project: t });
   }
 }));
-function q(i) {
-  Q.push(structuredClone(i)), Q.length > Vt && Q.shift(), ie.length = 0;
+function oe(o) {
+  B.push(structuredClone(o)), B.length > Ke && B.shift(), ne.length = 0;
 }
-const Ft = ({ outputManager: i }) => {
-  const e = J(null), t = J(null), s = g;
-  V(() => {
-    const a = e.current;
-    if (!a) return;
-    const l = new bt({
-      container: a,
+const zt = "_cameraPlanner_vqps8_9", Vt = "_cpMain_vqps8_39", Kt = "_cpViewportWrapper_vqps8_51", $t = "_cameraPlannerViewport_vqps8_63", Ut = "_cpToolbar_vqps8_87", Yt = "_cpToolbarGroup_vqps8_107", Wt = "_cpToolbarLabel_vqps8_119", Zt = "_cpToolbarBtn_vqps8_135", Xt = "_active_vqps8_175", Jt = "_cpToolbarSep_vqps8_187", Qt = "_cpToolbarSpacer_vqps8_201", es = "_cpToolbarExport_vqps8_209", ts = "_cpIcon_vqps8_239", ss = "_cpIconLg_vqps8_249", os = "_cpIconXl_vqps8_259", ns = "_cpSidebar_vqps8_273", is = "_cpSidebarTabs_vqps8_293", as = "_cpTabBtn_vqps8_305", rs = "_cpTabLabel_vqps8_357", cs = "_cpSidebarContent_vqps8_365", ls = "_cpCameraListHeader_vqps8_381", hs = "_cpCameraListItems_vqps8_399", ps = "_cpCameraItem_vqps8_411", ds = "_selected_vqps8_441", us = "_cpCameraColor_vqps8_451", ms = "_cpCameraInfo_vqps8_465", fs = "_cpCameraName_vqps8_475", _s = "_cpCameraMeta_vqps8_487", bs = "_cpCameraDelete_vqps8_499", ys = "_cpPaletteHeader_vqps8_553", gs = "_cpTemplatesHeader_vqps8_555", vs = "_cpPaletteGrid_vqps8_567", js = "_cpPaletteItem_vqps8_579", xs = "_cpPaletteLabel_vqps8_615", Ts = "_cpTemplatesGrid_vqps8_629", Ss = "_cpTemplateCard_vqps8_641", Cs = "_cpTemplateName_vqps8_677", ws = "_cpTemplateEn_vqps8_689", Es = "_cpTemplateCount_vqps8_699", Ps = "_cpPropertyPanel_vqps8_721", Ns = "_cpPanelSection_vqps8_739", Ms = "_cpSectionTitle_vqps8_747", Os = "_cpField_vqps8_769", Ds = "_cpFieldValue_vqps8_861", ks = "_cpFieldRow_vqps8_877", Rs = "_cpCalcRow_vqps8_885", Is = "_cpCalcValue_vqps8_901", As = "_cpMono_vqps8_911", Ls = "_cpBottomPanel_vqps8_925", Gs = "_cpBottomTabs_vqps8_943", qs = "_cpBottomContent_vqps8_969", Bs = "_cpTimeline_vqps8_985", Hs = "_cpTimelineControls_vqps8_997", Fs = "_cpPlayBtn_vqps8_1009", zs = "_cpTimelineBtn_vqps8_1049", Vs = "_cpTimelineTime_vqps8_1087", Ks = "_cpTimelineTrack_vqps8_1099", $s = "_cpTimelineSlider_vqps8_1107", Us = "_cpTimelineMarkers_vqps8_1117", Ys = "_cpTimelineMark_vqps8_1117", Ws = "_cpStoryboard_vqps8_1147", Zs = "_cpStoryboardHeader_vqps8_1159", Xs = "_cpStoryboardToggle_vqps8_1177", Js = "_cpStoryboardGrid_vqps8_1187", Qs = "_cpStoryboardCell_vqps8_1199", eo = "_hasCamera_vqps8_1237", to = "_cpCellNumber_vqps8_1247", so = "_cpCellCamera_vqps8_1263", oo = "_cpCellCamName_vqps8_1271", no = "_cpCellCamMeta_vqps8_1283", io = "_cpCellEmpty_vqps8_1293", ao = "_cpKeyframesHeader_vqps8_1317", ro = "_cpKeyframesList_vqps8_1329", co = "_cpKeyframeItem_vqps8_1341", lo = "_cpKfIndex_vqps8_1361", ho = "_cpKfPos_vqps8_1371", po = "_cpKfTime_vqps8_1381", uo = "_cpPlaceholder_vqps8_1393", mo = "_cpHint_vqps8_1407", fo = "_cpEmpty_vqps8_1419", _o = "_cpBtnSm_vqps8_1433", bo = "_cpBtn_vqps8_1433", yo = "_cpBtnPrimary_vqps8_1507", go = "_cpDialogOverlay_vqps8_1533", vo = "_cpDialog_vqps8_1533", jo = "_cpDialogHeader_vqps8_1581", xo = "_cpDialogClose_vqps8_1601", To = "_cpDialogTabs_vqps8_1639", So = "_cpDialogBody_vqps8_1651", Co = "_cpDialogActions_vqps8_1661", wo = "_cpExportInfo_vqps8_1675", Eo = "_cpExportJson_vqps8_1697", a = {
+  cameraPlanner: zt,
+  cpMain: Vt,
+  cpViewportWrapper: Kt,
+  cameraPlannerViewport: $t,
+  cpToolbar: Ut,
+  cpToolbarGroup: Yt,
+  cpToolbarLabel: Wt,
+  cpToolbarBtn: Zt,
+  active: Xt,
+  cpToolbarSep: Jt,
+  cpToolbarSpacer: Qt,
+  cpToolbarExport: es,
+  cpIcon: ts,
+  cpIconLg: ss,
+  cpIconXl: os,
+  cpSidebar: ns,
+  cpSidebarTabs: is,
+  cpTabBtn: as,
+  cpTabLabel: rs,
+  cpSidebarContent: cs,
+  cpCameraListHeader: ls,
+  cpCameraListItems: hs,
+  cpCameraItem: ps,
+  selected: ds,
+  cpCameraColor: us,
+  cpCameraInfo: ms,
+  cpCameraName: fs,
+  cpCameraMeta: _s,
+  cpCameraDelete: bs,
+  cpPaletteHeader: ys,
+  cpTemplatesHeader: gs,
+  cpPaletteGrid: vs,
+  cpPaletteItem: js,
+  cpPaletteLabel: xs,
+  cpTemplatesGrid: Ts,
+  cpTemplateCard: Ss,
+  cpTemplateName: Cs,
+  cpTemplateEn: ws,
+  cpTemplateCount: Es,
+  cpPropertyPanel: Ps,
+  cpPanelSection: Ns,
+  cpSectionTitle: Ms,
+  cpField: Os,
+  cpFieldValue: Ds,
+  cpFieldRow: ks,
+  cpCalcRow: Rs,
+  cpCalcValue: Is,
+  cpMono: As,
+  cpBottomPanel: Ls,
+  cpBottomTabs: Gs,
+  cpBottomContent: qs,
+  cpTimeline: Bs,
+  cpTimelineControls: Hs,
+  cpPlayBtn: Fs,
+  cpTimelineBtn: zs,
+  cpTimelineTime: Vs,
+  cpTimelineTrack: Ks,
+  cpTimelineSlider: $s,
+  cpTimelineMarkers: Us,
+  cpTimelineMark: Ys,
+  cpStoryboard: Ws,
+  cpStoryboardHeader: Zs,
+  cpStoryboardToggle: Xs,
+  cpStoryboardGrid: Js,
+  cpStoryboardCell: Qs,
+  hasCamera: eo,
+  cpCellNumber: to,
+  cpCellCamera: so,
+  cpCellCamName: oo,
+  cpCellCamMeta: no,
+  cpCellEmpty: io,
+  cpKeyframesHeader: ao,
+  cpKeyframesList: ro,
+  cpKeyframeItem: co,
+  cpKfIndex: lo,
+  cpKfPos: ho,
+  cpKfTime: po,
+  cpPlaceholder: uo,
+  cpHint: mo,
+  cpEmpty: fo,
+  cpBtnSm: _o,
+  cpBtn: bo,
+  cpBtnPrimary: yo,
+  cpDialogOverlay: go,
+  cpDialog: vo,
+  cpDialogHeader: jo,
+  cpDialogClose: xo,
+  cpDialogTabs: To,
+  cpDialogBody: So,
+  cpDialogActions: Co,
+  cpExportInfo: wo,
+  cpExportJson: Eo
+}, Po = ({ outputManager: o }) => {
+  const e = Q(null), t = Q(null), s = v;
+  z(() => {
+    const c = e.current;
+    if (!c) return;
+    const m = new yt({
+      container: c,
       antialias: !0,
       shadows: !0,
       showGrid: !0,
       showAxes: !0
-    }), h = new vt(l.scene), p = new xt(l.scene), y = new Et(l.scene), f = new St(l.scene), b = new Pt(l.camera, l.scene);
-    return b.setCameraGroups(h.getAllMeshGroups()), b.setObjectMeshes(p.getAllMeshes()), b.enable(l.getCanvas()), i.setPNGExporter(() => l.exportPNGBlob()), b.onPick((_) => {
-      _.target === "camera" && _.id ? (s.getState().selectCamera(_.id), i.emit("camera:select", _.id)) : _.target === "object" && _.id && s.getState().selectObject(_.id);
-    }), l.start(), t.current = {
-      scene: l,
-      cameraRig: h,
-      objectLib: p,
-      lightSystem: y,
-      pathSystem: f,
+    }), d = new Tt(m.scene), u = new St(m.scene), g = new wt(m.scene), l = new Et(m.scene), b = new Pt(m.camera, m.scene);
+    return b.setCameraGroups(d.getAllMeshGroups()), b.setObjectMeshes(u.getAllMeshes()), b.enable(m.getCanvas()), o.setPNGExporter(() => m.exportPNGBlob()), b.onPick((y) => {
+      y.target === "camera" && y.id ? (s.getState().selectCamera(y.id), o.emit("camera:select", y.id)) : y.target === "object" && y.id && s.getState().selectObject(y.id);
+    }), m.start(), t.current = {
+      scene: m,
+      cameraRig: d,
+      objectLib: u,
+      lightSystem: g,
+      pathSystem: l,
       rayPicker: b
     }, () => {
-      l.dispose(), t.current = null;
+      m.dispose(), t.current = null;
     };
-  }, [i]);
-  const n = s((a) => a.project), r = s((a) => a.selectedCameraId);
-  V(() => {
-    const a = t.current;
-    if (!a) return;
-    const l = n.cameras, h = a.cameraRig.getAllCameras(), p = new Set(h.map((f) => f.id)), y = new Set(l.map((f) => f.id));
-    for (const f of l)
-      p.has(f.id) || a.cameraRig.addCamera(f);
-    for (const f of p)
-      y.has(f) || a.cameraRig.deleteCamera(f);
-    for (const f of l) {
-      const b = a.cameraRig.getCamera(f.id);
-      b && (b.focal !== f.focal || b.position.x !== f.position.x || b.position.y !== f.position.y || b.position.z !== f.position.z) && a.cameraRig.updateCamera(f.id, f);
+  }, [o]);
+  const i = s((c) => c.project), r = s((c) => c.selectedCameraId);
+  z(() => {
+    const c = t.current;
+    if (!c) return;
+    const m = i.cameras, d = c.cameraRig.getAllCameras(), u = new Set(d.map((l) => l.id)), g = new Set(m.map((l) => l.id));
+    for (const l of m)
+      u.has(l.id) || c.cameraRig.addCamera(l);
+    for (const l of u)
+      g.has(l) || c.cameraRig.deleteCamera(l);
+    for (const l of m) {
+      const b = c.cameraRig.getCamera(l.id);
+      b && (b.focal !== l.focal || b.position.x !== l.position.x || b.position.y !== l.position.y || b.position.z !== l.position.z) && c.cameraRig.updateCamera(l.id, l);
     }
-    a.cameraRig.selectCamera(r), a.lightSystem.update(n.scene.lighting);
-  }, [n.cameras, n.scene.lighting, r]);
-  const c = s((a) => a.showGrid), d = s((a) => a.showAxes);
-  return V(() => {
-    var a;
-    (a = t.current) == null || a.scene.setGridVisible(c);
-  }, [c]), V(() => {
-    var a;
-    (a = t.current) == null || a.scene.setAxesVisible(d);
-  }, [d]), /* @__PURE__ */ o.jsx(
+    c.cameraRig.selectCamera(r), c.lightSystem.update(i.scene.lighting);
+  }, [i.cameras, i.scene.lighting, r]);
+  const h = s((c) => c.showGrid), p = s((c) => c.showAxes);
+  return z(() => {
+    var c;
+    (c = t.current) == null || c.scene.setGridVisible(h);
+  }, [h]), z(() => {
+    var c;
+    (c = t.current) == null || c.scene.setAxesVisible(p);
+  }, [p]), /* @__PURE__ */ n.jsx(
     "div",
     {
       ref: e,
-      className: "camera-planner-viewport",
+      className: a.cameraPlannerViewport,
       style: { width: "100%", height: "100%", minHeight: "400px" }
     }
   );
-}, Ut = [
+}, No = [
   { value: "select", label: "选择", icon: "↖" },
   { value: "place", label: "放置", icon: "⊕" },
   { value: "move", label: "移动", icon: "✥" },
   { value: "rotate", label: "旋转", icon: "↻" }
-], Yt = [
+], Mo = [
   { value: "camera", label: "摄像机", icon: "📷" },
   { value: "object", label: "物体", icon: "📦" },
   { value: "light", label: "灯光", icon: "💡" },
   { value: "path", label: "路径", icon: "〰" }
-], $t = ({ onExport: i }) => {
-  const e = g((p) => p.mode), t = g((p) => p.tool), s = g((p) => p.showGrid), n = g((p) => p.showAxes), r = g((p) => p.setMode), c = g((p) => p.setTool), d = g((p) => p.toggleGrid), a = g((p) => p.toggleAxes), l = g((p) => p.undo), h = g((p) => p.redo);
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-toolbar", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-toolbar-group", children: [
-      /* @__PURE__ */ o.jsx("span", { className: "cp-toolbar-label", children: "模式" }),
-      Ut.map((p) => /* @__PURE__ */ o.jsx(
+], Oo = ({ onExport: o }) => {
+  const e = v((u) => u.mode), t = v((u) => u.tool), s = v((u) => u.showGrid), i = v((u) => u.showAxes), r = v((u) => u.setMode), h = v((u) => u.setTool), p = v((u) => u.toggleGrid), c = v((u) => u.toggleAxes), m = v((u) => u.undo), d = v((u) => u.redo);
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpToolbar, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpToolbarGroup, children: [
+      /* @__PURE__ */ n.jsx("span", { className: a.cpToolbarLabel, children: "模式" }),
+      No.map((u) => /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-toolbar-btn ${e === p.value ? "active" : ""}`,
-          onClick: () => r(p.value),
-          title: p.label,
-          children: /* @__PURE__ */ o.jsx("span", { className: "cp-icon", children: p.icon })
+          className: `${a.cpToolbarBtn} ${e === u.value ? a.active : ""}`,
+          onClick: () => r(u.value),
+          title: u.label,
+          children: /* @__PURE__ */ n.jsx("span", { className: a.cpIcon, children: u.icon })
         },
-        p.value
+        u.value
       ))
     ] }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-toolbar-sep" }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-toolbar-group", children: [
-      /* @__PURE__ */ o.jsx("span", { className: "cp-toolbar-label", children: "工具" }),
-      Yt.map((p) => /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsx("div", { className: a.cpToolbarSep }),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpToolbarGroup, children: [
+      /* @__PURE__ */ n.jsx("span", { className: a.cpToolbarLabel, children: "工具" }),
+      Mo.map((u) => /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-toolbar-btn ${t === p.value ? "active" : ""}`,
-          onClick: () => c(p.value),
-          title: p.label,
-          children: /* @__PURE__ */ o.jsx("span", { className: "cp-icon", children: p.icon })
+          className: `${a.cpToolbarBtn} ${t === u.value ? a.active : ""}`,
+          onClick: () => h(u.value),
+          title: u.label,
+          children: /* @__PURE__ */ n.jsx("span", { className: a.cpIcon, children: u.icon })
         },
-        p.value
+        u.value
       ))
     ] }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-toolbar-sep" }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-toolbar-group", children: [
-      /* @__PURE__ */ o.jsx("button", { className: "cp-toolbar-btn", onClick: l, title: "撤销 (Ctrl+Z)", children: "↩" }),
-      /* @__PURE__ */ o.jsx("button", { className: "cp-toolbar-btn", onClick: h, title: "重做 (Ctrl+Y)", children: "↪" })
+    /* @__PURE__ */ n.jsx("div", { className: a.cpToolbarSep }),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpToolbarGroup, children: [
+      /* @__PURE__ */ n.jsx("button", { className: a.cpToolbarBtn, onClick: m, title: "撤销 (Ctrl+Z)", children: "↩" }),
+      /* @__PURE__ */ n.jsx("button", { className: a.cpToolbarBtn, onClick: d, title: "重做 (Ctrl+Y)", children: "↪" })
     ] }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-toolbar-sep" }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-toolbar-group", children: [
-      /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsx("div", { className: a.cpToolbarSep }),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpToolbarGroup, children: [
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-toolbar-btn ${s ? "active" : ""}`,
-          onClick: d,
+          className: `${a.cpToolbarBtn} ${s ? a.active : ""}`,
+          onClick: p,
           title: "网格",
           children: "#"
         }
       ),
-      /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-toolbar-btn ${n ? "active" : ""}`,
-          onClick: a,
+          className: `${a.cpToolbarBtn} ${i ? a.active : ""}`,
+          onClick: c,
           title: "坐标轴",
           children: "+"
         }
       )
     ] }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-toolbar-spacer" }),
-    i && /* @__PURE__ */ o.jsx("button", { className: "cp-toolbar-btn cp-toolbar-export", onClick: i, children: "导出" })
+    /* @__PURE__ */ n.jsx("div", { className: a.cpToolbarSpacer }),
+    o && /* @__PURE__ */ n.jsx("button", { className: [a.cpToolbarBtn, a.cpToolbarExport].join(" "), onClick: o, children: "导出" })
   ] });
-}, Bt = () => {
-  const i = g((d) => d.project.cameras), e = g((d) => d.selectedCameraId), t = g((d) => d.selectCamera), s = g((d) => d.addCamera), n = g((d) => d.deleteCamera), r = () => {
-    const d = B[0], a = 50, l = ne(d.h, a), h = ye(a, 2.8, 5, d.h), p = {
-      id: K(),
-      name: `CAM-${i.length + 1}`,
-      focal: a,
-      sensorW: d.w,
-      sensorH: d.h,
+}, Do = () => {
+  const o = v((p) => p.project.cameras), e = v((p) => p.selectedCameraId), t = v((p) => p.selectCamera), s = v((p) => p.addCamera), i = v((p) => p.deleteCamera), r = () => {
+    const p = Y[0], c = 50, m = ie(p.h, c), d = ye(c, 2.8, 5, p.h), u = {
+      id: Z(),
+      name: `CAM-${o.length + 1}`,
+      focal: c,
+      sensorW: p.w,
+      sensorH: p.h,
       fstop: 2.8,
       focusDist: 5,
       height: 1.6,
       position: { x: Math.random() * 4 - 2, y: 1.6, z: Math.random() * 4 - 2 },
       rotation: { yaw: Math.random() * 360 - 180, pitch: 0, roll: 0 },
-      fov: l,
-      dof: h,
+      fov: m,
+      dof: d,
       color: 8160255
     };
-    s(p), T.emit("camera:add", p), t(p.id);
-  }, c = (d) => {
-    n(d), T.emit("camera:delete", d);
+    s(u), P.emit("camera:add", u), t(u.id);
+  }, h = (p) => {
+    i(p), P.emit("camera:delete", p);
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-camera-list", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-camera-list-header", children: [
-      /* @__PURE__ */ o.jsxs("span", { children: [
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpCameraList, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpCameraListHeader, children: [
+      /* @__PURE__ */ n.jsxs("span", { children: [
         "摄像机 (",
-        i.length,
+        o.length,
         ")"
       ] }),
-      /* @__PURE__ */ o.jsx("button", { className: "cp-btn-sm", onClick: r, children: "+ 添加" })
+      /* @__PURE__ */ n.jsx("button", { className: a.cpBtnSm, onClick: r, children: "+ 添加" })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-camera-list-items", children: [
-      i.length === 0 && /* @__PURE__ */ o.jsx("div", { className: "cp-empty", children: '暂无摄像机，点击"添加"创建' }),
-      i.map((d) => /* @__PURE__ */ o.jsxs(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpCameraListItems, children: [
+      o.length === 0 && /* @__PURE__ */ n.jsx("div", { className: a.cpEmpty, children: '暂无摄像机，点击"添加"创建' }),
+      o.map((p) => /* @__PURE__ */ n.jsxs(
         "div",
         {
-          className: `cp-camera-item ${e === d.id ? "selected" : ""}`,
-          onClick: () => t(d.id),
+          className: `${a.cpCameraItem} ${e === p.id ? a.selected : ""}`,
+          onClick: () => t(p.id),
           children: [
-            /* @__PURE__ */ o.jsx(
+            /* @__PURE__ */ n.jsx(
               "div",
               {
-                className: "cp-camera-color",
-                style: { backgroundColor: `#${d.color.toString(16).padStart(6, "0")}` }
+                className: a.cpCameraColor,
+                style: { backgroundColor: `#${p.color.toString(16).padStart(6, "0")}` }
               }
             ),
-            /* @__PURE__ */ o.jsxs("div", { className: "cp-camera-info", children: [
-              /* @__PURE__ */ o.jsx("div", { className: "cp-camera-name", children: d.name }),
-              /* @__PURE__ */ o.jsxs("div", { className: "cp-camera-meta", children: [
-                d.focal,
+            /* @__PURE__ */ n.jsxs("div", { className: a.cpCameraInfo, children: [
+              /* @__PURE__ */ n.jsx("div", { className: a.cpCameraName, children: p.name }),
+              /* @__PURE__ */ n.jsxs("div", { className: a.cpCameraMeta, children: [
+                p.focal,
                 "mm · f/",
-                d.fstop,
+                p.fstop,
                 " · FOV ",
-                d.fov.toFixed(1),
+                p.fov.toFixed(1),
                 "°"
               ] })
             ] }),
-            /* @__PURE__ */ o.jsx(
+            /* @__PURE__ */ n.jsx(
               "button",
               {
-                className: "cp-camera-delete",
-                onClick: (a) => {
-                  a.stopPropagation(), c(d.id);
+                className: a.cpCameraDelete,
+                onClick: (c) => {
+                  c.stopPropagation(), h(p.id);
                 },
                 title: "删除",
                 children: "×"
@@ -2040,11 +2152,11 @@ const Ft = ({ outputManager: i }) => {
             )
           ]
         },
-        d.id
+        p.id
       ))
     ] })
   ] });
-}, Wt = [
+}, ko = [
   { type: "box", label: "方块", icon: "⬜" },
   { type: "sphere", label: "球体", icon: "⚪" },
   { type: "cone", label: "锥体", icon: "△" },
@@ -2055,58 +2167,59 @@ const Ft = ({ outputManager: i }) => {
   { type: "building", label: "建筑", icon: "🏢" },
   { type: "car", label: "车辆", icon: "🚗" },
   { type: "tree", label: "树木", icon: "🌳" },
+  { type: "chair", label: "椅子", icon: "🪑" },
   { type: "prop", label: "道具", icon: "🎭" }
-], Kt = () => {
-  const i = g((t) => t.addObject), e = (t) => {
+], Ro = () => {
+  const o = v((t) => t.addObject), e = (t) => {
     const s = {
-      id: K(),
+      id: Z(),
       type: t,
       position: { x: 0, y: 0, z: 0 },
       rotation: { yaw: 0, pitch: 0, roll: 0 },
       scale: { x: 1, y: 1, z: 1 },
       color: 8947848
     };
-    i(s), T.emit("object:add", s.id);
+    o(s), P.emit("object:add", s.id);
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-object-palette", children: [
-    /* @__PURE__ */ o.jsx("div", { className: "cp-palette-header", children: "物体库" }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-palette-grid", children: Wt.map((t) => /* @__PURE__ */ o.jsxs(
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpObjectPalette, children: [
+    /* @__PURE__ */ n.jsx("div", { className: a.cpPaletteHeader, children: "物体库" }),
+    /* @__PURE__ */ n.jsx("div", { className: a.cpPaletteGrid, children: ko.map((t) => /* @__PURE__ */ n.jsxs(
       "button",
       {
-        className: "cp-palette-item",
+        className: a.cpPaletteItem,
         onClick: () => e(t.type),
         title: t.label,
         children: [
-          /* @__PURE__ */ o.jsx("span", { className: "cp-icon-lg", children: t.icon }),
-          /* @__PURE__ */ o.jsx("span", { className: "cp-palette-label", children: t.label })
+          /* @__PURE__ */ n.jsx("span", { className: a.cpIconLg, children: t.icon }),
+          /* @__PURE__ */ n.jsx("span", { className: a.cpPaletteLabel, children: t.label })
         ]
       },
       t.type
     )) })
   ] });
 };
-function P(i, e, t, s, n = 1, r = 1, c = 1, d = 8947848) {
+function E(o, e, t, s, i = 1, r = 1, h = 1, p = 8947848) {
   return {
-    type: i,
+    type: o,
     position: { x: e, y: t, z: s },
     rotation: { yaw: 0, pitch: 0, roll: 0 },
-    scale: { x: n, y: r, z: c },
-    color: d
+    scale: { x: i, y: r, z: h },
+    color: p
   };
 }
-const Zt = [
+const Io = [
   {
     template: "studio",
     label: "摄影棚",
     labelEn: "Studio",
     icon: "🎬",
     objects: [
-      P("plane", 0, 0, 0, 20, 1, 20, 2763306),
-      P("box", -6, 1.5, -8, 3, 3, 0.3, 3355443),
+      E("plane", 0, 0, 0, 20, 1, 20, 2763306),
+      E("box", -6, 1.5, -8, 3, 3, 0.3, 3355443),
       // backdrop
-      P("cylinder", -3, 0.5, 0, 0.3, 1, 0.3, 4473924),
+      E("cylinder", -3, 0.5, 0, 0.3, 1, 0.3, 4473924),
       // light stand
-      P("cylinder", 3, 0.5, 0, 0.3, 1, 0.3, 4473924)
+      E("cylinder", 3, 0.5, 0, 0.3, 1, 0.3, 4473924)
       // light stand
     ]
   },
@@ -2116,15 +2229,15 @@ const Zt = [
     labelEn: "Living Room",
     icon: "🛋️",
     objects: [
-      P("plane", 0, 0, 0, 12, 1, 10, 9139029),
+      E("plane", 0, 0, 0, 12, 1, 10, 9139029),
       // floor
-      P("box", 0, 0.4, -4, 4, 0.8, 1, 6636321),
+      E("box", 0, 0.4, -4, 4, 0.8, 1, 6636321),
       // sofa
-      P("box", 0, 0.25, 0, 2, 0.5, 1.2, 4863784),
+      E("box", 0, 0.25, 0, 2, 0.5, 1.2, 4863784),
       // coffee table
-      P("box", -5, 1, -4.5, 0.3, 2, 3, 5592405),
+      E("box", -5, 1, -4.5, 0.3, 2, 3, 5592405),
       // bookshelf
-      P("box", 5, 0.5, -4.5, 2, 1, 0.5, 3355443)
+      E("box", 5, 0.5, -4.5, 2, 1, 0.5, 3355443)
       // TV stand
     ]
   },
@@ -2134,13 +2247,13 @@ const Zt = [
     labelEn: "Street",
     icon: "🏙️",
     objects: [
-      P("plane", 0, 0, 0, 8, 1, 30, 3815994),
+      E("plane", 0, 0, 0, 8, 1, 30, 3815994),
       // road
-      P("building", -6, 4, -5, 4, 8, 6, 6710886),
-      P("building", 6, 3, -5, 4, 6, 6, 7829367),
-      P("building", -6, 5, 10, 4, 10, 6, 5592405),
-      P("tree", 4, 2, 5, 1, 4, 1, 2972199),
-      P("tree", -4, 2, 12, 1, 4, 1, 2972199)
+      E("building", -6, 4, -5, 4, 8, 6, 6710886),
+      E("building", 6, 3, -5, 4, 6, 6, 7829367),
+      E("building", -6, 5, 10, 4, 10, 6, 5592405),
+      E("tree", 4, 2, 5, 1, 4, 1, 2972199),
+      E("tree", -4, 2, 12, 1, 4, 1, 2972199)
     ]
   },
   {
@@ -2149,16 +2262,16 @@ const Zt = [
     labelEn: "Cafe",
     icon: "☕",
     objects: [
-      P("plane", 0, 0, 0, 10, 1, 8, 9139029),
-      P("cylinder", -2, 0.35, -1, 0.4, 0.7, 0.4, 9127187),
+      E("plane", 0, 0, 0, 10, 1, 8, 9139029),
+      E("cylinder", -2, 0.35, -1, 0.4, 0.7, 0.4, 9127187),
       // table
-      P("cylinder", 2, 0.35, -1, 0.4, 0.7, 0.4, 9127187),
+      E("cylinder", 2, 0.35, -1, 0.4, 0.7, 0.4, 9127187),
       // table
-      P("cylinder", 0, 0.35, 2, 0.5, 0.7, 0.5, 9127187),
+      E("cylinder", 0, 0.35, 2, 0.5, 0.7, 0.5, 9127187),
       // round table
-      P("box", -4, 1, -3.5, 2, 2, 0.5, 6636321),
+      E("box", -4, 1, -3.5, 2, 2, 0.5, 6636321),
       // bar counter
-      P("box", 4, 1.2, -3.5, 0.3, 2.4, 2, 4473924)
+      E("box", 4, 1.2, -3.5, 0.3, 2.4, 2, 4473924)
       // shelf
     ]
   },
@@ -2169,34 +2282,34 @@ const Zt = [
     icon: "⬜",
     objects: []
   }
-], Xt = () => {
-  const i = g((t) => t.setSceneConfig), e = (t) => {
-    const s = t.objects.map((n) => ({
-      ...n,
-      id: K()
+], Ao = () => {
+  const o = v((t) => t.setSceneConfig), e = (t) => {
+    const s = t.objects.map((i) => ({
+      ...i,
+      id: Z()
     }));
-    i({
+    o({
       template: t.template,
       objects: s
-    }), T.emit("scene:change", {
+    }), P.emit("scene:change", {
       template: t.template,
       objects: s,
-      lighting: g.getState().project.scene.lighting
+      lighting: v.getState().project.scene.lighting
     });
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-scene-templates", children: [
-    /* @__PURE__ */ o.jsx("div", { className: "cp-templates-header", children: "场景模板" }),
-    /* @__PURE__ */ o.jsx("div", { className: "cp-templates-grid", children: Zt.map((t) => /* @__PURE__ */ o.jsxs(
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpSceneTemplates, children: [
+    /* @__PURE__ */ n.jsx("div", { className: a.cpTemplatesHeader, children: "场景模板" }),
+    /* @__PURE__ */ n.jsx("div", { className: a.cpTemplatesGrid, children: Io.map((t) => /* @__PURE__ */ n.jsxs(
       "button",
       {
-        className: "cp-template-card",
+        className: a.cpTemplateCard,
         onClick: () => e(t),
         children: [
-          /* @__PURE__ */ o.jsx("span", { className: "cp-icon-xl", children: t.icon }),
-          /* @__PURE__ */ o.jsxs("div", { className: "cp-template-info", children: [
-            /* @__PURE__ */ o.jsx("div", { className: "cp-template-name", children: t.label }),
-            /* @__PURE__ */ o.jsx("div", { className: "cp-template-en", children: t.labelEn }),
-            /* @__PURE__ */ o.jsxs("div", { className: "cp-template-count", children: [
+          /* @__PURE__ */ n.jsx("span", { className: a.cpIconXl, children: t.icon }),
+          /* @__PURE__ */ n.jsxs("div", { className: a.cpTemplateInfo, children: [
+            /* @__PURE__ */ n.jsx("div", { className: a.cpTemplateName, children: t.label }),
+            /* @__PURE__ */ n.jsx("div", { className: a.cpTemplateEn, children: t.labelEn }),
+            /* @__PURE__ */ n.jsxs("div", { className: a.cpTemplateCount, children: [
               t.objects.length,
               " 个物体"
             ] })
@@ -2206,34 +2319,34 @@ const Zt = [
       t.template
     )) })
   ] });
-}, qt = [
+}, Lo = [
   { value: "cameras", label: "机位", icon: "📷" },
   { value: "objects", label: "物体", icon: "📦" },
   { value: "templates", label: "场景", icon: "🏠" },
   { value: "characters", label: "角色", icon: "👤" }
-], Jt = () => {
-  const i = g((t) => t.sideTab), e = g((t) => t.setSideTab);
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-sidebar", children: [
-    /* @__PURE__ */ o.jsx("div", { className: "cp-sidebar-tabs", children: qt.map((t) => /* @__PURE__ */ o.jsxs(
+], Go = () => {
+  const o = v((t) => t.sideTab), e = v((t) => t.setSideTab);
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpSidebar, children: [
+    /* @__PURE__ */ n.jsx("div", { className: a.cpSidebarTabs, children: Lo.map((t) => /* @__PURE__ */ n.jsxs(
       "button",
       {
-        className: `cp-tab-btn ${i === t.value ? "active" : ""}`,
+        className: `${a.cpTabBtn} ${o === t.value ? a.active : ""}`,
         onClick: () => e(t.value),
         title: t.label,
         children: [
-          /* @__PURE__ */ o.jsx("span", { className: "cp-icon", children: t.icon }),
-          /* @__PURE__ */ o.jsx("span", { className: "cp-tab-label", children: t.label })
+          /* @__PURE__ */ n.jsx("span", { className: a.cpIcon, children: t.icon }),
+          /* @__PURE__ */ n.jsx("span", { className: a.cpTabLabel, children: t.label })
         ]
       },
       t.value
     )) }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-sidebar-content", children: [
-      i === "cameras" && /* @__PURE__ */ o.jsx(Bt, {}),
-      i === "objects" && /* @__PURE__ */ o.jsx(Kt, {}),
-      i === "templates" && /* @__PURE__ */ o.jsx(Xt, {}),
-      i === "characters" && /* @__PURE__ */ o.jsxs("div", { className: "cp-placeholder", children: [
-        /* @__PURE__ */ o.jsx("p", { children: "角色面板（待开发）" }),
-        /* @__PURE__ */ o.jsx("p", { className: "cp-hint", children: "从剧本导入角色，自动分配位置" })
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpSidebarContent, children: [
+      o === "cameras" && /* @__PURE__ */ n.jsx(Do, {}),
+      o === "objects" && /* @__PURE__ */ n.jsx(Ro, {}),
+      o === "templates" && /* @__PURE__ */ n.jsx(Ao, {}),
+      o === "characters" && /* @__PURE__ */ n.jsxs("div", { className: a.cpPlaceholder, children: [
+        /* @__PURE__ */ n.jsx("p", { children: "角色面板（待开发）" }),
+        /* @__PURE__ */ n.jsx("p", { className: a.cpHint, children: "从剧本导入角色，自动分配位置" })
       ] })
     ] })
   ] });
@@ -2294,290 +2407,363 @@ const Zt = [
     description: "摄像机垂直降下，接近地面",
     defaultDuration: 3
   }
-], Qt = () => {
-  const i = g((a) => a.selectedCameraId), e = g((a) => a.selectedObjectId), t = g((a) => a.project.cameras), s = g((a) => a.project.scene.objects), n = g((a) => a.updateCamera), r = g((a) => a.updateObject), c = t.find((a) => a.id === i), d = s.find((a) => a.id === e);
-  return !c && !d ? /* @__PURE__ */ o.jsx("div", { className: "cp-property-panel", children: /* @__PURE__ */ o.jsx("div", { className: "cp-placeholder", children: /* @__PURE__ */ o.jsx("p", { children: "选择机位或物体查看属性" }) }) }) : c ? /* @__PURE__ */ o.jsx(es, { camera: c, onUpdate: n }) : d ? /* @__PURE__ */ o.jsx(ts, { object: d, onUpdate: r }) : null;
-}, es = ({ camera: i, onUpdate: e }) => {
-  var c, d;
-  const t = (a, l) => {
-    const h = { [a]: l };
-    e(i.id, h), T.emit("camera:change", { ...i, ...h });
-  }, s = (a, l) => {
-    const h = { ...i.position, [a]: l };
-    e(i.id, { position: h }), T.emit("camera:change", { ...i, position: h });
-  }, n = (a, l) => {
-    const h = { ...i.rotation, [a]: l };
-    e(i.id, { rotation: h }), T.emit("camera:change", { ...i, rotation: h });
-  }, r = (a) => {
-    const l = B.find((h) => h.name === a);
-    l && e(i.id, { sensorW: l.w, sensorH: l.h });
+], qo = () => {
+  const o = v((c) => c.selectedCameraId), e = v((c) => c.selectedObjectId), t = v((c) => c.project.cameras), s = v((c) => c.project.scene.objects), i = v((c) => c.updateCamera), r = v((c) => c.updateObject), h = t.find((c) => c.id === o), p = s.find((c) => c.id === e);
+  return !h && !p ? /* @__PURE__ */ n.jsx("div", { className: a.cpPropertyPanel, children: /* @__PURE__ */ n.jsx("div", { className: a.cpPlaceholder, children: /* @__PURE__ */ n.jsx("p", { children: "选择机位或物体查看属性" }) }) }) : h ? /* @__PURE__ */ n.jsx(Bo, { camera: h, onUpdate: i }) : p ? /* @__PURE__ */ n.jsx(Ho, { object: p, onUpdate: r }) : null;
+}, Bo = ({ camera: o, onUpdate: e }) => {
+  var h, p, c, m, d, u, g;
+  const t = (l, b) => {
+    const y = { [l]: b };
+    e(o.id, y), P.emit("camera:change", { ...o, ...y });
+  }, s = (l, b) => {
+    const y = { ...o.position, [l]: b };
+    e(o.id, { position: y }), P.emit("camera:change", { ...o, position: y });
+  }, i = (l, b) => {
+    const y = { ...o.rotation, [l]: b };
+    e(o.id, { rotation: y }), P.emit("camera:change", { ...o, rotation: y });
+  }, r = (l) => {
+    const b = Y.find((y) => y.name === l);
+    b && e(o.id, { sensorW: b.w, sensorH: b.h });
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-property-panel", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "摄像机参数" }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-field", children: [
-        /* @__PURE__ */ o.jsx("label", { children: "名称" }),
-        /* @__PURE__ */ o.jsx(
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpPropertyPanel, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "摄像机参数" }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "名称" }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "text",
-            value: i.name,
-            onChange: (a) => t("name", a.target.value)
+            value: o.name,
+            onChange: (l) => t("name", l.target.value)
           }
         )
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-field", children: [
-        /* @__PURE__ */ o.jsx("label", { children: "焦距 (mm)" }),
-        /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "焦距 (mm)" }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "range",
             min: "8",
             max: "300",
             step: "1",
-            value: i.focal,
-            onChange: (a) => t("focal", Number(a.target.value))
+            value: o.focal,
+            onChange: (l) => t("focal", Number(l.target.value))
           }
         ),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-field-value", children: [
-          i.focal,
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpFieldValue, children: [
+          o.focal,
           "mm"
         ] })
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-field", children: [
-        /* @__PURE__ */ o.jsx("label", { children: "传感器" }),
-        /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "传感器" }),
+        /* @__PURE__ */ n.jsx(
           "select",
           {
-            value: ((c = B.find(
-              (a) => Math.abs(a.w - i.sensorW) < 0.1 && Math.abs(a.h - i.sensorH) < 0.1
-            )) == null ? void 0 : c.name) || "",
-            onChange: (a) => r(a.target.value),
-            children: B.map((a) => /* @__PURE__ */ o.jsx("option", { value: a.name, children: a.label }, a.name))
+            value: ((h = Y.find(
+              (l) => Math.abs(l.w - o.sensorW) < 0.1 && Math.abs(l.h - o.sensorH) < 0.1
+            )) == null ? void 0 : h.name) || "",
+            onChange: (l) => r(l.target.value),
+            children: Y.map((l) => /* @__PURE__ */ n.jsx("option", { value: l.name, children: l.label }, l.name))
           }
         )
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-field", children: [
-        /* @__PURE__ */ o.jsx("label", { children: "光圈 (f/)" }),
-        /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "光圈 (f/)" }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "range",
             min: "1.2",
             max: "22",
             step: "0.1",
-            value: i.fstop,
-            onChange: (a) => t("fstop", Number(a.target.value))
+            value: o.fstop,
+            onChange: (l) => t("fstop", Number(l.target.value))
           }
         ),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-field-value", children: [
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpFieldValue, children: [
           "f/",
-          i.fstop.toFixed(1)
+          o.fstop.toFixed(1)
         ] })
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-field", children: [
-        /* @__PURE__ */ o.jsx("label", { children: "对焦距离 (m)" }),
-        /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "对焦距离 (m)" }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "range",
             min: "0.3",
             max: "100",
             step: "0.1",
-            value: i.focusDist,
-            onChange: (a) => t("focusDist", Number(a.target.value))
+            value: o.focusDist,
+            onChange: (l) => t("focusDist", Number(l.target.value))
           }
         ),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-field-value", children: [
-          i.focusDist.toFixed(1),
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpFieldValue, children: [
+          o.focusDist.toFixed(1),
           "m"
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "位置" }),
-      ["x", "y", "z"].map((a) => /* @__PURE__ */ o.jsxs("div", { className: "cp-field cp-field-row", children: [
-        /* @__PURE__ */ o.jsx("label", { children: a.toUpperCase() }),
-        /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "位置" }),
+      ["x", "y", "z"].map((l) => /* @__PURE__ */ n.jsxs("div", { className: [a.cpField, a.cpFieldRow].join(" "), children: [
+        /* @__PURE__ */ n.jsx("label", { children: l.toUpperCase() }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "number",
             step: "0.1",
-            value: i.position[a],
-            onChange: (l) => s(a, Number(l.target.value))
+            value: o.position[l],
+            onChange: (b) => s(l, Number(b.target.value))
           }
         )
-      ] }, a))
+      ] }, l))
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "旋转" }),
-      ["yaw", "pitch", "roll"].map((a) => /* @__PURE__ */ o.jsxs("div", { className: "cp-field cp-field-row", children: [
-        /* @__PURE__ */ o.jsx("label", { children: a }),
-        /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "旋转" }),
+      ["yaw", "pitch", "roll"].map((l) => /* @__PURE__ */ n.jsxs("div", { className: [a.cpField, a.cpFieldRow].join(" "), children: [
+        /* @__PURE__ */ n.jsx("label", { children: l }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "range",
             min: "-180",
             max: "180",
             step: "1",
-            value: i.rotation[a],
-            onChange: (l) => n(a, Number(l.target.value))
+            value: o.rotation[l],
+            onChange: (b) => i(l, Number(b.target.value))
           }
         ),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-field-value", children: [
-          i.rotation[a],
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpFieldValue, children: [
+          o.rotation[l],
           "°"
         ] })
-      ] }, a))
+      ] }, l))
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "计算值" }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-calc-row", children: [
-        /* @__PURE__ */ o.jsx("span", { children: "FOV" }),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-calc-value", children: [
-          i.fov.toFixed(1),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "计算值" }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpCalcRow, children: [
+        /* @__PURE__ */ n.jsx("span", { children: "FOV" }),
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpCalcValue, children: [
+          o.fov.toFixed(1),
           "°"
         ] })
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-calc-row", children: [
-        /* @__PURE__ */ o.jsx("span", { children: "景深范围" }),
-        /* @__PURE__ */ o.jsx("span", { className: "cp-calc-value", children: i.dof.range === 1 / 0 ? "∞" : `${i.dof.range.toFixed(2)}m` })
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpCalcRow, children: [
+        /* @__PURE__ */ n.jsx("span", { children: "景深范围" }),
+        /* @__PURE__ */ n.jsx("span", { className: a.cpCalcValue, children: o.dof.range === 1 / 0 ? "∞" : `${o.dof.range.toFixed(2)}m` })
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-calc-row", children: [
-        /* @__PURE__ */ o.jsx("span", { children: "近焦" }),
-        /* @__PURE__ */ o.jsxs("span", { className: "cp-calc-value", children: [
-          i.dof.near.toFixed(2),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpCalcRow, children: [
+        /* @__PURE__ */ n.jsx("span", { children: "近焦" }),
+        /* @__PURE__ */ n.jsxs("span", { className: a.cpCalcValue, children: [
+          o.dof.near.toFixed(2),
           "m"
         ] })
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-calc-row", children: [
-        /* @__PURE__ */ o.jsx("span", { children: "远焦" }),
-        /* @__PURE__ */ o.jsx("span", { className: "cp-calc-value", children: i.dof.far === 1 / 0 ? "∞" : `${i.dof.far.toFixed(2)}m` })
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpCalcRow, children: [
+        /* @__PURE__ */ n.jsx("span", { children: "远焦" }),
+        /* @__PURE__ */ n.jsx("span", { className: a.cpCalcValue, children: o.dof.far === 1 / 0 ? "∞" : `${o.dof.far.toFixed(2)}m` })
       ] })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "运镜" }),
-      /* @__PURE__ */ o.jsxs(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "运镜" }),
+      /* @__PURE__ */ n.jsxs(
         "select",
         {
-          value: ((d = i.movement) == null ? void 0 : d.type) || "",
-          onChange: (a) => {
-            const l = He.find((h) => h.type === a.target.value);
-            l && e(i.id, {
-              movement: { type: l.type, duration: l.defaultDuration }
+          value: ((p = o.movement) == null ? void 0 : p.type) || "",
+          onChange: (l) => {
+            const b = He.find((y) => y.type === l.target.value);
+            b && e(o.id, {
+              movement: { type: b.type, duration: b.defaultDuration }
             });
           },
           children: [
-            /* @__PURE__ */ o.jsx("option", { value: "", children: "无" }),
-            He.map((a) => /* @__PURE__ */ o.jsxs("option", { value: a.type, children: [
-              a.label,
+            /* @__PURE__ */ n.jsx("option", { value: "", children: "无" }),
+            He.map((l) => /* @__PURE__ */ n.jsxs("option", { value: l.type, children: [
+              l.label,
               " (",
-              a.labelEn,
+              l.labelEn,
               ")"
-            ] }, a.type))
+            ] }, l.type))
           ]
         }
       )
+    ] }),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "剧本绑定" }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "场景" }),
+        /* @__PURE__ */ n.jsx(
+          "input",
+          {
+            type: "text",
+            value: ((c = o.script) == null ? void 0 : c.sceneId) || "",
+            onChange: (l) => e(o.id, {
+              script: { ...o.script, sceneId: l.target.value }
+            }),
+            placeholder: "Scene-01"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "镜号" }),
+        /* @__PURE__ */ n.jsx(
+          "input",
+          {
+            type: "text",
+            value: ((m = o.script) == null ? void 0 : m.shotId) || "",
+            onChange: (l) => e(o.id, {
+              script: { ...o.script, shotId: l.target.value }
+            }),
+            placeholder: "Shot-03"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "描述" }),
+        /* @__PURE__ */ n.jsx(
+          "input",
+          {
+            type: "text",
+            value: ((d = o.script) == null ? void 0 : d.description) || "",
+            onChange: (l) => e(o.id, {
+              script: { ...o.script, description: l.target.value }
+            }),
+            placeholder: "主角对话近景"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "对白" }),
+        /* @__PURE__ */ n.jsx(
+          "input",
+          {
+            type: "text",
+            value: ((u = o.script) == null ? void 0 : u.dialogue) || "",
+            onChange: (l) => e(o.id, {
+              script: { ...o.script, dialogue: l.target.value }
+            }),
+            placeholder: "你怎么来了？"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpField, children: [
+        /* @__PURE__ */ n.jsx("label", { children: "动作" }),
+        /* @__PURE__ */ n.jsx(
+          "input",
+          {
+            type: "text",
+            value: ((g = o.script) == null ? void 0 : g.action) || "",
+            onChange: (l) => e(o.id, {
+              script: { ...o.script, action: l.target.value }
+            }),
+            placeholder: "转身离开"
+          }
+        )
+      ] })
     ] })
   ] });
-}, ts = ({ object: i, onUpdate: e }) => {
-  const t = (n, r) => {
-    e(i.id, { position: { ...i.position, [n]: r } });
-  }, s = (n, r) => {
-    e(i.id, { scale: { ...i.scale, [n]: r } });
+}, Ho = ({ object: o, onUpdate: e }) => {
+  const t = (i, r) => {
+    e(o.id, { position: { ...o.position, [i]: r } });
+  }, s = (i, r) => {
+    e(o.id, { scale: { ...o.scale, [i]: r } });
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-property-panel", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-section-title", children: [
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpPropertyPanel, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpSectionTitle, children: [
         "物体: ",
-        i.type
+        o.type
       ] }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-calc-row", children: [
-        /* @__PURE__ */ o.jsx("span", { children: "ID" }),
-        /* @__PURE__ */ o.jsx("span", { className: "cp-calc-value cp-mono", children: i.id.slice(0, 8) })
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpCalcRow, children: [
+        /* @__PURE__ */ n.jsx("span", { children: "ID" }),
+        /* @__PURE__ */ n.jsx("span", { className: [a.cpCalcValue, a.cpMono].join(" "), children: o.id.slice(0, 8) })
       ] })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "位置" }),
-      ["x", "y", "z"].map((n) => /* @__PURE__ */ o.jsxs("div", { className: "cp-field cp-field-row", children: [
-        /* @__PURE__ */ o.jsx("label", { children: n.toUpperCase() }),
-        /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "位置" }),
+      ["x", "y", "z"].map((i) => /* @__PURE__ */ n.jsxs("div", { className: [a.cpField, a.cpFieldRow].join(" "), children: [
+        /* @__PURE__ */ n.jsx("label", { children: i.toUpperCase() }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "number",
             step: "0.1",
-            value: i.position[n],
-            onChange: (r) => t(n, Number(r.target.value))
+            value: o.position[i],
+            onChange: (r) => t(i, Number(r.target.value))
           }
         )
-      ] }, n))
+      ] }, i))
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "缩放" }),
-      ["x", "y", "z"].map((n) => /* @__PURE__ */ o.jsxs("div", { className: "cp-field cp-field-row", children: [
-        /* @__PURE__ */ o.jsx("label", { children: n.toUpperCase() }),
-        /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "缩放" }),
+      ["x", "y", "z"].map((i) => /* @__PURE__ */ n.jsxs("div", { className: [a.cpField, a.cpFieldRow].join(" "), children: [
+        /* @__PURE__ */ n.jsx("label", { children: i.toUpperCase() }),
+        /* @__PURE__ */ n.jsx(
           "input",
           {
             type: "number",
             step: "0.1",
             min: "0.1",
-            value: i.scale[n],
-            onChange: (r) => s(n, Number(r.target.value))
+            value: o.scale[i],
+            onChange: (r) => s(i, Number(r.target.value))
           }
         )
-      ] }, n))
+      ] }, i))
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-panel-section", children: [
-      /* @__PURE__ */ o.jsx("div", { className: "cp-section-title", children: "颜色" }),
-      /* @__PURE__ */ o.jsx("div", { className: "cp-field", children: /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpPanelSection, children: [
+      /* @__PURE__ */ n.jsx("div", { className: a.cpSectionTitle, children: "颜色" }),
+      /* @__PURE__ */ n.jsx("div", { className: a.cpField, children: /* @__PURE__ */ n.jsx(
         "input",
         {
           type: "color",
-          value: `#${i.color.toString(16).padStart(6, "0")}`,
-          onChange: (n) => e(i.id, { color: parseInt(n.target.value.slice(1), 16) })
+          value: `#${o.color.toString(16).padStart(6, "0")}`,
+          onChange: (i) => e(o.id, { color: parseInt(i.target.value.slice(1), 16) })
         }
       ) })
     ] })
   ] });
-}, ss = () => {
-  const i = g((l) => l.project.timeline), e = g((l) => l.setTimelineTime), t = g((l) => l.setTimelinePlaying), s = J(null), n = J(0), r = J(0), c = () => {
-    if (i.playing)
+}, Fo = () => {
+  const o = v((m) => m.project.timeline), e = v((m) => m.setTimelineTime), t = v((m) => m.setTimelinePlaying), s = Q(null), i = Q(0), r = Q(0), h = () => {
+    if (o.playing)
       s.current && cancelAnimationFrame(s.current), s.current = null, t(!1);
     else {
-      t(!0), n.current = performance.now(), r.current = i.currentTime;
-      const l = (h) => {
-        const p = (h - n.current) / 1e3, y = r.current + p;
-        if (y >= i.duration) {
+      t(!0), i.current = performance.now(), r.current = o.currentTime;
+      const m = (d) => {
+        const u = (d - i.current) / 1e3, g = r.current + u;
+        if (g >= o.duration) {
           e(0), t(!1);
           return;
         }
-        e(y), T.emit("timeline:change", y), s.current = requestAnimationFrame(l);
+        e(g), P.emit("timeline:change", g), s.current = requestAnimationFrame(m);
       };
-      s.current = requestAnimationFrame(l);
+      s.current = requestAnimationFrame(m);
     }
-  }, d = Ke((l) => {
-    const h = Number(l.target.value);
-    e(h), T.emit("timeline:change", h);
-  }, [e]), a = (l) => {
-    const h = Math.floor(l / 60), p = Math.floor(l % 60), y = Math.floor(l % 1 * 10);
-    return `${h}:${p.toString().padStart(2, "0")}.${y}`;
+  }, p = Ze((m) => {
+    const d = Number(m.target.value);
+    e(d), P.emit("timeline:change", d);
+  }, [e]), c = (m) => {
+    const d = Math.floor(m / 60), u = Math.floor(m % 60), g = Math.floor(m % 1 * 10);
+    return `${d}:${u.toString().padStart(2, "0")}.${g}`;
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-timeline", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-timeline-controls", children: [
-      /* @__PURE__ */ o.jsx(
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpTimeline, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpTimelineControls, children: [
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: "cp-play-btn",
-          onClick: c,
-          title: i.playing ? "暂停" : "播放",
-          children: i.playing ? "⏸" : "▶"
+          className: a.cpPlayBtn,
+          onClick: h,
+          title: o.playing ? "暂停" : "播放",
+          children: o.playing ? "⏸" : "▶"
         }
       ),
-      /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: "cp-timeline-btn",
+          className: a.cpTimelineBtn,
           onClick: () => {
             e(0), t(!1);
           },
@@ -2585,135 +2771,135 @@ const Zt = [
           children: "⏮"
         }
       ),
-      /* @__PURE__ */ o.jsxs("span", { className: "cp-timeline-time", children: [
-        a(i.currentTime),
+      /* @__PURE__ */ n.jsxs("span", { className: a.cpTimelineTime, children: [
+        c(o.currentTime),
         " / ",
-        a(i.duration)
+        c(o.duration)
       ] })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-timeline-track", children: [
-      /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpTimelineTrack, children: [
+      /* @__PURE__ */ n.jsx(
         "input",
         {
           type: "range",
           min: "0",
-          max: i.duration,
+          max: o.duration,
           step: "0.1",
-          value: i.currentTime,
-          onChange: d,
-          className: "cp-timeline-slider"
+          value: o.currentTime,
+          onChange: p,
+          className: a.cpTimelineSlider
         }
       ),
-      /* @__PURE__ */ o.jsx("div", { className: "cp-timeline-markers", children: Array.from({ length: Math.ceil(i.duration / 5) + 1 }, (l, h) => /* @__PURE__ */ o.jsxs("span", { className: "cp-timeline-mark", style: { left: `${h * 5 / i.duration * 100}%` }, children: [
-        h * 5,
+      /* @__PURE__ */ n.jsx("div", { className: a.cpTimelineMarkers, children: Array.from({ length: Math.ceil(o.duration / 5) + 1 }, (m, d) => /* @__PURE__ */ n.jsxs("span", { className: a.cpTimelineMark, style: { left: `${d * 5 / o.duration * 100}%` }, children: [
+        d * 5,
         "s"
-      ] }, h)) })
+      ] }, d)) })
     ] })
   ] });
-}, is = () => {
-  const i = g((a) => a.project.storyboard), e = g((a) => a.project.cameras), t = g((a) => a.setStoryboardGrid), s = g((a) => a.setStoryboardCell), n = g((a) => a.selectCamera), r = i.grid === "5x5" ? 5 : 3, c = r * r, d = (a) => {
-    const l = i.cells.find((h) => h.index === a);
-    return l != null && l.cameraId && e.find((h) => h.id === l.cameraId) || null;
+}, zo = () => {
+  const o = v((c) => c.project.storyboard), e = v((c) => c.project.cameras), t = v((c) => c.setStoryboardGrid), s = v((c) => c.setStoryboardCell), i = v((c) => c.selectCamera), r = o.grid === "5x5" ? 5 : 3, h = r * r, p = (c) => {
+    const m = o.cells.find((d) => d.index === c);
+    return m != null && m.cameraId && e.find((d) => d.id === m.cameraId) || null;
   };
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-storyboard", children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-storyboard-header", children: [
-      /* @__PURE__ */ o.jsx("span", { children: "分镜表" }),
-      /* @__PURE__ */ o.jsxs("div", { className: "cp-storyboard-toggle", children: [
-        /* @__PURE__ */ o.jsx(
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpStoryboard, children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpStoryboardHeader, children: [
+      /* @__PURE__ */ n.jsx("span", { children: "分镜表" }),
+      /* @__PURE__ */ n.jsxs("div", { className: a.cpStoryboardToggle, children: [
+        /* @__PURE__ */ n.jsx(
           "button",
           {
-            className: `cp-btn-sm ${i.grid === "3x3" ? "active" : ""}`,
+            className: `${a.cpBtnSm} ${o.grid === "3x3" ? a.active : ""}`,
             onClick: () => t("3x3"),
             children: "3×3"
           }
         ),
-        /* @__PURE__ */ o.jsx(
+        /* @__PURE__ */ n.jsx(
           "button",
           {
-            className: `cp-btn-sm ${i.grid === "5x5" ? "active" : ""}`,
+            className: `${a.cpBtnSm} ${o.grid === "5x5" ? a.active : ""}`,
             onClick: () => t("5x5"),
             children: "5×5"
           }
         )
       ] })
     ] }),
-    /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsx(
       "div",
       {
-        className: "cp-storyboard-grid",
+        className: a.cpStoryboardGrid,
         style: {
           gridTemplateColumns: `repeat(${r}, 1fr)`
         },
-        children: Array.from({ length: c }, (a, l) => {
-          const h = d(l);
-          return /* @__PURE__ */ o.jsxs(
+        children: Array.from({ length: h }, (c, m) => {
+          const d = p(m);
+          return /* @__PURE__ */ n.jsxs(
             "div",
             {
-              className: `cp-storyboard-cell ${h ? "has-camera" : ""}`,
+              className: `${a.cpStoryboardCell} ${d ? a.hasCamera : ""}`,
               onClick: () => {
-                h && n(h.id);
+                d && i(d.id);
               },
               children: [
-                /* @__PURE__ */ o.jsx("div", { className: "cp-cell-number", children: l + 1 }),
-                h ? /* @__PURE__ */ o.jsxs("div", { className: "cp-cell-camera", children: [
-                  /* @__PURE__ */ o.jsx("div", { className: "cp-cell-cam-name", children: h.name }),
-                  /* @__PURE__ */ o.jsxs("div", { className: "cp-cell-cam-meta", children: [
-                    h.focal,
+                /* @__PURE__ */ n.jsx("div", { className: a.cpCellNumber, children: m + 1 }),
+                d ? /* @__PURE__ */ n.jsxs("div", { className: a.cpCellCamera, children: [
+                  /* @__PURE__ */ n.jsx("div", { className: a.cpCellCamName, children: d.name }),
+                  /* @__PURE__ */ n.jsxs("div", { className: a.cpCellCamMeta, children: [
+                    d.focal,
                     "mm"
                   ] })
-                ] }) : /* @__PURE__ */ o.jsx("div", { className: "cp-cell-empty", children: /* @__PURE__ */ o.jsxs(
+                ] }) : /* @__PURE__ */ n.jsx("div", { className: a.cpCellEmpty, children: /* @__PURE__ */ n.jsxs(
                   "select",
                   {
                     value: "",
-                    onChange: (p) => {
-                      p.target.value && s(l, p.target.value);
+                    onChange: (u) => {
+                      u.target.value && s(m, u.target.value);
                     },
-                    onClick: (p) => p.stopPropagation(),
+                    onClick: (u) => u.stopPropagation(),
                     children: [
-                      /* @__PURE__ */ o.jsx("option", { value: "", children: "分配机位..." }),
-                      e.map((p) => /* @__PURE__ */ o.jsx("option", { value: p.id, children: p.name }, p.id))
+                      /* @__PURE__ */ n.jsx("option", { value: "", children: "分配机位..." }),
+                      e.map((u) => /* @__PURE__ */ n.jsx("option", { value: u.id, children: u.name }, u.id))
                     ]
                   }
                 ) })
               ]
             },
-            l
+            m
           );
         })
       }
     )
   ] });
-}, ns = [
+}, Vo = [
   { value: "timeline", label: "时间线" },
   { value: "storyboard", label: "分镜表" },
   { value: "keyframes", label: "关键帧" }
-], os = () => {
-  const i = g((s) => s.bottomTab), e = g((s) => s.setBottomTab), t = g((s) => s.project.path);
-  return /* @__PURE__ */ o.jsxs("div", { className: "cp-bottom-panel", children: [
-    /* @__PURE__ */ o.jsx("div", { className: "cp-bottom-tabs", children: ns.map((s) => /* @__PURE__ */ o.jsx(
+], Ko = () => {
+  const o = v((s) => s.bottomTab), e = v((s) => s.setBottomTab), t = v((s) => s.project.path);
+  return /* @__PURE__ */ n.jsxs("div", { className: a.cpBottomPanel, children: [
+    /* @__PURE__ */ n.jsx("div", { className: a.cpBottomTabs, children: Vo.map((s) => /* @__PURE__ */ n.jsx(
       "button",
       {
-        className: `cp-tab-btn ${i === s.value ? "active" : ""}`,
+        className: `${a.cpTabBtn} ${o === s.value ? a.active : ""}`,
         onClick: () => e(s.value),
         children: s.label
       },
       s.value
     )) }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-bottom-content", children: [
-      i === "timeline" && /* @__PURE__ */ o.jsx(ss, {}),
-      i === "storyboard" && /* @__PURE__ */ o.jsx(is, {}),
-      i === "keyframes" && /* @__PURE__ */ o.jsxs("div", { className: "cp-keyframes", children: [
-        /* @__PURE__ */ o.jsxs("div", { className: "cp-keyframes-header", children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpBottomContent, children: [
+      o === "timeline" && /* @__PURE__ */ n.jsx(Fo, {}),
+      o === "storyboard" && /* @__PURE__ */ n.jsx(zo, {}),
+      o === "keyframes" && /* @__PURE__ */ n.jsxs("div", { className: a.cpKeyframes, children: [
+        /* @__PURE__ */ n.jsxs("div", { className: a.cpKeyframesHeader, children: [
           "关键帧 (",
           t.length,
           ")"
         ] }),
-        t.length === 0 ? /* @__PURE__ */ o.jsx("div", { className: "cp-empty", children: "暂无关键帧。在路径工具模式下点击场景添加。" }) : /* @__PURE__ */ o.jsx("div", { className: "cp-keyframes-list", children: t.map((s, n) => /* @__PURE__ */ o.jsxs("div", { className: "cp-keyframe-item", children: [
-          /* @__PURE__ */ o.jsxs("span", { className: "cp-kf-index", children: [
+        t.length === 0 ? /* @__PURE__ */ n.jsx("div", { className: a.cpEmpty, children: "暂无关键帧。在路径工具模式下点击场景添加。" }) : /* @__PURE__ */ n.jsx("div", { className: a.cpKeyframesList, children: t.map((s, i) => /* @__PURE__ */ n.jsxs("div", { className: a.cpKeyframeItem, children: [
+          /* @__PURE__ */ n.jsxs("span", { className: a.cpKfIndex, children: [
             "#",
-            n + 1
+            i + 1
           ] }),
-          /* @__PURE__ */ o.jsxs("span", { className: "cp-kf-pos", children: [
+          /* @__PURE__ */ n.jsxs("span", { className: a.cpKfPos, children: [
             "(",
             s.position.x.toFixed(1),
             ", ",
@@ -2722,7 +2908,7 @@ const Zt = [
             s.position.z.toFixed(1),
             ")"
           ] }),
-          /* @__PURE__ */ o.jsxs("span", { className: "cp-kf-time", children: [
+          /* @__PURE__ */ n.jsxs("span", { className: a.cpKfTime, children: [
             "t=",
             s.t.toFixed(2)
           ] })
@@ -2730,105 +2916,112 @@ const Zt = [
       ] })
     ] })
   ] });
-}, as = ({ open: i, onClose: e }) => {
-  const [t, s] = fe("json"), [n, r] = fe(""), c = g((h) => h.project);
-  if (!i) return null;
-  const d = () => {
-    const h = T.exportProject(), p = JSON.stringify(h, null, 2);
-    r(p), T.emit("project:export", h);
-  }, a = () => {
-    const h = T.exportProject(), p = new Blob([JSON.stringify(h, null, 2)], { type: "application/json" }), y = URL.createObjectURL(p), f = document.createElement("a");
-    f.href = y, f.download = `camera-planner-${Date.now()}.json`, f.click(), URL.revokeObjectURL(y);
-  }, l = async () => {
-    const h = await T.exportStoryboardPNG();
-    if (!h) return;
-    const p = URL.createObjectURL(h), y = document.createElement("a");
-    y.href = p, y.download = `viewport-${Date.now()}.png`, y.click(), URL.revokeObjectURL(p);
+}, $o = ({ open: o, onClose: e }) => {
+  const [t, s] = _e("json"), [i, r] = _e(""), h = v((d) => d.project);
+  if (!o) return null;
+  const p = () => {
+    const d = P.exportProject(), u = JSON.stringify(d, null, 2);
+    r(u), P.emit("project:export", d);
+  }, c = () => {
+    const d = P.exportProject(), u = new Blob([JSON.stringify(d, null, 2)], { type: "application/json" }), g = URL.createObjectURL(u), l = document.createElement("a");
+    l.href = g, l.download = `camera-planner-${Date.now()}.json`, l.click(), URL.revokeObjectURL(g);
+  }, m = async () => {
+    const d = await P.exportStoryboardPNG();
+    if (!d) return;
+    const u = URL.createObjectURL(d), g = document.createElement("a");
+    g.href = u, g.download = `viewport-${Date.now()}.png`, g.click(), URL.revokeObjectURL(u);
   };
-  return /* @__PURE__ */ o.jsx("div", { className: "cp-dialog-overlay", onClick: e, children: /* @__PURE__ */ o.jsxs("div", { className: "cp-dialog", onClick: (h) => h.stopPropagation(), children: [
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-dialog-header", children: [
-      /* @__PURE__ */ o.jsx("span", { children: "导出" }),
-      /* @__PURE__ */ o.jsx("button", { className: "cp-dialog-close", onClick: e, children: "×" })
+  return /* @__PURE__ */ n.jsx("div", { className: a.cpDialogOverlay, onClick: e, children: /* @__PURE__ */ n.jsxs("div", { className: a.cpDialog, onClick: (d) => d.stopPropagation(), children: [
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpDialogHeader, children: [
+      /* @__PURE__ */ n.jsx("span", { children: "导出" }),
+      /* @__PURE__ */ n.jsx("button", { className: a.cpDialogClose, onClick: e, children: "×" })
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-dialog-tabs", children: [
-      /* @__PURE__ */ o.jsx(
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpDialogTabs, children: [
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-tab-btn ${t === "json" ? "active" : ""}`,
+          className: `${a.cpTabBtn} ${t === "json" ? a.active : ""}`,
           onClick: () => s("json"),
           children: "JSON 数据"
         }
       ),
-      /* @__PURE__ */ o.jsx(
+      /* @__PURE__ */ n.jsx(
         "button",
         {
-          className: `cp-tab-btn ${t === "png" ? "active" : ""}`,
+          className: `${a.cpTabBtn} ${t === "png" ? a.active : ""}`,
           onClick: () => s("png"),
           children: "PNG 截图"
         }
       )
     ] }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-dialog-body", children: [
-      t === "json" && /* @__PURE__ */ o.jsxs(o.Fragment, { children: [
-        /* @__PURE__ */ o.jsxs("div", { className: "cp-export-info", children: [
-          /* @__PURE__ */ o.jsxs("div", { children: [
-            c.cameras.length,
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpDialogBody, children: [
+      t === "json" && /* @__PURE__ */ n.jsxs(n.Fragment, { children: [
+        /* @__PURE__ */ n.jsxs("div", { className: a.cpExportInfo, children: [
+          /* @__PURE__ */ n.jsxs("div", { children: [
+            h.cameras.length,
             " 个摄像机"
           ] }),
-          /* @__PURE__ */ o.jsxs("div", { children: [
-            c.scene.objects.length,
+          /* @__PURE__ */ n.jsxs("div", { children: [
+            h.scene.objects.length,
             " 个场景物体"
           ] }),
-          /* @__PURE__ */ o.jsxs("div", { children: [
-            c.path.length,
+          /* @__PURE__ */ n.jsxs("div", { children: [
+            h.path.length,
             " 个路径关键帧"
           ] })
         ] }),
-        n ? /* @__PURE__ */ o.jsx("pre", { className: "cp-export-json", children: n }) : /* @__PURE__ */ o.jsx("div", { className: "cp-placeholder", children: /* @__PURE__ */ o.jsx("p", { children: "点击下方按钮生成 JSON" }) }),
-        /* @__PURE__ */ o.jsxs("div", { className: "cp-dialog-actions", children: [
-          /* @__PURE__ */ o.jsx("button", { className: "cp-btn", onClick: d, children: "生成 JSON" }),
-          /* @__PURE__ */ o.jsx("button", { className: "cp-btn cp-btn-primary", onClick: a, children: "下载文件" })
+        i ? /* @__PURE__ */ n.jsx("pre", { className: a.cpExportJson, children: i }) : /* @__PURE__ */ n.jsx("div", { className: a.cpPlaceholder, children: /* @__PURE__ */ n.jsx("p", { children: "点击下方按钮生成 JSON" }) }),
+        /* @__PURE__ */ n.jsxs("div", { className: a.cpDialogActions, children: [
+          /* @__PURE__ */ n.jsx("button", { className: a.cpBtn, onClick: p, children: "生成 JSON" }),
+          /* @__PURE__ */ n.jsx("button", { className: [a.cpBtn, a.cpBtnPrimary].join(" "), onClick: c, children: "下载文件" })
         ] })
       ] }),
-      t === "png" && /* @__PURE__ */ o.jsxs(o.Fragment, { children: [
-        /* @__PURE__ */ o.jsx("div", { className: "cp-placeholder", children: /* @__PURE__ */ o.jsx("p", { children: "导出当前 3D 视口截图" }) }),
-        /* @__PURE__ */ o.jsx("div", { className: "cp-dialog-actions", children: /* @__PURE__ */ o.jsx("button", { className: "cp-btn cp-btn-primary", onClick: l, children: "导出 PNG" }) })
+      t === "png" && /* @__PURE__ */ n.jsxs(n.Fragment, { children: [
+        /* @__PURE__ */ n.jsx("div", { className: a.cpPlaceholder, children: /* @__PURE__ */ n.jsx("p", { children: "导出当前 3D 视口截图" }) }),
+        /* @__PURE__ */ n.jsx("div", { className: a.cpDialogActions, children: /* @__PURE__ */ n.jsx("button", { className: [a.cpBtn, a.cpBtnPrimary].join(" "), onClick: m, children: "导出 PNG" }) })
       ] })
     ] })
   ] }) });
 };
-class rs {
+class Uo {
   /** Load a complete project */
   loadProject(e) {
-    g.getState().loadProject(e);
+    v.getState().loadProject(e);
   }
   /** Load only cameras (replace all) */
   loadCameras(e) {
-    const t = g.getState(), s = t.getProjectData();
+    const t = v.getState(), s = t.getProjectData();
     t.loadProject({ ...s, cameras: e });
   }
   /** Load only scene config */
   loadScene(e) {
-    g.getState().setSceneConfig(e);
+    v.getState().setSceneConfig(e);
   }
   /** Load script binding for a specific camera */
   loadScript(e, t) {
-    g.getState().updateCamera(e, { script: t });
+    v.getState().updateCamera(e, { script: t });
   }
   /** Update a single camera's params */
   updateCamera(e, t) {
-    g.getState().updateCamera(e, t);
+    v.getState().updateCamera(e, t);
   }
   /** Update scene config partially */
   updateScene(e) {
-    g.getState().setSceneConfig(e);
+    v.getState().setSceneConfig(e);
   }
   /** Select a camera (from external control) */
   selectCamera(e) {
-    g.getState().selectCamera(e);
+    v.getState().selectCamera(e);
+  }
+  /** Trigger a movement animation on a camera */
+  playMovement(e, t) {
+    const s = v.getState();
+    s.project.cameras.find((r) => r.id === e) && s.updateCamera(e, {
+      movement: { type: t, duration: 3 }
+    });
   }
 }
-class cs {
+class Yo {
   constructor() {
     this.listeners = /* @__PURE__ */ new Map(), this.pngExporter = null;
   }
@@ -2842,16 +3035,16 @@ class cs {
   emit(e, t) {
     const s = this.listeners.get(e);
     if (s)
-      for (const n of s)
-        n(t);
+      for (const i of s)
+        i(t);
   }
   /** Export current project data */
   exportProject() {
-    return g.getState().getProjectData();
+    return v.getState().getProjectData();
   }
   /** Export cameras only */
   exportCameras() {
-    return g.getState().getProjectData().cameras;
+    return v.getState().getProjectData().cameras;
   }
   setPNGExporter(e) {
     this.pngExporter = e;
@@ -2861,38 +3054,38 @@ class cs {
     return ((e = this.pngExporter) == null ? void 0 : e.call(this)) ?? null;
   }
 }
-const ls = new rs(), T = new cs(), ms = ({
-  initialData: i,
+const Wo = new Uo(), P = new Yo(), en = ({
+  initialData: o,
   onCameraChange: e,
   onCameraSelect: t,
   onCameraAdd: s,
-  onCameraDelete: n,
+  onCameraDelete: i,
   onSceneChange: r,
-  onProjectExport: c
+  onProjectExport: h
 }) => {
-  const [d, a] = fe(!1);
-  return V(() => {
-    i && ls.loadProject(i);
-  }, [i]), V(() => {
-    const l = [];
-    return e && l.push(T.on("camera:change", e)), t && l.push(T.on("camera:select", t)), s && l.push(T.on("camera:add", s)), n && l.push(T.on("camera:delete", n)), r && l.push(T.on("scene:change", r)), c && l.push(T.on("project:export", c)), () => l.forEach((h) => h());
-  }, [e, t, s, n, r, c]), V(() => {
-    const l = (h) => {
-      h.ctrlKey && h.key === "z" && (h.preventDefault(), g.getState().undo()), h.ctrlKey && h.key === "y" && (h.preventDefault(), g.getState().redo());
+  const [p, c] = _e(!1);
+  return z(() => {
+    o && Wo.loadProject(o);
+  }, [o]), z(() => {
+    const m = [];
+    return e && m.push(P.on("camera:change", e)), t && m.push(P.on("camera:select", t)), s && m.push(P.on("camera:add", s)), i && m.push(P.on("camera:delete", i)), r && m.push(P.on("scene:change", r)), h && m.push(P.on("project:export", h)), () => m.forEach((d) => d());
+  }, [e, t, s, i, r, h]), z(() => {
+    const m = (d) => {
+      d.ctrlKey && d.key === "z" && (d.preventDefault(), v.getState().undo()), d.ctrlKey && d.key === "y" && (d.preventDefault(), v.getState().redo());
     };
-    return window.addEventListener("keydown", l), () => window.removeEventListener("keydown", l);
-  }, []), /* @__PURE__ */ o.jsxs("div", { className: "camera-planner", children: [
-    /* @__PURE__ */ o.jsx($t, { onExport: () => a(!0) }),
-    /* @__PURE__ */ o.jsxs("div", { className: "cp-main", children: [
-      /* @__PURE__ */ o.jsx(Jt, {}),
-      /* @__PURE__ */ o.jsx("div", { className: "cp-viewport-wrapper", children: /* @__PURE__ */ o.jsx(Ft, { outputManager: T }) }),
-      /* @__PURE__ */ o.jsx(Qt, {})
+    return window.addEventListener("keydown", m), () => window.removeEventListener("keydown", m);
+  }, []), /* @__PURE__ */ n.jsxs("div", { className: a.cameraPlanner, children: [
+    /* @__PURE__ */ n.jsx(Oo, { onExport: () => c(!0) }),
+    /* @__PURE__ */ n.jsxs("div", { className: a.cpMain, children: [
+      /* @__PURE__ */ n.jsx(Go, {}),
+      /* @__PURE__ */ n.jsx("div", { className: a.cpViewportWrapper, children: /* @__PURE__ */ n.jsx(Po, { outputManager: P }) }),
+      /* @__PURE__ */ n.jsx(qo, {})
     ] }),
-    /* @__PURE__ */ o.jsx(os, {}),
-    /* @__PURE__ */ o.jsx(as, { open: d, onClose: () => a(!1) })
+    /* @__PURE__ */ n.jsx(Ko, {}),
+    /* @__PURE__ */ n.jsx($o, { open: p, onClose: () => c(!1) })
   ] });
 };
-class fs {
+class tn {
   constructor(e) {
     this.baseUrl = e.baseUrl.replace(/\/$/, ""), this.token = e.token || "", this.headers = e.headers || {};
   }
@@ -2934,47 +3127,47 @@ class fs {
   }
   // --- Private ---
   async request(e, t, s) {
-    const n = `${this.baseUrl}${t}`, r = {
+    const i = `${this.baseUrl}${t}`, r = {
       "Content-Type": "application/json",
       ...this.headers
     };
     this.token && (r.Authorization = `Bearer ${this.token}`);
-    const c = await fetch(n, {
+    const h = await fetch(i, {
       method: e,
       headers: r,
       body: s ? JSON.stringify(s) : void 0
     });
-    if (!c.ok)
-      throw new Error(`API ${e} ${t} failed: ${c.status} ${c.statusText}`);
-    return c.json();
+    if (!h.ok)
+      throw new Error(`API ${e} ${t} failed: ${h.status} ${h.statusText}`);
+    return h.json();
   }
 }
 export {
-  fs as ApiClient,
-  ms as CameraPlanner,
-  vt as CameraRig,
-  rs as InputManager,
-  wt as LIGHT_PRESETS,
-  Et as LightSystem,
+  tn as ApiClient,
+  en as CameraPlanner,
+  Tt as CameraRig,
+  Uo as InputManager,
+  Ct as LIGHT_PRESETS,
+  wt as LightSystem,
   He as MOVEMENT_PRESETS,
-  xt as ObjectLib,
-  cs as OutputManager,
-  St as PathSystem,
+  St as ObjectLib,
+  Yo as OutputManager,
+  Et as PathSystem,
   Pt as RayPicker,
-  Zt as SCENE_PRESETS,
-  B as SENSOR_PRESETS,
-  bt as SceneEngine,
+  Io as SCENE_PRESETS,
+  Y as SENSOR_PRESETS,
+  yt as SceneEngine,
   ye as calcDOF,
-  ne as calcFOV,
-  us as calcFOVByPreset,
-  yt as clamp,
-  Ht as createEmptyProject,
-  G as deg2rad,
-  gt as easeInOutCubic,
-  K as generateId,
-  ls as inputManager,
-  U as lerp,
-  T as outputManager,
-  ps as rad2deg,
-  g as usePlannerStore
+  ie as calcFOV,
+  Jo as calcFOVByPreset,
+  gt as clamp,
+  Ft as createEmptyProject,
+  q as deg2rad,
+  vt as easeInOutCubic,
+  Z as generateId,
+  Wo as inputManager,
+  K as lerp,
+  P as outputManager,
+  Qo as rad2deg,
+  v as usePlannerStore
 };

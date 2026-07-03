@@ -1,10 +1,13 @@
+/**
+ * Standalone React demo for Camera Planner v3.
+ * Bundled by esbuild into a single HTML for GitHub Pages.
+ */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { CameraPlanner } from '../src/components/CameraPlanner'
-// CSS Modules are imported by components internally
+import type { ProjectData } from '../src/types/project'
 
-// Demo: load with some sample cameras
-const sampleData = {
+const sampleData: ProjectData = {
   version: '3.0',
   cameras: [
     {
@@ -54,12 +57,12 @@ const sampleData = {
     },
   ],
   scene: {
-    template: 'studio' as const,
+    template: 'studio',
     objects: [
-      { id: 'floor', type: 'plane' as const, position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 20, y: 1, z: 20 }, color: 0x2a2a2a },
-      { id: 'actor1', type: 'person' as const, position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x888888 },
-      { id: 'actor2', type: 'person' as const, position: { x: 2, y: 0, z: -1 }, rotation: { yaw: -30, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x666666 },
-      { id: 'desk', type: 'box' as const, position: { x: -2, y: 0.35, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 2, y: 0.7, z: 1 }, color: 0x654321 },
+      { id: 'floor', type: 'plane', position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 20, y: 1, z: 20 }, color: 0x2a2a2a },
+      { id: 'actor1', type: 'person', position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x888888 },
+      { id: 'actor2', type: 'person', position: { x: 2, y: 0, z: -1 }, rotation: { yaw: -30, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x666666 },
+      { id: 'desk', type: 'box', position: { x: -2, y: 0.35, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 2, y: 0.7, z: 1 }, color: 0x654321 },
     ],
     lighting: {
       position: { x: 5, y: 10, z: 5 },
@@ -69,7 +72,7 @@ const sampleData = {
     },
   },
   path: [],
-  storyboard: { grid: '3x3' as const, cells: [] },
+  storyboard: { grid: '3x3', cells: [] },
   timeline: { duration: 30, currentTime: 0, playing: false, keyframes: [] },
 }
 
@@ -77,12 +80,13 @@ function App() {
   return (
     <CameraPlanner
       initialData={sampleData}
-      onCameraChange={(cam) => console.log('Camera changed:', cam)}
-      onCameraSelect={(id) => console.log('Camera selected:', id)}
-      onCameraAdd={(cam) => console.log('Camera added:', cam)}
-      onCameraDelete={(id) => console.log('Camera deleted:', id)}
+      onCameraChange={(cam) => console.log('[Demo] Camera changed:', cam)}
+      onCameraSelect={(id) => console.log('[Demo] Camera selected:', id)}
+      onCameraAdd={(cam) => console.log('[Demo] Camera added:', cam)}
+      onCameraDelete={(id) => console.log('[Demo] Camera deleted:', id)}
     />
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+console.log('Camera Planner Pro v3 — React Standalone Demo')

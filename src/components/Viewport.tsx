@@ -16,6 +16,7 @@ import {
 } from '../engine'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
+import css from '../styles.module.css'
 
 interface ViewportProps {
   outputManager: OutputManager
@@ -148,7 +149,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   return (
     <div
       ref={containerRef}
-      className="camera-planner-viewport"
+      className={css.cameraPlannerViewport}
       style={{ width: '100%', height: '100%', minHeight: '400px' }}
     />
   )

@@ -7,6 +7,7 @@ import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
 import { SCENE_PRESETS } from '../presets/templates'
 import { generateId } from '../engine/calc'
+import css from '../styles.module.css'
 
 export const SceneTemplates: React.FC = () => {
   const setSceneConfig = usePlannerStore(s => s.setSceneConfig)
@@ -30,20 +31,20 @@ export const SceneTemplates: React.FC = () => {
   }
 
   return (
-    <div className="cp-scene-templates">
-      <div className="cp-templates-header">场景模板</div>
-      <div className="cp-templates-grid">
+    <div className={css.cpSceneTemplates}>
+      <div className={css.cpTemplatesHeader}>场景模板</div>
+      <div className={css.cpTemplatesGrid}>
         {SCENE_PRESETS.map(preset => (
           <button
             key={preset.template}
-            className="cp-template-card"
+            className={css.cpTemplateCard}
             onClick={() => handleSelect(preset)}
           >
-            <span className="cp-icon-xl">{preset.icon}</span>
-            <div className="cp-template-info">
-              <div className="cp-template-name">{preset.label}</div>
-              <div className="cp-template-en">{preset.labelEn}</div>
-              <div className="cp-template-count">{preset.objects.length} 个物体</div>
+            <span className={css.cpIconXl}>{preset.icon}</span>
+            <div className={css.cpTemplateInfo}>
+              <div className={css.cpTemplateName}>{preset.label}</div>
+              <div className={css.cpTemplateEn}>{preset.labelEn}</div>
+              <div className={css.cpTemplateCount}>{preset.objects.length} 个物体</div>
             </div>
           </button>
         ))}

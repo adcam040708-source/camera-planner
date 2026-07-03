@@ -43,7 +43,7 @@ export type {
 export { createEmptyProject } from './types'
 
 // Styles
-import './styles.css'
+
 
 // Presets
 export { SENSOR_PRESETS, MOVEMENT_PRESETS, LIGHT_PRESETS, SCENE_PRESETS } from './presets'

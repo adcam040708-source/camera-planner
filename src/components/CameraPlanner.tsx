@@ -21,6 +21,7 @@ import { InputManager } from '../io/InputManager'
 import { OutputManager } from '../io/OutputManager'
 import { ProjectData } from '../types/project'
 import { Camera } from '../types/camera'
+import css from '../styles.module.css'
 
 export interface CameraPlannerProps {
   projectId?: string
@@ -88,17 +89,17 @@ export const CameraPlanner: React.FC<CameraPlannerProps> = ({
   }, [])
 
   return (
-    <div className="camera-planner">
+    <div className={css.cameraPlanner}>
       {/* A: Top Toolbar */}
       <TopToolbar onExport={() => setExportOpen(true)} />
 
       {/* Main content area: B + C + D */}
-      <div className="cp-main">
+      <div className={css.cpMain}>
         {/* B: Left Sidebar */}
         <Sidebar />
 
         {/* C: Center Viewport */}
-        <div className="cp-viewport-wrapper">
+        <div className={css.cpViewportWrapper}>
           <Viewport outputManager={outputManager} />
         </div>
 

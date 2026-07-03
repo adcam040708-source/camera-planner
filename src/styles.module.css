@@ -1,0 +1,881 @@
+/* @muraguchi/camera-planner — full styles */
+
+/* ===== Layout ===== */
+
+.cameraPlanner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  color: #e0e0e0;
+  background: #0a0a14;
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.cpMain {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.cpViewportWrapper {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.cameraPlannerViewport {
+  width: 100%;
+  height: 100%;
+}
+
+.cameraPlannerViewport canvas {
+  display: block;
+  outline: none;
+}
+
+/* ===== A: Top Toolbar ===== */
+
+.cpToolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #12121e;
+  border-bottom: 1px solid #1e1e38;
+  flex-shrink: 0;
+}
+
+.cpToolbarGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.cpToolbarLabel {
+  font-size: 11px;
+  color: #888;
+  margin-right: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cpToolbarBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+
+.cpToolbarBtn:hover {
+  background: #1e1e38;
+  color: #fff;
+}
+
+.cpToolbarBtn.active {
+  background: #2a2a4a;
+  border-color: #7c83ff;
+  color: #7c83ff;
+}
+
+.cpToolbarSep {
+  width: 1px;
+  height: 24px;
+  background: #2a2a3a;
+  margin: 0 4px;
+}
+
+.cpToolbarSpacer {
+  flex: 1;
+}
+
+.cpToolbarExport {
+  width: auto;
+  padding: 0 12px;
+  background: #2a2a4a;
+  border: 1px solid #7c83ff;
+  color: #7c83ff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cpToolbarExport:hover {
+  background: #7c83ff;
+  color: #fff;
+}
+
+.cpIcon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cpIconLg {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.cpIconXl {
+  font-size: 36px;
+  line-height: 1;
+}
+
+/* ===== B: Left Sidebar ===== */
+
+.cpSidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #0e0e1a;
+  border-right: 1px solid #1e1e38;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cpSidebarTabs {
+  display: flex;
+  border-bottom: 1px solid #1e1e38;
+  flex-shrink: 0;
+}
+
+.cpTabBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #888;
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.15s;
+}
+
+.cpTabBtn:hover {
+  color: #ccc;
+  background: #14142a;
+}
+
+.cpTabBtn.active {
+  color: #7c83ff;
+  border-bottom-color: #7c83ff;
+}
+
+.cpTabLabel {
+  font-size: 10px;
+}
+
+.cpSidebarContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* ===== Camera List ===== */
+
+.cpCameraListHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.cpCameraListItems {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cpCameraItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  background: #14142a;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cpCameraItem:hover {
+  background: #1e1e38;
+}
+
+.cpCameraItem.selected {
+  background: #2a2a4a;
+  box-shadow: inset 0 0 0 1px #7c83ff;
+}
+
+.cpCameraColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.cpCameraInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cpCameraName {
+  font-weight: 600;
+  font-size: 12px;
+  color: #fff;
+}
+
+.cpCameraMeta {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.cpCameraDelete {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: all 0.15s;
+}
+
+.cpCameraItem:hover .cpCameraDelete {
+  opacity: 1;
+}
+
+.cpCameraDelete:hover {
+  background: #ff4444;
+  color: #fff;
+}
+
+/* ===== Object Palette ===== */
+
+.cpPaletteHeader,
+.cpTemplatesHeader {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.cpPaletteGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.cpPaletteItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  background: #14142a;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cpPaletteItem:hover {
+  background: #1e1e38;
+  border-color: #333;
+}
+
+.cpPaletteLabel {
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* ===== Scene Templates ===== */
+
+.cpTemplatesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cpTemplateCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #14142a;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.cpTemplateCard:hover {
+  background: #1e1e38;
+  border-color: #333;
+}
+
+.cpTemplateName {
+  font-weight: 600;
+  font-size: 13px;
+  color: #fff;
+}
+
+.cpTemplateEn {
+  font-size: 11px;
+  color: #888;
+}
+
+.cpTemplateCount {
+  font-size: 10px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ===== C: Viewport ===== */
+/* (canvas styles above) */
+
+/* ===== D: Right Property Panel ===== */
+
+.cpPropertyPanel {
+  width: 260px;
+  flex-shrink: 0;
+  background: #0e0e1a;
+  border-left: 1px solid #1e1e38;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.cpPanelSection {
+  margin-bottom: 16px;
+}
+
+.cpSectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7c83ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #1e1e38;
+}
+
+.cpField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cpField label {
+  width: 60px;
+  font-size: 11px;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.cpField input[type="text"],
+.cpField input[type="number"],
+.cpField select {
+  flex: 1;
+  padding: 4px 6px;
+  background: #14142a;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 12px;
+  outline: none;
+}
+
+.cpField input:focus,
+.cpField select:focus {
+  border-color: #7c83ff;
+}
+
+.cpField input[type="range"] {
+  flex: 1;
+  accent-color: #7c83ff;
+}
+
+.cpField input[type="color"] {
+  width: 40px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cpFieldValue {
+  font-size: 11px;
+  color: #aaa;
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cpFieldRow input[type="number"] {
+  width: 70px;
+}
+
+.cpCalcRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12px;
+  color: #888;
+}
+
+.cpCalcValue {
+  color: #ccc;
+  font-weight: 500;
+}
+
+.cpMono {
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 11px;
+}
+
+/* ===== E: Bottom Panel ===== */
+
+.cpBottomPanel {
+  height: 160px;
+  flex-shrink: 0;
+  background: #0e0e1a;
+  border-top: 1px solid #1e1e38;
+  display: flex;
+  flex-direction: column;
+}
+
+.cpBottomTabs {
+  display: flex;
+  border-bottom: 1px solid #1e1e38;
+  flex-shrink: 0;
+}
+
+.cpBottomTabs .cpTabBtn {
+  flex: none;
+  padding: 6px 16px;
+  flex-direction: row;
+  font-size: 12px;
+}
+
+.cpBottomContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* ===== Timeline ===== */
+
+.cpTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cpTimelineControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cpPlayBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a4a;
+  border: 1px solid #7c83ff;
+  border-radius: 50%;
+  color: #7c83ff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.cpPlayBtn:hover {
+  background: #7c83ff;
+  color: #fff;
+}
+
+.cpTimelineBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.cpTimelineBtn:hover {
+  background: #1e1e38;
+  color: #fff;
+}
+
+.cpTimelineTime {
+  font-size: 12px;
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  color: #aaa;
+}
+
+.cpTimelineTrack {
+  position: relative;
+}
+
+.cpTimelineSlider {
+  width: 100%;
+  accent-color: #7c83ff;
+}
+
+.cpTimelineMarkers {
+  position: relative;
+  height: 16px;
+  margin-top: -4px;
+}
+
+.cpTimelineMark {
+  position: absolute;
+  font-size: 9px;
+  color: #555;
+  transform: translateX(-50%);
+}
+
+/* ===== Storyboard ===== */
+
+.cpStoryboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cpStoryboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.cpStoryboardToggle {
+  display: flex;
+  gap: 4px;
+}
+
+.cpStoryboardGrid {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+}
+
+.cpStoryboardCell {
+  background: #14142a;
+  border: 1px solid #1e1e38;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 50px;
+  position: relative;
+}
+
+.cpStoryboardCell:hover {
+  border-color: #333;
+}
+
+.cpStoryboardCell.hasCamera {
+  border-color: #7c83ff;
+  background: #1a1a3a;
+}
+
+.cpCellNumber {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 9px;
+  color: #444;
+}
+
+.cpCellCamera {
+  text-align: center;
+}
+
+.cpCellCamName {
+  font-weight: 600;
+  font-size: 11px;
+  color: #7c83ff;
+}
+
+.cpCellCamMeta {
+  font-size: 10px;
+  color: #888;
+}
+
+.cpCellEmpty select {
+  background: transparent;
+  border: none;
+  color: #555;
+  font-size: 10px;
+  cursor: pointer;
+  text-align: center;
+  max-width: 100%;
+}
+
+/* ===== Keyframes ===== */
+
+.cpKeyframesHeader {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.cpKeyframesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cpKeyframeItem {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 8px;
+  background: #14142a;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.cpKfIndex {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.cpKfPos {
+  color: #aaa;
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+}
+
+.cpKfTime {
+  color: #666;
+}
+
+/* ===== Shared ===== */
+
+.cpPlaceholder {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-size: 12px;
+}
+
+.cpHint {
+  font-size: 11px;
+  color: #444;
+  margin-top: 4px;
+}
+
+.cpEmpty {
+  text-align: center;
+  padding: 16px;
+  color: #555;
+  font-size: 12px;
+}
+
+.cpBtnSm {
+  padding: 3px 8px;
+  background: #1e1e38;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+
+.cpBtnSm:hover {
+  background: #2a2a4a;
+  color: #fff;
+}
+
+.cpBtnSm.active {
+  background: #2a2a4a;
+  border-color: #7c83ff;
+  color: #7c83ff;
+}
+
+.cpBtn {
+  padding: 6px 14px;
+  background: #1e1e38;
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.cpBtn:hover {
+  background: #2a2a4a;
+}
+
+.cpBtnPrimary {
+  background: #2a2a6a;
+  border-color: #7c83ff;
+  color: #7c83ff;
+}
+
+.cpBtnPrimary:hover {
+  background: #7c83ff;
+  color: #fff;
+}
+
+/* ===== Export Dialog ===== */
+
+.cpDialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cpDialog {
+  background: #12121e;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.cpDialogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 15px;
+  border-bottom: 1px solid #1e1e38;
+}
+
+.cpDialogClose {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.cpDialogClose:hover {
+  background: #1e1e38;
+  color: #fff;
+}
+
+.cpDialogTabs {
+  display: flex;
+  padding: 8px 20px 0;
+  gap: 4px;
+}
+
+.cpDialogBody {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.cpDialogActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.cpExportInfo {
+  display: flex;
+  gap: 16px;
+  padding: 8px 12px;
+  background: #14142a;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.cpExportJson {
+  max-height: 300px;
+  overflow-y: auto;
+  background: #0a0a14;
+  border: 1px solid #1e1e38;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: #aaa;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ===== Scrollbar ===== */
+
+.cameraPlanner ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.cameraPlanner ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cameraPlanner ::-webkit-scrollbar-thumb {
+  background: #2a2a3a;
+  border-radius: 3px;
+}
+
+.cameraPlanner ::-webkit-scrollbar-thumb:hover {
+  background: #3a3a5a;
+}

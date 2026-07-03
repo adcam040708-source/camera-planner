@@ -5,6 +5,7 @@
 import React, { useState } from 'react'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
+import css from '../styles.module.css'
 
 interface ExportDialogProps {
   open: boolean
@@ -48,52 +49,52 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ open, onClose }) => 
   }
 
   return (
-    <div className="cp-dialog-overlay" onClick={onClose}>
-      <div className="cp-dialog" onClick={e => e.stopPropagation()}>
-        <div className="cp-dialog-header">
+    <div className={css.cpDialogOverlay} onClick={onClose}>
+      <div className={css.cpDialog} onClick={e => e.stopPropagation()}>
+        <div className={css.cpDialogHeader}>
           <span>导出</span>
-          <button className="cp-dialog-close" onClick={onClose}>×</button>
+          <button className={css.cpDialogClose} onClick={onClose}>×</button>
         </div>
 
-        <div className="cp-dialog-tabs">
+        <div className={css.cpDialogTabs}>
           <button
-            className={`cp-tab-btn ${tab === 'json' ? 'active' : ''}`}
+            className={`${css.cpTabBtn} ${tab === 'json' ? css.active : ''}`}
             onClick={() => setTab('json')}
           >JSON 数据</button>
           <button
-            className={`cp-tab-btn ${tab === 'png' ? 'active' : ''}`}
+            className={`${css.cpTabBtn} ${tab === 'png' ? css.active : ''}`}
             onClick={() => setTab('png')}
           >PNG 截图</button>
         </div>
 
-        <div className="cp-dialog-body">
+        <div className={css.cpDialogBody}>
           {tab === 'json' && (
             <>
-              <div className="cp-export-info">
+              <div className={css.cpExportInfo}>
                 <div>{project.cameras.length} 个摄像机</div>
                 <div>{project.scene.objects.length} 个场景物体</div>
                 <div>{project.path.length} 个路径关键帧</div>
               </div>
               {jsonText ? (
-                <pre className="cp-export-json">{jsonText}</pre>
+                <pre className={css.cpExportJson}>{jsonText}</pre>
               ) : (
-                <div className="cp-placeholder">
+                <div className={css.cpPlaceholder}>
                   <p>点击下方按钮生成 JSON</p>
                 </div>
               )}
-              <div className="cp-dialog-actions">
-                <button className="cp-btn" onClick={handleExportJSON}>生成 JSON</button>
-                <button className="cp-btn cp-btn-primary" onClick={handleDownloadJSON}>下载文件</button>
+              <div className={css.cpDialogActions}>
+                <button className={css.cpBtn} onClick={handleExportJSON}>生成 JSON</button>
+                <button className={[css.cpBtn, css.cpBtnPrimary].join(' ')} onClick={handleDownloadJSON}>下载文件</button>
               </div>
             </>
           )}
           {tab === 'png' && (
             <>
-              <div className="cp-placeholder">
+              <div className={css.cpPlaceholder}>
                 <p>导出当前 3D 视口截图</p>
               </div>
-              <div className="cp-dialog-actions">
-                <button className="cp-btn cp-btn-primary" onClick={handleExportPNG}>导出 PNG</button>
+              <div className={css.cpDialogActions}>
+                <button className={[css.cpBtn, css.cpBtnPrimary].join(' ')} onClick={handleExportPNG}>导出 PNG</button>
               </div>
             </>
           )}

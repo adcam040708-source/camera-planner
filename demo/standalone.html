@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camera Planner Pro v3 — Demo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#e0e0e0;background:#0a0a14;user-select:none;font-size:13px}
+
+.app{display:flex;flex-direction:column;width:100%;height:100%}
+
+/* Top Toolbar */
+.toolbar{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#12121e;border-bottom:1px solid #1e1e38;flex-shrink:0}
+.tb-group{display:flex;align-items:center;gap:2px}
+.tb-label{font-size:10px;color:#666;margin-right:4px;text-transform:uppercase;letter-spacing:.5px}
+.tb-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;border-radius:4px;color:#aaa;cursor:pointer;font-size:15px;transition:all .15s}
+.tb-btn:hover{background:#1e1e38;color:#fff}
+.tb-btn.active{background:#2a2a4a;border-color:#7c83ff;color:#7c83ff}
+.tb-sep{width:1px;height:24px;background:#2a2a3a;margin:0 4px}
+.tb-spacer{flex:1}
+.tb-export{width:auto;padding:0 12px;background:#2a2a4a;border:1px solid #7c83ff;color:#7c83ff;font-size:12px;font-weight:600}
+.tb-export:hover{background:#7c83ff;color:#fff}
+
+/* Main area */
+.main{display:flex;flex:1;min-height:0}
+
+/* Sidebar */
+.sidebar{width:220px;flex-shrink:0;background:#0e0e1a;border-right:1px solid #1e1e38;display:flex;flex-direction:column}
+.sidebar-tabs{display:flex;border-bottom:1px solid #1e1e38}
+.sidebar-tab{flex:1;padding:8px;background:transparent;border:none;border-bottom:2px solid transparent;color:#888;cursor:pointer;font-size:11px;transition:all .15s}
+.sidebar-tab:hover{color:#ccc;background:#14142a}
+.sidebar-tab.active{color:#7c83ff;border-bottom-color:#7c83ff}
+.sidebar-content{flex:1;overflow-y:auto;padding:8px}
+.sidebar-panel{display:none}
+.sidebar-panel.visible{display:block}
+
+/* Viewport */
+.viewport-wrap{flex:1;min-width:0;position:relative}
+#viewport{width:100%;height:100%}
+#viewport canvas{display:block;outline:none}
+
+/* Property Panel */
+.prop-panel-wrap{width:250px;flex-shrink:0;background:#0e0e1a;border-left:1px solid #1e1e38;overflow-y:auto;padding:8px}
+
+/* Bottom Panel */
+.bottom{height:140px;flex-shrink:0;background:#0e0e1a;border-top:1px solid #1e1e38;display:flex;flex-direction:column}
+.bottom-tabs{display:flex;border-bottom:1px solid #1e1e38}
+.bottom-tab{padding:6px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:#888;cursor:pointer;font-size:12px;transition:all .15s}
+.bottom-tab:hover{color:#ccc}
+.bottom-tab.active{color:#7c83ff;border-bottom-color:#7c83ff}
+.bottom-content{flex:1;overflow-y:auto;padding:8px 12px}
+.bottom-panel{display:none}
+.bottom-panel.visible{display:block}
+
+/* Camera list */
+.cam-list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600;font-size:12px}
+.btn-sm{padding:3px 8px;background:#1e1e38;border:1px solid #2a2a3a;border-radius:4px;color:#aaa;cursor:pointer;font-size:11px}
+.btn-sm:hover{background:#2a2a4a;color:#fff}
+.cam-item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:#14142a;cursor:pointer;margin-bottom:4px;transition:all .15s}
+.cam-item:hover{background:#1e1e38}
+.cam-item.selected{background:#2a2a4a;box-shadow:inset 0 0 0 1px #7c83ff}
+.cam-color{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.cam-info{flex:1;min-width:0}
+.cam-name{font-weight:600;font-size:12px;color:#fff}
+.cam-meta{font-size:11px;color:#888;margin-top:2px}
+.cam-del{width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:#666;cursor:pointer;font-size:16px;border-radius:3px;opacity:0;transition:all .15s}
+.cam-item:hover .cam-del{opacity:1}
+.cam-del:hover{background:#ff4444;color:#fff}
+
+/* Object palette */
+.obj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.obj-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;background:#14142a;border:1px solid transparent;border-radius:6px;cursor:pointer;transition:all .15s}
+.obj-btn:hover{background:#1e1e38;border-color:#333}
+.obj-icon{font-size:20px}
+.obj-label{font-size:10px;color:#aaa}
+
+/* Templates */
+.template-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px;background:#14142a;border:1px solid transparent;border-radius:6px;cursor:pointer;text-align:left;margin-bottom:4px;transition:all .15s;color:#e0e0e0;font-size:12px}
+.template-btn:hover{background:#1e1e38;border-color:#333}
+.tpl-icon{font-size:24px}
+
+/* Property panel fields */
+.section{margin-bottom:14px}
+.section-title{font-size:11px;font-weight:700;color:#7c83ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #1e1e38}
+.field{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.field label{width:50px;font-size:11px;color:#888;flex-shrink:0}
+.field input[type=text],.field input[type=number],.field select{flex:1;padding:4px 6px;background:#14142a;border:1px solid #2a2a3a;border-radius:4px;color:#e0e0e0;font-size:12px;outline:none}
+.field input:focus,.field select:focus{border-color:#7c83ff}
+.field input[type=range]{flex:1;accent-color:#7c83ff}
+.val{font-size:11px;color:#aaa;min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.field-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.field-row label{width:20px;font-size:11px;color:#888}
+.field-row input[type=number]{width:70px;padding:4px 6px;background:#14142a;border:1px solid #2a2a3a;border-radius:4px;color:#e0e0e0;font-size:12px;outline:none}
+.calc-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;color:#888}
+.calc-val{color:#ccc;font-weight:500}
+.placeholder{text-align:center;padding:20px;color:#555;font-size:12px}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2a2a3a;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#3a3a5a}
+
+/* Info bar */
+.info-bar{padding:8px 12px;font-size:11px;color:#555;line-height:1.6}
+.info-bar kbd{background:#1e1e38;padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid #2a2a3a}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="tb-group">
+      <span class="tb-label">编辑</span>
+      <button class="tb-btn active" title="选择">↖</button>
+      <button class="tb-btn" title="放置">⊕</button>
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-group">
+      <button class="tb-btn" id="btn-undo" title="撤销 Ctrl+Z">↩</button>
+      <button class="tb-btn" id="btn-redo" title="重做 Ctrl+Y">↪</button>
+    </div>
+    <div class="tb-sep"></div>
+    <div class="tb-group">
+      <button class="tb-btn active" id="btn-grid" title="网格">#</button>
+      <button class="tb-btn active" id="btn-axes" title="坐标轴">+</button>
+    </div>
+    <div class="tb-spacer"></div>
+    <div class="tb-group">
+      <button class="tb-btn" id="btn-png" title="导出PNG" style="font-size:12px">PNG</button>
+      <button class="tb-btn tb-export" id="btn-export">导出 JSON</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="cameras">📷 机位</button>
+        <button class="sidebar-tab" data-tab="objects">📦 物体</button>
+        <button class="sidebar-tab" data-tab="scene">🏠 场景</button>
+      </div>
+      <div class="sidebar-content">
+        <div class="sidebar-panel visible" id="panel-cameras">
+          <div class="cam-list-header">
+            <span>摄像机</span>
+            <button class="btn-sm" id="btn-add-camera">+ 添加</button>
+          </div>
+          <div id="camera-list"></div>
+        </div>
+        <div class="sidebar-panel" id="panel-objects">
+          <div style="font-weight:600;font-size:12px;margin-bottom:8px">物体库</div>
+          <div class="obj-grid" id="obj-palette"></div>
+        </div>
+        <div class="sidebar-panel" id="panel-scene">
+          <div style="font-weight:600;font-size:12px;margin-bottom:8px">场景模板</div>
+          <div id="template-list"></div>
+          <div style="margin-top:12px">
+            <div style="font-weight:600;font-size:12px;margin-bottom:6px">灯光预设</div>
+            <select id="light-preset" style="width:100%;padding:6px;background:#14142a;border:1px solid #2a2a3a;border-radius:4px;color:#e0e0e0;font-size:12px">
+              <option value="daylight">日光</option>
+              <option value="indoor">室内</option>
+              <option value="night">夜景</option>
+              <option value="soft">柔和</option>
+              <option value="dramatic">戏剧</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Viewport -->
+    <div class="viewport-wrap">
+      <div id="viewport"></div>
+    </div>
+
+    <!-- Property Panel -->
+    <div class="prop-panel-wrap" id="prop-panel">
+      <div class="placeholder">选择机位查看属性</div>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom">
+    <div class="bottom-tabs">
+      <button class="bottom-tab active" data-tab="info">快捷键</button>
+      <button class="bottom-tab" data-tab="stats">场景信息</button>
+    </div>
+    <div class="bottom-content">
+      <div class="bottom-panel visible" id="bpanel-info">
+        <div class="info-bar">
+          <kbd>鼠标左键</kbd> 旋转视角 &nbsp; <kbd>鼠标右键</kbd> 平移 &nbsp; <kbd>滚轮</kbd> 缩放 &nbsp; <kbd>Ctrl+Z</kbd> 撤销 &nbsp; <kbd>Ctrl+Y</kbd> 重做<br>
+          点击左侧机位列表选中摄像机，右侧面板编辑参数。点击场景中的物体可以选中。
+        </div>
+      </div>
+      <div class="bottom-panel" id="bpanel-stats">
+        <div class="info-bar" id="stats-info">加载中...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>BUNDLE_JS</script>
+</body>
+</html>

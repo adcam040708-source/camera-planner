@@ -7,7 +7,7 @@ export interface SceneObject {
     scale: Position3D;
     color: number;
 }
-export type ObjectType = 'box' | 'sphere' | 'cone' | 'cylinder' | 'torus' | 'plane' | 'person' | 'building' | 'car' | 'tree' | 'prop';
+export type ObjectType = 'box' | 'sphere' | 'cone' | 'cylinder' | 'torus' | 'plane' | 'person' | 'building' | 'car' | 'tree' | 'chair' | 'prop';
 export interface LightingConfig {
     position: Position3D;
     intensity: number;

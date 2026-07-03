@@ -33,5 +33,6 @@ export declare class ObjectLib {
     private createBuilding;
     private createCar;
     private createTree;
+    private createChair;
     private applyTransform;
 }

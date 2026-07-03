@@ -5,6 +5,7 @@
 
 import React from 'react'
 import { usePlannerStore } from '../store/usePlannerStore'
+import css from '../styles.module.css'
 
 export const StoryboardGrid: React.FC = () => {
   const storyboard = usePlannerStore(s => s.project.storyboard)
@@ -23,22 +24,22 @@ export const StoryboardGrid: React.FC = () => {
   }
 
   return (
-    <div className="cp-storyboard">
-      <div className="cp-storyboard-header">
+    <div className={css.cpStoryboard}>
+      <div className={css.cpStoryboardHeader}>
         <span>分镜表</span>
-        <div className="cp-storyboard-toggle">
+        <div className={css.cpStoryboardToggle}>
           <button
-            className={`cp-btn-sm ${storyboard.grid === '3x3' ? 'active' : ''}`}
+            className={`${css.cpBtnSm} ${storyboard.grid === '3x3' ? css.active : ''}`}
             onClick={() => setStoryboardGrid('3x3')}
           >3×3</button>
           <button
-            className={`cp-btn-sm ${storyboard.grid === '5x5' ? 'active' : ''}`}
+            className={`${css.cpBtnSm} ${storyboard.grid === '5x5' ? css.active : ''}`}
             onClick={() => setStoryboardGrid('5x5')}
           >5×5</button>
         </div>
       </div>
       <div
-        className="cp-storyboard-grid"
+        className={css.cpStoryboardGrid}
         style={{
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
         }}
@@ -48,21 +49,21 @@ export const StoryboardGrid: React.FC = () => {
           return (
             <div
               key={i}
-              className={`cp-storyboard-cell ${cam ? 'has-camera' : ''}`}
+              className={`${css.cpStoryboardCell} ${cam ? css.hasCamera : ''}`}
               onClick={() => {
                 if (cam) {
                   selectCamera(cam.id)
                 }
               }}
             >
-              <div className="cp-cell-number">{i + 1}</div>
+              <div className={css.cpCellNumber}>{i + 1}</div>
               {cam ? (
-                <div className="cp-cell-camera">
-                  <div className="cp-cell-cam-name">{cam.name}</div>
-                  <div className="cp-cell-cam-meta">{cam.focal}mm</div>
+                <div className={css.cpCellCamera}>
+                  <div className={css.cpCellCamName}>{cam.name}</div>
+                  <div className={css.cpCellCamMeta}>{cam.focal}mm</div>
                 </div>
               ) : (
-                <div className="cp-cell-empty">
+                <div className={css.cpCellEmpty}>
                   <select
                     value=""
                     onChange={e => {

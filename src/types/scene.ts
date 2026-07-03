@@ -13,7 +13,7 @@ export interface SceneObject {
 
 export type ObjectType =
   | 'box' | 'sphere' | 'cone' | 'cylinder' | 'torus' | 'plane'
-  | 'person' | 'building' | 'car' | 'tree' | 'prop'
+  | 'person' | 'building' | 'car' | 'tree' | 'chair' | 'prop'
 
 export interface LightingConfig {
   position: Position3D

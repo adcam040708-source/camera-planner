@@ -5,7 +5,7 @@
  * The InputManager normalizes data and dispatches it to the Zustand store.
  */
 
-import { Camera } from '../types/camera'
+import { Camera, MovementType } from '../types/camera'
 import { SceneConfig } from '../types/scene'
 import { ProjectData } from '../types/project'
 import { ScriptBinding } from '../types/camera'
@@ -47,5 +47,17 @@ export class InputManager {
   /** Select a camera (from external control) */
   selectCamera(id: string): void {
     usePlannerStore.getState().selectCamera(id)
+  }
+
+  /** Trigger a movement animation on a camera */
+  playMovement(cameraId: string, type: MovementType): void {
+    const store = usePlannerStore.getState()
+    const camera = store.project.cameras.find(c => c.id === cameraId)
+    if (!camera) return
+
+    // Set movement config on the camera
+    store.updateCamera(cameraId, {
+      movement: { type, duration: 3 },
+    })
   }
 }

@@ -4,6 +4,7 @@
 
 import React from 'react'
 import { usePlannerStore, EditorMode, ToolMode } from '../store/usePlannerStore'
+import css from '../styles.module.css'
 
 const MODES: { value: EditorMode; label: string; icon: string }[] = [
   { value: 'select', label: '选择', icon: '↖' },
@@ -36,63 +37,63 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({ onExport }) => {
   const redo = usePlannerStore(s => s.redo)
 
   return (
-    <div className="cp-toolbar">
-      <div className="cp-toolbar-group">
-        <span className="cp-toolbar-label">模式</span>
+    <div className={css.cpToolbar}>
+      <div className={css.cpToolbarGroup}>
+        <span className={css.cpToolbarLabel}>模式</span>
         {MODES.map(m => (
           <button
             key={m.value}
-            className={`cp-toolbar-btn ${mode === m.value ? 'active' : ''}`}
+            className={`${css.cpToolbarBtn} ${mode === m.value ? css.active : ''}`}
             onClick={() => setMode(m.value)}
             title={m.label}
           >
-            <span className="cp-icon">{m.icon}</span>
+            <span className={css.cpIcon}>{m.icon}</span>
           </button>
         ))}
       </div>
 
-      <div className="cp-toolbar-sep" />
+      <div className={css.cpToolbarSep} />
 
-      <div className="cp-toolbar-group">
-        <span className="cp-toolbar-label">工具</span>
+      <div className={css.cpToolbarGroup}>
+        <span className={css.cpToolbarLabel}>工具</span>
         {TOOLS.map(t => (
           <button
             key={t.value}
-            className={`cp-toolbar-btn ${tool === t.value ? 'active' : ''}`}
+            className={`${css.cpToolbarBtn} ${tool === t.value ? css.active : ''}`}
             onClick={() => setTool(t.value)}
             title={t.label}
           >
-            <span className="cp-icon">{t.icon}</span>
+            <span className={css.cpIcon}>{t.icon}</span>
           </button>
         ))}
       </div>
 
-      <div className="cp-toolbar-sep" />
+      <div className={css.cpToolbarSep} />
 
-      <div className="cp-toolbar-group">
-        <button className="cp-toolbar-btn" onClick={undo} title="撤销 (Ctrl+Z)">↩</button>
-        <button className="cp-toolbar-btn" onClick={redo} title="重做 (Ctrl+Y)">↪</button>
+      <div className={css.cpToolbarGroup}>
+        <button className={css.cpToolbarBtn} onClick={undo} title="撤销 (Ctrl+Z)">↩</button>
+        <button className={css.cpToolbarBtn} onClick={redo} title="重做 (Ctrl+Y)">↪</button>
       </div>
 
-      <div className="cp-toolbar-sep" />
+      <div className={css.cpToolbarSep} />
 
-      <div className="cp-toolbar-group">
+      <div className={css.cpToolbarGroup}>
         <button
-          className={`cp-toolbar-btn ${showGrid ? 'active' : ''}`}
+          className={`${css.cpToolbarBtn} ${showGrid ? css.active : ''}`}
           onClick={toggleGrid}
           title="网格"
         >#</button>
         <button
-          className={`cp-toolbar-btn ${showAxes ? 'active' : ''}`}
+          className={`${css.cpToolbarBtn} ${showAxes ? css.active : ''}`}
           onClick={toggleAxes}
           title="坐标轴"
         >+</button>
       </div>
 
-      <div className="cp-toolbar-spacer" />
+      <div className={css.cpToolbarSpacer} />
 
       {onExport && (
-        <button className="cp-toolbar-btn cp-toolbar-export" onClick={onExport}>
+        <button className={[css.cpToolbarBtn, css.cpToolbarExport].join(' ')} onClick={onExport}>
           导出
         </button>
       )}

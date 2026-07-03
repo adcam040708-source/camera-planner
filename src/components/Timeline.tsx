@@ -5,6 +5,7 @@
 import React, { useRef, useCallback } from 'react'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
+import css from '../styles.module.css'
 
 export const Timeline: React.FC = () => {
   const timeline = usePlannerStore(s => s.project.timeline)
@@ -56,27 +57,27 @@ export const Timeline: React.FC = () => {
   }
 
   return (
-    <div className="cp-timeline">
-      <div className="cp-timeline-controls">
+    <div className={css.cpTimeline}>
+      <div className={css.cpTimelineControls}>
         <button
-          className="cp-play-btn"
+          className={css.cpPlayBtn}
           onClick={togglePlay}
           title={timeline.playing ? '暂停' : '播放'}
         >
           {timeline.playing ? '⏸' : '▶'}
         </button>
         <button
-          className="cp-timeline-btn"
+          className={css.cpTimelineBtn}
           onClick={() => { setTimelineTime(0); setTimelinePlaying(false) }}
           title="重置"
         >
           ⏮
         </button>
-        <span className="cp-timeline-time">
+        <span className={css.cpTimelineTime}>
           {formatTime(timeline.currentTime)} / {formatTime(timeline.duration)}
         </span>
       </div>
-      <div className="cp-timeline-track">
+      <div className={css.cpTimelineTrack}>
         <input
           type="range"
           min="0"
@@ -84,11 +85,11 @@ export const Timeline: React.FC = () => {
           step="0.1"
           value={timeline.currentTime}
           onChange={handleScrub}
-          className="cp-timeline-slider"
+          className={css.cpTimelineSlider}
         />
-        <div className="cp-timeline-markers">
+        <div className={css.cpTimelineMarkers}>
           {Array.from({ length: Math.ceil(timeline.duration / 5) + 1 }, (_, i) => (
-            <span key={i} className="cp-timeline-mark" style={{ left: `${(i * 5 / timeline.duration) * 100}%` }}>
+            <span key={i} className={css.cpTimelineMark} style={{ left: `${(i * 5 / timeline.duration) * 100}%` }}>
               {i * 5}s
             </span>
           ))}

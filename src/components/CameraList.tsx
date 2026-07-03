@@ -7,6 +7,7 @@ import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
 import { calcFOV, calcDOF, generateId } from '../engine/calc'
 import { SENSOR_PRESETS } from '../presets/sensors'
+import css from '../styles.module.css'
 
 export const CameraList: React.FC = () => {
   const cameras = usePlannerStore(s => s.project.cameras)
@@ -48,33 +49,33 @@ export const CameraList: React.FC = () => {
   }
 
   return (
-    <div className="cp-camera-list">
-      <div className="cp-camera-list-header">
+    <div className={css.cpCameraList}>
+      <div className={css.cpCameraListHeader}>
         <span>摄像机 ({cameras.length})</span>
-        <button className="cp-btn-sm" onClick={handleAdd}>+ 添加</button>
+        <button className={css.cpBtnSm} onClick={handleAdd}>+ 添加</button>
       </div>
-      <div className="cp-camera-list-items">
+      <div className={css.cpCameraListItems}>
         {cameras.length === 0 && (
-          <div className="cp-empty">暂无摄像机，点击"添加"创建</div>
+          <div className={css.cpEmpty}>暂无摄像机，点击"添加"创建</div>
         )}
         {cameras.map(cam => (
           <div
             key={cam.id}
-            className={`cp-camera-item ${selectedId === cam.id ? 'selected' : ''}`}
+            className={`${css.cpCameraItem} ${selectedId === cam.id ? css.selected : ''}`}
             onClick={() => selectCamera(cam.id)}
           >
             <div
-              className="cp-camera-color"
+              className={css.cpCameraColor}
               style={{ backgroundColor: `#${cam.color.toString(16).padStart(6, '0')}` }}
             />
-            <div className="cp-camera-info">
-              <div className="cp-camera-name">{cam.name}</div>
-              <div className="cp-camera-meta">
+            <div className={css.cpCameraInfo}>
+              <div className={css.cpCameraName}>{cam.name}</div>
+              <div className={css.cpCameraMeta}>
                 {cam.focal}mm · f/{cam.fstop} · FOV {cam.fov.toFixed(1)}°
               </div>
             </div>
             <button
-              className="cp-camera-delete"
+              className={css.cpCameraDelete}
               onClick={(e) => { e.stopPropagation(); handleDelete(cam.id) }}
               title="删除"
             >

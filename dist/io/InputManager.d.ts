@@ -1,4 +1,4 @@
-import { Camera, ScriptBinding } from '../types/camera';
+import { Camera, MovementType, ScriptBinding } from '../types/camera';
 import { SceneConfig } from '../types/scene';
 import { ProjectData } from '../types/project';
 export declare class InputManager {
@@ -16,4 +16,6 @@ export declare class InputManager {
     updateScene(params: Partial<SceneConfig>): void;
     /** Select a camera (from external control) */
     selectCamera(id: string): void;
+    /** Trigger a movement animation on a camera */
+    playMovement(cameraId: string, type: MovementType): void;
 }

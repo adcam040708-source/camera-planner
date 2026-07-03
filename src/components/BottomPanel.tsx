@@ -6,6 +6,7 @@ import React from 'react'
 import { usePlannerStore, BottomTab } from '../store/usePlannerStore'
 import { Timeline } from './Timeline'
 import { StoryboardGrid } from './StoryboardGrid'
+import css from '../styles.module.css'
 
 const TABS: { value: BottomTab; label: string }[] = [
   { value: 'timeline', label: '时间线' },
@@ -19,37 +20,37 @@ export const BottomPanel: React.FC = () => {
   const pathPoints = usePlannerStore(s => s.project.path)
 
   return (
-    <div className="cp-bottom-panel">
-      <div className="cp-bottom-tabs">
+    <div className={css.cpBottomPanel}>
+      <div className={css.cpBottomTabs}>
         {TABS.map(t => (
           <button
             key={t.value}
-            className={`cp-tab-btn ${bottomTab === t.value ? 'active' : ''}`}
+            className={`${css.cpTabBtn} ${bottomTab === t.value ? css.active : ''}`}
             onClick={() => setBottomTab(t.value)}
           >
             {t.label}
           </button>
         ))}
       </div>
-      <div className="cp-bottom-content">
+      <div className={css.cpBottomContent}>
         {bottomTab === 'timeline' && <Timeline />}
         {bottomTab === 'storyboard' && <StoryboardGrid />}
         {bottomTab === 'keyframes' && (
-          <div className="cp-keyframes">
-            <div className="cp-keyframes-header">
+          <div className={css.cpKeyframes}>
+            <div className={css.cpKeyframesHeader}>
               关键帧 ({pathPoints.length})
             </div>
             {pathPoints.length === 0 ? (
-              <div className="cp-empty">暂无关键帧。在路径工具模式下点击场景添加。</div>
+              <div className={css.cpEmpty}>暂无关键帧。在路径工具模式下点击场景添加。</div>
             ) : (
-              <div className="cp-keyframes-list">
+              <div className={css.cpKeyframesList}>
                 {pathPoints.map((p, i) => (
-                  <div key={p.id} className="cp-keyframe-item">
-                    <span className="cp-kf-index">#{i + 1}</span>
-                    <span className="cp-kf-pos">
+                  <div key={p.id} className={css.cpKeyframeItem}>
+                    <span className={css.cpKfIndex}>#{i + 1}</span>
+                    <span className={css.cpKfPos}>
                       ({p.position.x.toFixed(1)}, {p.position.y.toFixed(1)}, {p.position.z.toFixed(1)})
                     </span>
-                    <span className="cp-kf-time">t={p.t.toFixed(2)}</span>
+                    <span className={css.cpKfTime}>t={p.t.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
