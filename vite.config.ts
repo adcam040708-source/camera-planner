@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  root: mode === 'development' ? 'demo' : undefined,
   plugins: [
     react(),
     dts({ include: ['src'] }),
@@ -14,13 +15,13 @@ export default defineConfig({
     },
   },
   build: {
-    lib: {
+    lib: mode === 'development' ? undefined : {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'CameraPlanner',
       formats: ['es', 'umd'],
       fileName: 'camera-planner',
     },
-    rollupOptions: {
+    rollupOptions: mode === 'development' ? undefined : {
       external: ['react', 'react-dom', 'three'],
       output: {
         globals: {
@@ -31,4 +32,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))

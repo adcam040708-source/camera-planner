@@ -1,12 +1,21 @@
 /**
  * CameraPlanner — Main entry React component.
  *
- * This is the component that gets imported by the Muraguchi host project.
- * It renders the full planner UI (viewport + panels).
+ * 5-panel layout:
+ *   A: TopToolbar (top)
+ *   B: Sidebar (left)
+ *   C: Viewport (center)
+ *   D: PropertyPanel (right)
+ *   E: BottomPanel (bottom)
  */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Viewport } from './Viewport'
+import { TopToolbar } from './TopToolbar'
+import { Sidebar } from './Sidebar'
+import { PropertyPanel } from './PropertyPanel'
+import { BottomPanel } from './BottomPanel'
+import { ExportDialog } from './ExportDialog'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { InputManager } from '../io/InputManager'
 import { OutputManager } from '../io/OutputManager'
@@ -14,15 +23,10 @@ import { ProjectData } from '../types/project'
 import { Camera } from '../types/camera'
 
 export interface CameraPlannerProps {
-  /** Project ID for API calls */
   projectId?: string
-  /** Muraguchi API base URL */
   apiUrl?: string
-  /** Auth token */
   token?: string
-  /** Initial project data (optional, can also be loaded via API) */
   initialData?: ProjectData
-  /** Callbacks */
   onCameraChange?: (camera: Camera) => void
   onCameraSelect?: (id: string) => void
   onCameraAdd?: (camera: Camera) => void
@@ -38,9 +42,6 @@ const outputManager = new OutputManager()
 export { inputManager, outputManager }
 
 export const CameraPlanner: React.FC<CameraPlannerProps> = ({
-  projectId,
-  apiUrl,
-  token,
   initialData,
   onCameraChange,
   onCameraSelect,
@@ -49,7 +50,7 @@ export const CameraPlanner: React.FC<CameraPlannerProps> = ({
   onSceneChange,
   onProjectExport,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [exportOpen, setExportOpen] = useState(false)
 
   // Load initial data
   useEffect(() => {
@@ -70,9 +71,46 @@ export const CameraPlanner: React.FC<CameraPlannerProps> = ({
     return () => unsubs.forEach(u => u())
   }, [onCameraChange, onCameraSelect, onCameraAdd, onCameraDelete, onSceneChange, onProjectExport])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault()
+        usePlannerStore.getState().undo()
+      }
+      if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault()
+        usePlannerStore.getState().redo()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
   return (
-    <div ref={containerRef} className="camera-planner">
-      <Viewport outputManager={outputManager} />
+    <div className="camera-planner">
+      {/* A: Top Toolbar */}
+      <TopToolbar onExport={() => setExportOpen(true)} />
+
+      {/* Main content area: B + C + D */}
+      <div className="cp-main">
+        {/* B: Left Sidebar */}
+        <Sidebar />
+
+        {/* C: Center Viewport */}
+        <div className="cp-viewport-wrapper">
+          <Viewport outputManager={outputManager} />
+        </div>
+
+        {/* D: Right Property Panel */}
+        <PropertyPanel />
+      </div>
+
+      {/* E: Bottom Panel */}
+      <BottomPanel />
+
+      {/* Export Dialog */}
+      <ExportDialog open={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
   )
 }

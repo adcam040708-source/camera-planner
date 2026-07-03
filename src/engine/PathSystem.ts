@@ -109,14 +109,16 @@ export class PathSystem {
     // Remove old
     if (this.line) {
       this.scene.remove(this.line)
-      this.line.geometry.dispose()
-      (this.line.material as THREE.Material).dispose()
+      this.line.geometry?.dispose()
+      const lineMat = this.line.material
+      if (Array.isArray(lineMat)) { lineMat.forEach(m => m.dispose()) } else { lineMat?.dispose() }
       this.line = null
     }
     for (const m of this.markers) {
       this.scene.remove(m)
-      m.geometry.dispose()
-      (m.material as THREE.Material).dispose()
+      m.geometry?.dispose()
+      const mat = m.material
+      if (Array.isArray(mat)) { mat.forEach(mm => mm.dispose()) } else { mat?.dispose() }
     }
     this.markers = []
 
