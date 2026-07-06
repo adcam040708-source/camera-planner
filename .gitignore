@@ -3,3 +3,12 @@ dist/
 .DS_Store
 *.log
 .env
+*.b64
+*.bak
+build_standalone.py
+convert_css_import.py
+convert_css_modules.py
+fix_css_import.py
+upload_to_github.py
+update_components.py
+node_modules.windows-backup/

@@ -13,6 +13,7 @@ import {
   LightSystem,
   PathSystem,
   RayPicker,
+  ActorRig,
 } from '../engine'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
@@ -31,6 +32,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     lightSystem: LightSystem
     pathSystem: PathSystem
     rayPicker: RayPicker
+    actorRig: ActorRig
   } | null>(null)
 
   const store = usePlannerStore
@@ -53,9 +55,11 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     const lightSystem = new LightSystem(scene.scene)
     const pathSystem = new PathSystem(scene.scene)
     const rayPicker = new RayPicker(scene.camera, scene.scene)
+    const actorRig = new ActorRig(scene.scene)
 
     rayPicker.setCameraGroups(cameraRig.getAllMeshGroups())
     rayPicker.setObjectMeshes(objectLib.getAllMeshes())
+    rayPicker.setActorGroups(actorRig.getAllMeshGroups())
     rayPicker.enable(scene.getCanvas())
 
     // Set up PNG exporter for output manager
@@ -68,6 +72,8 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
         outputManager.emit('camera:select', result.id)
       } else if (result.target === 'object' && result.id) {
         store.getState().selectObject(result.id)
+      } else if (result.target === 'actor' && result.id) {
+        store.getState().selectActor(result.id)
       }
     })
 
@@ -80,6 +86,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       lightSystem,
       pathSystem,
       rayPicker,
+      actorRig,
     }
 
     return () => {
@@ -91,6 +98,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   // Sync store → engine
   const project = store(s => s.project)
   const selectedCameraId = store(s => s.selectedCameraId)
+  const selectedActorId = store(s => s.selectedActorId)
 
   useEffect(() => {
     const engine = engineRef.current
@@ -130,9 +138,32 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     // Sync selection
     engine.cameraRig.selectCamera(selectedCameraId)
 
+
+    // Sync actors
+    const storeActors = project.actors
+    const engineActors = engine.actorRig.getAllActors()
+    const engineActorIds = new Set(engineActors.map(a => a.id))
+    const storeActorIds = new Set(storeActors.map(a => a.id))
+
+    for (const actor of storeActors) {
+      if (!engineActorIds.has(actor.id)) {
+        engine.actorRig.addActor(actor)
+      } else {
+        engine.actorRig.updateActor(actor.id, actor)
+      }
+    }
+    for (const id of engineActorIds) {
+      if (!storeActorIds.has(id)) {
+        engine.actorRig.deleteActor(id)
+      }
+    }
+
+    // Sync actor selection
+    engine.actorRig.selectActor(selectedActorId)
+
     // Sync lighting
     engine.lightSystem.update(project.scene.lighting)
-  }, [project.cameras, project.scene.lighting, selectedCameraId])
+  }, [project.cameras, project.actors, project.scene.lighting, selectedCameraId, selectedActorId])
 
   // Sync grid/axes visibility
   const showGrid = store(s => s.showGrid)

@@ -7,6 +7,7 @@ import { usePlannerStore, SideTab } from '../store/usePlannerStore'
 import { CameraList } from './CameraList'
 import { ObjectPalette } from './ObjectPalette'
 import { SceneTemplates } from './SceneTemplates'
+import { ActorPanel } from './ActorPanel'
 import css from '../styles.module.css'
 
 const TABS: { value: SideTab; label: string; icon: string }[] = [
@@ -39,12 +40,7 @@ export const Sidebar: React.FC = () => {
         {sideTab === 'cameras' && <CameraList />}
         {sideTab === 'objects' && <ObjectPalette />}
         {sideTab === 'templates' && <SceneTemplates />}
-        {sideTab === 'characters' && (
-          <div className={css.cpPlaceholder}>
-            <p>角色面板（待开发）</p>
-            <p className={css.cpHint}>从剧本导入角色，自动分配位置</p>
-          </div>
-        )}
+        {sideTab === 'characters' && <ActorPanel />}
       </div>
     </div>
   )

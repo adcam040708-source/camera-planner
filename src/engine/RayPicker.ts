@@ -7,7 +7,7 @@
 
 import * as THREE from 'three'
 
-export type PickTarget = 'camera' | 'object' | 'ground' | null
+export type PickTarget = 'camera' | 'object' | 'actor' | 'ground' | null
 
 export interface PickResult {
   target: PickTarget
@@ -29,13 +29,14 @@ export class RayPicker {
 
   // Drag state
   private isDragging = false
-  private dragTarget: { type: 'camera' | 'object'; id: string } | null = null
+  private dragTarget: { type: 'camera' | 'object' | 'actor'; id: string } | null = null
   private dragPlane: THREE.Plane
   private dragOffset: THREE.Vector3
 
   // Reference to interactable objects
   private cameraGroups: THREE.Group[] = []
   private objectMeshes: THREE.Object3D[] = []
+  private actorGroups: THREE.Group[] = []
 
   constructor(camera: THREE.Camera, scene: THREE.Scene) {
     this.camera = camera
@@ -55,6 +56,11 @@ export class RayPicker {
   /** Set the object meshes that can be picked */
   setObjectMeshes(meshes: THREE.Object3D[]): void {
     this.objectMeshes = meshes
+  }
+
+  /** Set the actor groups that can be picked */
+  setActorGroups(groups: THREE.Group[]): void {
+    this.actorGroups = groups
   }
 
   /** Enable picking on a canvas element */
@@ -87,7 +93,7 @@ export class RayPicker {
     this.updateMouse(event)
     const result = this.raycast()
 
-    if (result.target === 'camera' || result.target === 'object') {
+    if (result.target === 'camera' || result.target === 'object' || result.target === 'actor') {
       this.isDragging = true
       this.dragTarget = {
         type: result.target,
@@ -169,6 +175,11 @@ export class RayPicker {
         if (child instanceof THREE.Mesh) allMeshes.push(child)
       })
     }
+    for (const group of this.actorGroups) {
+      group.traverse((child) => {
+        if (child instanceof THREE.Mesh) allMeshes.push(child)
+      })
+    }
 
     const intersects = this.raycaster.intersectObjects(allMeshes, false)
 
@@ -196,6 +207,14 @@ export class RayPicker {
           groundPoint,
         }
       }
+      if (userData.actorId) {
+        return {
+          target: 'actor',
+          id: userData.actorId,
+          point: hit.point.clone(),
+          groundPoint,
+        }
+      }
     }
 
     // Hit ground
@@ -213,9 +232,13 @@ export class RayPicker {
     return empty
   }
 
-  private getWorldPosition(type: 'camera' | 'object', id: string): THREE.Vector3 | null {
+  private getWorldPosition(type: 'camera' | 'object' | 'actor', id: string): THREE.Vector3 | null {
     if (type === 'camera') {
       const group = this.cameraGroups.find(g => g.userData.cameraId === id)
+      return group ? group.position.clone() : null
+    }
+    if (type === 'actor') {
+      const group = this.actorGroups.find(g => g.userData.actorId === id)
       return group ? group.position.clone() : null
     }
     const mesh = this.objectMeshes.find(m => m.userData.objectId === id)

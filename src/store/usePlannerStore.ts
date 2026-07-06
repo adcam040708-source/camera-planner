@@ -8,6 +8,7 @@
 
 import { create } from 'zustand'
 import { Camera, MovementConfig } from '../types/camera'
+import { Actor, ActorKeyframe } from '../types/actor'
 import { SceneConfig, SceneObject, LightingConfig } from '../types/scene'
 import { ProjectData, PathPoint, StoryboardConfig, TimelineConfig } from '../types/project'
 import { createEmptyProject } from '../types/project'
@@ -28,6 +29,7 @@ export interface PlannerState {
   bottomTab: BottomTab
   selectedCameraId: string | null
   selectedObjectId: string | null
+  selectedActorId: string | null
 
   // UI state
   showGrid: boolean
@@ -50,6 +52,15 @@ export interface PlannerState {
   // --- Scene actions ---
   setSceneConfig: (config: Partial<SceneConfig>) => void
   setLighting: (config: Partial<LightingConfig>) => void
+
+  // --- Actor actions ---
+  addActor: (actor: Actor) => void
+  updateActor: (id: string, params: Partial<Actor>) => void
+  deleteActor: (id: string) => void
+  selectActor: (id: string | null) => void
+  addActorKeyframe: (actorId: string, keyframe: ActorKeyframe) => void
+  updateActorKeyframe: (actorId: string, keyframeId: string, params: Partial<ActorKeyframe>) => void
+  removeActorKeyframe: (actorId: string, keyframeId: string) => void
 
   // --- Path actions ---
   setPath: (points: PathPoint[]) => void
@@ -96,6 +107,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   bottomTab: 'timeline',
   selectedCameraId: null,
   selectedObjectId: null,
+  selectedActorId: null,
   showGrid: true,
   showAxes: true,
   showFovCones: true,
@@ -202,6 +214,72 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     },
   })),
 
+  // --- Actor actions ---
+  addActor: (actor) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: { ...s.project, actors: [...s.project.actors, actor] },
+    }
+  }),
+
+  updateActor: (id, params) => set((s) => ({
+    project: {
+      ...s.project,
+      actors: s.project.actors.map(a => a.id === id ? { ...a, ...params } : a),
+    },
+  })),
+
+  deleteActor: (id) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: {
+        ...s.project,
+        actors: s.project.actors.filter(a => a.id !== id),
+      },
+      selectedActorId: s.selectedActorId === id ? null : s.selectedActorId,
+    }
+  }),
+
+  selectActor: (id) => set({ selectedActorId: id, selectedCameraId: null, selectedObjectId: null }),
+
+  addActorKeyframe: (actorId, keyframe) => set((s) => ({
+    project: {
+      ...s.project,
+      actors: s.project.actors.map(a =>
+        a.id === actorId
+          ? { ...a, keyframes: [...a.keyframes, keyframe].sort((x, y) => x.time - y.time) }
+          : a
+      ),
+    }
+  })),
+
+  updateActorKeyframe: (actorId, keyframeId, params) => set((s) => ({
+    project: {
+      ...s.project,
+      actors: s.project.actors.map(a =>
+        a.id === actorId
+          ? {
+              ...a,
+              keyframes: a.keyframes.map(k =>
+                k.id === keyframeId ? { ...k, ...params } : k
+              ).sort((x, y) => x.time - y.time)
+            }
+          : a
+      ),
+    }
+  })),
+
+  removeActorKeyframe: (actorId, keyframeId) => set((s) => ({
+    project: {
+      ...s.project,
+      actors: s.project.actors.map(a =>
+        a.id === actorId
+          ? { ...a, keyframes: a.keyframes.filter(k => k.id !== keyframeId) }
+          : a
+      ),
+    }
+  })),
+
   // --- Path actions ---
   setPath: (points) => set((s) => ({
     project: { ...s.project, path: points },
@@ -268,6 +346,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     project: data,
     selectedCameraId: null,
     selectedObjectId: null,
+    selectedActorId: null,
   }),
 
   getProjectData: () => get().project,
@@ -276,7 +355,6 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   undo: () => {
     if (historyStack.length === 0) return
     const prev = historyStack.pop()!
-    // Save the state we're leaving so redo can return to it
     redoStack.push(structuredClone(get().project))
     set({ project: prev })
   },
@@ -284,7 +362,6 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   redo: () => {
     if (redoStack.length === 0) return
     const next = redoStack.pop()!
-    // Save the state we're leaving so undo can return to it (don't clear redoStack)
     historyStack.push(structuredClone(get().project))
     if (historyStack.length > MAX_HISTORY) historyStack.shift()
     set({ project: next })
@@ -294,5 +371,5 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 function pushHistory(project: ProjectData): void {
   historyStack.push(structuredClone(project))
   if (historyStack.length > MAX_HISTORY) historyStack.shift()
-  redoStack.length = 0  // clear redo on new action
+  redoStack.length = 0
 }

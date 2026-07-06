@@ -12,3 +12,4 @@ export {
   calcFOV, calcDOF, calcFOVByPreset,
   deg2rad, rad2deg, generateId, clamp, lerp, easeInOutCubic,
 } from './calc'
+export { ActorRig } from './ActorRig'

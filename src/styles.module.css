@@ -879,3 +879,186 @@
 .cameraPlanner ::-webkit-scrollbar-thumb:hover {
   background: #3a3a5a;
 }
+
+/* === Actor Panel v4 === */
+
+.cpPropsSection {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+.cpLabel {
+  display: block;
+  font-size: 11px;
+  color: #8899aa;
+  margin-bottom: 4px;
+}
+
+.cpInput {
+  width: 100%;
+  padding: 4px 8px;
+  background: #1a1a2e;
+  border: 1px solid #333355;
+  border-radius: 3px;
+  color: #e0e0e8;
+  font-size: 12px;
+  outline: none;
+}
+
+.cpInput:focus {
+  border-color: #7c83ff;
+}
+
+.cpSelect {
+  width: 100%;
+  padding: 4px 8px;
+  background: #1a1a2e;
+  border: 1px solid #333355;
+  border-radius: 3px;
+  color: #e0e0e8;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cpActorProps {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(78, 205, 196, 0.05);
+  border-radius: 4px;
+  border: 1px solid rgba(78, 205, 196, 0.15);
+}
+
+.cpKeyframeSection {
+  margin-top: 12px;
+  border-top: 1px solid #1e1e38;
+  padding-top: 8px;
+}
+
+.cpKeyframeList {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cpKfAction {
+  padding: 2px 4px;
+  background: #1a1a2e;
+  border: 1px solid #333355;
+  border-radius: 3px;
+  color: #e0e0e8;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+  width: 60px;
+}
+
+/* === Actor Panel v4 === */
+
+.cpActorProps {
+  padding: 8px;
+  border-top: 1px solid #2a2a3a;
+  background: #111120;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cpPropsSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cpLabel {
+  font-size: 12px;
+  color: #888;
+  min-width: 48px;
+  white-space: nowrap;
+}
+
+.cpInput {
+  flex: 1;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3a;
+  color: #e0e0f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+}
+
+.cpInput:focus {
+  border-color: #4ecdc4;
+}
+
+.cpSelect {
+  flex: 1;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3a;
+  color: #e0e0f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cpSelect:focus {
+  border-color: #4ecdc4;
+}
+
+.cpKeyframeSection {
+  margin-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  padding-top: 8px;
+}
+
+.cpKeyframeList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.keyframeItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #1a1a2e;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.kfIndex {
+  color: #555;
+  min-width: 20px;
+}
+
+.kfTime {
+  color: #4ecdc4;
+  font-weight: 600;
+  min-width: 36px;
+}
+
+.kfPos {
+  color: #aaa;
+  flex: 1;
+  font-family: monospace;
+}
+
+.cpKfAction {
+  background: #0d0d1a;
+  border: 1px solid #2a2a3a;
+  color: #e0e0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+}

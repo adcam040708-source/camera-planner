@@ -1,11 +1,13 @@
 // Project-level types
 
 import { Camera } from './camera'
+import { Actor } from './actor'
 import { SceneConfig, SceneObject } from './scene'
 
 export interface ProjectData {
   version: string
   cameras: Camera[]
+  actors: Actor[]
   scene: SceneConfig
   path: PathPoint[]
   storyboard: StoryboardConfig
@@ -49,8 +51,9 @@ export interface TimelineKeyframe {
 
 export function createEmptyProject(): ProjectData {
   return {
-    version: '3.0',
+    version: '4.0',
     cameras: [],
+    actors: [],
     scene: {
       template: 'empty',
       objects: [],

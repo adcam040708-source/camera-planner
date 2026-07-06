@@ -5,7 +5,7 @@ import { CameraPlanner } from '../src/components/CameraPlanner'
 
 // Demo: load with some sample cameras
 const sampleData = {
-  version: '3.0',
+  version: '4.0',
   cameras: [
     {
       id: 'cam1',
@@ -51,6 +51,35 @@ const sampleData = {
       fov: 26.4,
       dof: { near: 2.42, far: 3.91, range: 1.49 },
       color: 0x35ffa5,
+    },
+  ],
+  actors: [
+    {
+      id: 'actor1',
+      name: '小明',
+      role: 'principal' as const,
+      position: { x: 0, y: 0, z: 0 },
+      rotation: { yaw: 0, pitch: 0, roll: 0 },
+      height: 1.75,
+      color: 0x4ecdc4,
+      keyframes: [
+        { id: 'ak1', time: 0, position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, action: 'stand' as const },
+        { id: 'ak2', time: 5, position: { x: 2, y: 0, z: -1 }, rotation: { yaw: -30, pitch: 0, roll: 0 }, action: 'walk' as const },
+        { id: 'ak3', time: 10, position: { x: 4, y: 0, z: -2 }, rotation: { yaw: 90, pitch: 0, roll: 0 }, action: 'turn' as const },
+      ],
+    },
+    {
+      id: 'actor2',
+      name: '小红',
+      role: 'supporting' as const,
+      position: { x: -2, y: 0, z: 1 },
+      rotation: { yaw: 30, pitch: 0, roll: 0 },
+      height: 1.65,
+      color: 0xff6b35,
+      keyframes: [
+        { id: 'ak4', time: 0, position: { x: -2, y: 0, z: 1 }, rotation: { yaw: 30, pitch: 0, roll: 0 }, action: 'sit' as const },
+        { id: 'ak5', time: 8, position: { x: -1, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, action: 'stand' as const },
+      ],
     },
   ],
   scene: {
