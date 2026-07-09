@@ -42,7 +42,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ open, onClose }) => 
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `camera-panner-prompt-${Date.now()}.json`
+    a.download = `camera-planner-prompt-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }

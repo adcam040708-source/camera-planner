@@ -7,7 +7,7 @@
  */
 
 import { create } from 'zustand'
-import { Camera, MovementConfig } from '../types/camera'
+import { Camera, MovementConfig, Position3D } from '../types/camera'
 import { Actor, ActorKeyframe } from '../types/actor'
 import { SceneConfig, SceneObject, LightingConfig } from '../types/scene'
 import { ProjectData, PathPoint, StoryboardConfig, TimelineConfig } from '../types/project'
@@ -61,6 +61,8 @@ export interface PlannerState {
   addActorKeyframe: (actorId: string, keyframe: ActorKeyframe) => void
   updateActorKeyframe: (actorId: string, keyframeId: string, params: Partial<ActorKeyframe>) => void
   removeActorKeyframe: (actorId: string, keyframeId: string) => void
+  setActorPosition: (id: string, position: Position3D) => void
+  snapshot: () => void
 
   // --- Path actions ---
   setPath: (points: PathPoint[]) => void
@@ -222,12 +224,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   }),
 
-  updateActor: (id, params) => set((s) => ({
-    project: {
-      ...s.project,
-      actors: s.project.actors.map(a => a.id === id ? { ...a, ...params } : a),
-    },
-  })),
+  updateActor: (id, params) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: {
+        ...s.project,
+        actors: s.project.actors.map(a => a.id === id ? { ...a, ...params } : a),
+      },
+    }
+  }),
 
   deleteActor: (id) => set((s) => {
     pushHistory(s.project)
@@ -242,43 +247,63 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   selectActor: (id) => set({ selectedActorId: id, selectedCameraId: null, selectedObjectId: null }),
 
-  addActorKeyframe: (actorId, keyframe) => set((s) => ({
+  addActorKeyframe: (actorId, keyframe) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: {
+        ...s.project,
+        actors: s.project.actors.map(a =>
+          a.id === actorId
+            ? { ...a, keyframes: [...a.keyframes, keyframe].sort((x, y) => x.time - y.time) }
+            : a
+        ),
+      }
+    }
+  }),
+
+  updateActorKeyframe: (actorId, keyframeId, params) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: {
+        ...s.project,
+        actors: s.project.actors.map(a =>
+          a.id === actorId
+            ? {
+                ...a,
+                keyframes: a.keyframes.map(k =>
+                  k.id === keyframeId ? { ...k, ...params } : k
+                ).sort((x, y) => x.time - y.time)
+              }
+            : a
+        ),
+      }
+    }
+  }),
+
+  removeActorKeyframe: (actorId, keyframeId) => set((s) => {
+    pushHistory(s.project)
+    return {
+      project: {
+        ...s.project,
+        actors: s.project.actors.map(a =>
+          a.id === actorId
+            ? { ...a, keyframes: a.keyframes.filter(k => k.id !== keyframeId) }
+            : a
+        ),
+      }
+    }
+  }),
+
+  setActorPosition: (id, position) => set((s) => ({
     project: {
       ...s.project,
-      actors: s.project.actors.map(a =>
-        a.id === actorId
-          ? { ...a, keyframes: [...a.keyframes, keyframe].sort((x, y) => x.time - y.time) }
-          : a
-      ),
-    }
+      actors: s.project.actors.map(a => a.id === id ? { ...a, position } : a),
+    },
   })),
 
-  updateActorKeyframe: (actorId, keyframeId, params) => set((s) => ({
-    project: {
-      ...s.project,
-      actors: s.project.actors.map(a =>
-        a.id === actorId
-          ? {
-              ...a,
-              keyframes: a.keyframes.map(k =>
-                k.id === keyframeId ? { ...k, ...params } : k
-              ).sort((x, y) => x.time - y.time)
-            }
-          : a
-      ),
-    }
-  })),
-
-  removeActorKeyframe: (actorId, keyframeId) => set((s) => ({
-    project: {
-      ...s.project,
-      actors: s.project.actors.map(a =>
-        a.id === actorId
-          ? { ...a, keyframes: a.keyframes.filter(k => k.id !== keyframeId) }
-          : a
-      ),
-    }
-  })),
+  snapshot: () => {
+    pushHistory(get().project)
+  },
 
   // --- Path actions ---
   setPath: (points) => set((s) => ({

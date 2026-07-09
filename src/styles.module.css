@@ -957,7 +957,29 @@
   width: 60px;
 }
 
-/* === Actor Panel v4 === */
+.cpKfLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 10px;
+  color: #8888aa;
+}
+
+.cpKfLabel span {
+  font-size: 9px;
+  color: #666688;
+}
+
+.cpKfLabel input {
+  width: 40px;
+  padding: 2px 4px;
+  background: #1a1a2e;
+  border: 1px solid #333355;
+  border-radius: 3px;
+  color: #e0e0e8;
+  font-size: 11px;
+  outline: none;
+}
 
 .cpActorProps {
   padding: 8px;

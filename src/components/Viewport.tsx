@@ -5,7 +5,7 @@
  * Connects engine state to the Zustand store.
  */
 
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   SceneEngine,
   CameraRig,
@@ -34,6 +34,12 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     rayPicker: RayPicker
     actorRig: ActorRig
   } | null>(null)
+
+  // Track actor drag state: { id, historyPushed }
+  // - On first pick (pointerdown): just select, set dragRef
+  // - On subsequent picks (pointermove during drag): update position
+  // - History is pushed only once, on the first actual movement
+  const dragRef = useRef<{ id: string; historyPushed: boolean } | null>(null)
 
   const store = usePlannerStore
 
@@ -73,7 +79,36 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       } else if (result.target === 'object' && result.id) {
         store.getState().selectObject(result.id)
       } else if (result.target === 'actor' && result.id) {
-        store.getState().selectActor(result.id)
+        if (!dragRef.current || dragRef.current.id !== result.id) {
+          // First pick (pointerdown) — select and prepare for potential drag
+          dragRef.current = { id: result.id, historyPushed: false }
+          store.getState().selectActor(result.id)
+        } else {
+          // Same actor — this is a drag move
+          if (result.groundPoint) {
+            const actor = store.getState().project.actors.find(a => a.id === result.id)
+            if (actor) {
+              const dx = result.groundPoint.x - actor.position.x
+              const dz = result.groundPoint.z - actor.position.z
+              if (Math.abs(dx) > 0.01 || Math.abs(dz) > 0.01) {
+                // First actual movement — push history once for the whole drag
+                if (!dragRef.current.historyPushed) {
+                  store.getState().snapshot()
+                  dragRef.current.historyPushed = true
+                }
+                // Update position without history (live drag)
+                store.getState().setActorPosition(result.id, {
+                  x: result.groundPoint.x,
+                  y: 0,
+                  z: result.groundPoint.z,
+                })
+              }
+            }
+          }
+        }
+      } else {
+        // Clicked on ground or nothing — reset drag state
+        dragRef.current = null
       }
     })
 
@@ -145,17 +180,39 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     const engineActorIds = new Set(engineActors.map(a => a.id))
     const storeActorIds = new Set(storeActors.map(a => a.id))
 
+    let actorsChanged = false
     for (const actor of storeActors) {
       if (!engineActorIds.has(actor.id)) {
         engine.actorRig.addActor(actor)
+        actorsChanged = true
       } else {
-        engine.actorRig.updateActor(actor.id, actor)
+        const existing = engine.actorRig.getActor(actor.id)
+        if (existing && (
+          existing.name !== actor.name ||
+          existing.role !== actor.role ||
+          existing.height !== actor.height ||
+          existing.color !== actor.color ||
+          existing.position.x !== actor.position.x ||
+          existing.position.y !== actor.position.y ||
+          existing.position.z !== actor.position.z ||
+          existing.rotation.yaw !== actor.rotation.yaw ||
+          existing.keyframes.length !== actor.keyframes.length
+        )) {
+          engine.actorRig.updateActor(actor.id, actor)
+          actorsChanged = true
+        }
       }
     }
     for (const id of engineActorIds) {
       if (!storeActorIds.has(id)) {
         engine.actorRig.deleteActor(id)
+        actorsChanged = true
       }
+    }
+
+    // Refresh rayPicker's actor groups so new/deleted actors are pickable
+    if (actorsChanged) {
+      engine.rayPicker.setActorGroups(engine.actorRig.getAllMeshGroups())
     }
 
     // Sync actor selection
@@ -176,6 +233,13 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   useEffect(() => {
     engineRef.current?.scene.setAxesVisible(showAxes)
   }, [showAxes])
+
+  // Timeline playback: update actor positions based on current time
+  const timelineTime = store(s => s.project.timeline.currentTime)
+
+  useEffect(() => {
+    engineRef.current?.actorRig.updatePlayback(timelineTime)
+  }, [timelineTime])
 
   return (
     <div

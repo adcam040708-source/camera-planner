@@ -3,7 +3,8 @@
  * No Three.js dependency. Pure functions, easy to unit test.
  */
 
-import { DOFResult } from '../types/camera'
+import { DOFResult, Position3D, Rotation3D } from '../types/camera'
+import { ActorKeyframe } from '../types/actor'
 import { SENSOR_PRESETS } from '../presets/sensors'
 
 /**
@@ -109,4 +110,50 @@ export function easeInOutCubic(t: number): number {
   return t < 0.5
     ? 4 * t * t * t
     : 1 - Math.pow(-2 * t + 2, 3) / 2
+}
+
+/**
+ * Sample an actor's position/rotation at a given time based on keyframes.
+ * Uses easeInOutCubic interpolation between keyframes.
+ * Pure function — no Three.js dependency.
+ */
+export function sampleActorAtTime(
+  keyframes: ActorKeyframe[],
+  time: number
+): { position: Position3D; rotation: Rotation3D; action: string } | null {
+  if (keyframes.length === 0) return null
+  if (keyframes.length === 1) {
+    return {
+      position: { ...keyframes[0].position },
+      rotation: { ...keyframes[0].rotation },
+      action: keyframes[0].action,
+    }
+  }
+
+  // Find the two keyframes surrounding `time`
+  let i = 0
+  for (; i < keyframes.length - 1; i++) {
+    if (keyframes[i + 1].time >= time) break
+  }
+  i = Math.min(i, keyframes.length - 2)
+
+  const a = keyframes[i]
+  const b = keyframes[i + 1]
+  const span = b.time - a.time
+  const localT = span > 0 ? (time - a.time) / span : 0
+  const eased = easeInOutCubic(localT)
+
+  return {
+    position: {
+      x: lerp(a.position.x, b.position.x, eased),
+      y: lerp(a.position.y, b.position.y, eased),
+      z: lerp(a.position.z, b.position.z, eased),
+    },
+    rotation: {
+      yaw: lerp(a.rotation.yaw, b.rotation.yaw, eased),
+      pitch: lerp(a.rotation.pitch, b.rotation.pitch, eased),
+      roll: lerp(a.rotation.roll, b.rotation.roll, eased),
+    },
+    action: localT < 0.5 ? a.action : b.action,
+  }
 }

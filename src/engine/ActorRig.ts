@@ -65,15 +65,37 @@ export class ActorRig {
     const entry = this.actors.get(id)
     if (!entry) return null
 
+    // Check which properties actually changed
+    const heightChanged = params.height !== undefined && params.height !== entry.actor.height
+    const colorChanged = params.color !== undefined && params.color !== entry.actor.color
+    const posChanged = params.position !== undefined
+    const rotChanged = params.rotation !== undefined
+    const kfChanged = params.keyframes !== undefined
+
+    // Update data
     Object.assign(entry.actor, params)
 
-    // 重建网格
-    this.scene.remove(entry.group)
-    entry.group = this.createActorMesh(entry.actor)
-    this.scene.add(entry.group)
+    // Only rebuild mesh if visual properties changed (height, color)
+    if (heightChanged || colorChanged) {
+      // Dispose old mesh before creating new one
+      this.disposeGroup(entry.group)
+      this.scene.remove(entry.group)
+      entry.group = this.createActorMesh(entry.actor)
+      this.scene.add(entry.group)
+    } else {
+      // Just update position/rotation on existing mesh
+      if (posChanged) {
+        entry.group.position.set(entry.actor.position.x, entry.actor.position.y, entry.actor.position.z)
+      }
+      if (rotChanged) {
+        entry.group.rotation.set(0, deg2rad(entry.actor.rotation.yaw), 0)
+      }
+    }
 
-    // 重建路径
-    this.refreshPath(id)
+    // Refresh path if keyframes or position changed
+    if (kfChanged || posChanged || rotChanged) {
+      this.refreshPath(id)
+    }
 
     if (id === this.selectedId) {
       this.highlightActor(id, true)
@@ -82,13 +104,20 @@ export class ActorRig {
     return entry.actor
   }
 
-  /** 删除角色 */
-  deleteActor(id: string): boolean {
-    const entry = this.actors.get(id)
-    if (!entry) return false
+  /** 时间轴播放：更新所有角色在指定时间的位置 */
+  updatePlayback(time: number): void {
+    for (const [id, entry] of this.actors) {
+      const sample = this.sampleAtTime(id, time)
+      if (sample) {
+        entry.group.position.set(sample.position.x, sample.position.y, sample.position.z)
+        entry.group.rotation.set(0, deg2rad(sample.rotation.yaw), 0)
+      }
+    }
+  }
 
-    this.scene.remove(entry.group)
-    entry.group.traverse(child => {
+  /** 释放Group内所有Mesh的geometry和material */
+  private disposeGroup(group: THREE.Group): void {
+    group.traverse(child => {
       if (child instanceof THREE.Mesh) {
         child.geometry?.dispose()
         const mat = child.material
@@ -96,6 +125,15 @@ export class ActorRig {
         else mat?.dispose()
       }
     })
+  }
+
+  /** 删除角色 */
+  deleteActor(id: string): boolean {
+    const entry = this.actors.get(id)
+    if (!entry) return false
+
+    this.disposeGroup(entry.group)
+    this.scene.remove(entry.group)
     this.clearPath(entry)
     this.actors.delete(id)
 
@@ -315,14 +353,18 @@ export class ActorRig {
       else mat?.dispose()
       entry.pathLine = null
     }
-    for (const m of entry.pathMarkers) {
-      this.scene.remove(m)
-      m.geometry?.dispose()
-      const mat = m.material
-      if (Array.isArray(mat)) mat.forEach(m => m.dispose())
-      else mat?.dispose()
+    if (entry.pathMarkers.length > 0) {
+      // All markers share the same geometry and material — dispose only once
+      const sharedGeo = entry.pathMarkers[0].geometry
+      const sharedMat = entry.pathMarkers[0].material
+      for (const m of entry.pathMarkers) {
+        this.scene.remove(m)
+      }
+      sharedGeo?.dispose()
+      if (Array.isArray(sharedMat)) sharedMat.forEach(m => m.dispose())
+      else (sharedMat as THREE.Material)?.dispose()
+      entry.pathMarkers = []
     }
-    entry.pathMarkers = []
   }
 
   /** 高亮角色 */

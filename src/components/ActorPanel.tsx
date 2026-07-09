@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { usePlannerStore } from '../store/usePlannerStore'
-import { generateId } from '../engine/calc'
+import { generateId, sampleActorAtTime } from '../engine/calc'
 import { Actor, ActorRole, ActorAction } from '../types/actor'
 import css from '../styles.module.css'
 
@@ -64,12 +64,14 @@ export const ActorPanel: React.FC = () => {
 
   const handleAddKeyframe = () => {
     if (!selectedActor) return
+    // Use interpolated position at current timeline time if keyframes exist
+    const sample = sampleActorAtTime(selectedActor.keyframes, timelineTime)
     addActorKeyframe(selectedActor.id, {
       id: generateId(),
       time: timelineTime,
-      position: { ...selectedActor.position },
-      rotation: { ...selectedActor.rotation },
-      action: 'stand',
+      position: sample?.position ?? { ...selectedActor.position },
+      rotation: sample?.rotation ?? { ...selectedActor.rotation },
+      action: (sample?.action ?? 'stand') as ActorAction,
     })
   }
 
@@ -156,10 +158,46 @@ export const ActorPanel: React.FC = () => {
               {selectedActor.keyframes.map((kf, idx) => (
                 <div key={kf.id} className={css.cpKeyframeItem}>
                   <span className={css.cpKfIndex}>{idx + 1}</span>
-                  <span className={css.cpKfTime}>{kf.time.toFixed(1)}s</span>
-                  <span className={css.cpKfPos}>
-                    ({kf.position.x.toFixed(1)}, {kf.position.z.toFixed(1)})
-                  </span>
+                  <label className={css.cpKfLabel}>
+                    <span>时间</span>
+                    <input
+                      className={css.cpInput}
+                      type="number"
+                      step="0.5"
+                      min="0"
+                      value={kf.time}
+                      onChange={e => updateActorKeyframe(
+                        selectedActor.id, kf.id,
+                        { time: parseFloat(e.target.value) || 0 }
+                      )}
+                    />
+                  </label>
+                  <label className={css.cpKfLabel}>
+                    <span>X</span>
+                    <input
+                      className={css.cpInput}
+                      type="number"
+                      step="0.1"
+                      value={kf.position.x.toFixed(1)}
+                      onChange={e => updateActorKeyframe(
+                        selectedActor.id, kf.id,
+                        { position: { ...kf.position, x: parseFloat(e.target.value) || 0 } }
+                      )}
+                    />
+                  </label>
+                  <label className={css.cpKfLabel}>
+                    <span>Z</span>
+                    <input
+                      className={css.cpInput}
+                      type="number"
+                      step="0.1"
+                      value={kf.position.z.toFixed(1)}
+                      onChange={e => updateActorKeyframe(
+                        selectedActor.id, kf.id,
+                        { position: { ...kf.position, z: parseFloat(e.target.value) || 0 } }
+                      )}
+                    />
+                  </label>
                   <select
                     className={css.cpKfAction}
                     value={kf.action}
