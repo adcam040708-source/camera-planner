@@ -8,38 +8,154 @@ import { outputManager } from './CameraPlanner'
 import { SENSOR_PRESETS } from '../presets/sensors'
 import { MOVEMENT_PRESETS } from '../presets/movements'
 import { Camera } from '../types/camera'
+import { Actor, ActorRole } from '../types/actor'
 import css from '../styles.module.css'
+
+const ROLE_LABELS: Record<ActorRole, string> = {
+  principal: '主角',
+  supporting: '配角',
+  extra: '群众',
+}
 
 export const PropertyPanel: React.FC = () => {
   const selectedCameraId = usePlannerStore(s => s.selectedCameraId)
   const selectedObjectId = usePlannerStore(s => s.selectedObjectId)
+  const selectedActorId = usePlannerStore(s => s.selectedActorId)
   const cameras = usePlannerStore(s => s.project.cameras)
   const sceneObjects = usePlannerStore(s => s.project.scene.objects)
+  const actors = usePlannerStore(s => s.project.actors)
   const updateCamera = usePlannerStore(s => s.updateCamera)
   const updateObject = usePlannerStore(s => s.updateObject)
+  const updateActor = usePlannerStore(s => s.updateActor)
 
   const selectedCamera = cameras.find(c => c.id === selectedCameraId)
   const selectedObject = sceneObjects.find(o => o.id === selectedObjectId)
-
-  if (!selectedCamera && !selectedObject) {
-    return (
-      <div className={css.cpPropertyPanel}>
-        <div className={css.cpPlaceholder}>
-          <p>选择机位或物体查看属性</p>
-        </div>
-      </div>
-    )
-  }
+  const selectedActor = actors.find(a => a.id === selectedActorId)
 
   if (selectedCamera) {
     return <CameraProperties camera={selectedCamera} onUpdate={updateCamera} />
+  }
+
+  if (selectedActor) {
+    return <ActorProperties actor={selectedActor} onUpdate={updateActor} />
   }
 
   if (selectedObject) {
     return <ObjectProperties object={selectedObject} onUpdate={updateObject} />
   }
 
-  return null
+  return (
+    <div className={css.cpPropertyPanel}>
+      <div className={css.cpPlaceholder}>
+        <p>选择机位、角色或物体查看属性</p>
+      </div>
+    </div>
+  )
+}
+
+// --- Actor Properties ---
+
+interface ActorPropsProps {
+  actor: Actor
+  onUpdate: (id: string, params: Partial<Actor>) => void
+}
+
+const ActorProperties: React.FC<ActorPropsProps> = ({ actor, onUpdate }) => {
+  const handlePositionChange = (axis: 'x' | 'y' | 'z', value: number) => {
+    onUpdate(actor.id, { position: { ...actor.position, [axis]: value } })
+  }
+
+  const handleRotationChange = (axis: 'yaw' | 'pitch' | 'roll', value: number) => {
+    onUpdate(actor.id, { rotation: { ...actor.rotation, [axis]: value } })
+  }
+
+  return (
+    <div className={css.cpPropertyPanel}>
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>角色属性</div>
+
+        <div className={css.cpField}>
+          <label>名称</label>
+          <input
+            type="text"
+            value={actor.name}
+            onChange={e => onUpdate(actor.id, { name: e.target.value })}
+          />
+        </div>
+
+        <div className={css.cpField}>
+          <label>类型</label>
+          <select
+            value={actor.role}
+            onChange={e => onUpdate(actor.id, { role: e.target.value as ActorRole })}
+          >
+            {Object.entries(ROLE_LABELS).map(([v, l]) => (
+              <option key={v} value={v}>{l}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className={css.cpField}>
+          <label>身高 (m)</label>
+          <input
+            type="range" min="0.5" max="2.5" step="0.05"
+            value={actor.height}
+            onChange={e => onUpdate(actor.id, { height: Number(e.target.value) })}
+          />
+          <span className={css.cpFieldValue}>{actor.height.toFixed(2)}m</span>
+        </div>
+
+        <div className={css.cpField}>
+          <label>颜色</label>
+          <input
+            type="color"
+            value={`#${actor.color.toString(16).padStart(6, '0')}`}
+            onChange={e => onUpdate(actor.id, { color: parseInt(e.target.value.slice(1), 16) })}
+          />
+        </div>
+      </div>
+
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>位置</div>
+        {(['x', 'y', 'z'] as const).map(axis => (
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
+            <label>{axis.toUpperCase()}</label>
+            <input
+              type="number" step="0.1"
+              value={actor.position[axis]}
+              onChange={e => handlePositionChange(axis, Number(e.target.value))}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className={css.cpPanelSection}>
+        <div className={css.cpSectionTitle}>朝向</div>
+        {(['yaw', 'pitch', 'roll'] as const).map(axis => (
+          <div className={[css.cpField, css.cpFieldRow].join(' ')} key={axis}>
+            <label>{axis}</label>
+            <input
+              type="range" min="-180" max="180" step="1"
+              value={actor.rotation[axis]}
+              onChange={e => handleRotationChange(axis, Number(e.target.value))}
+            />
+            <span className={css.cpFieldValue}>{actor.rotation[axis]}°</span>
+          </div>
+        ))}
+      </div>
+
+      <div className={css.cpPanelSection}>
+        <div className={css.cpCalcRow}>
+          <span>关键帧</span>
+          <span className={css.cpCalcValue}>{actor.keyframes.length} 个</span>
+        </div>
+        <div className={css.cpCalcRow}>
+          <span>ID</span>
+          <span className={[css.cpCalcValue, css.cpMono].join(' ')}>{actor.id.slice(0, 8)}</span>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // --- Camera Properties ---

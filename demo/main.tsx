@@ -86,8 +86,6 @@ const sampleData = {
     template: 'studio' as const,
     objects: [
       { id: 'floor', type: 'plane' as const, position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 20, y: 1, z: 20 }, color: 0x2a2a2a },
-      { id: 'actor1', type: 'person' as const, position: { x: 0, y: 0, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x888888 },
-      { id: 'actor2', type: 'person' as const, position: { x: 2, y: 0, z: -1 }, rotation: { yaw: -30, pitch: 0, roll: 0 }, scale: { x: 1, y: 1, z: 1 }, color: 0x666666 },
       { id: 'desk', type: 'box' as const, position: { x: -2, y: 0.35, z: 0 }, rotation: { yaw: 0, pitch: 0, roll: 0 }, scale: { x: 2, y: 0.7, z: 1 }, color: 0x654321 },
     ],
     lighting: {

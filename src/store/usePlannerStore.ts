@@ -306,17 +306,20 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   // --- Path actions ---
-  setPath: (points) => set((s) => ({
-    project: { ...s.project, path: points },
-  })),
+  setPath: (points) => set((s) => {
+    pushHistory(s.project)
+    return { project: { ...s.project, path: points } }
+  }),
 
-  addPathPoint: (point) => set((s) => ({
-    project: { ...s.project, path: [...s.project.path, point] },
-  })),
+  addPathPoint: (point) => set((s) => {
+    pushHistory(s.project)
+    return { project: { ...s.project, path: [...s.project.path, point] } }
+  }),
 
-  removePathPoint: (id) => set((s) => ({
-    project: { ...s.project, path: s.project.path.filter(p => p.id !== id) },
-  })),
+  removePathPoint: (id) => set((s) => {
+    pushHistory(s.project)
+    return { project: { ...s.project, path: s.project.path.filter(p => p.id !== id) } }
+  }),
 
   // --- Timeline actions ---
   setTimelineTime: (time) => set((s) => ({

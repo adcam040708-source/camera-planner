@@ -6,6 +6,7 @@
  */
 
 import React, { useEffect, useRef } from 'react'
+import * as THREE from 'three'
 import {
   SceneEngine,
   CameraRig,
@@ -15,6 +16,7 @@ import {
   RayPicker,
   ActorRig,
 } from '../engine'
+import { generateId } from '../engine/calc'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
 import css from '../styles.module.css'
@@ -25,6 +27,7 @@ interface ViewportProps {
 
 export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<{
     scene: SceneEngine
     cameraRig: CameraRig
@@ -33,6 +36,9 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     pathSystem: PathSystem
     rayPicker: RayPicker
     actorRig: ActorRig
+    previewRenderer: THREE.WebGLRenderer | null
+    previewCamera: THREE.PerspectiveCamera | null
+    previewUnsub: (() => void) | null
   } | null>(null)
 
   // Track actor drag state: { id, historyPushed }
@@ -71,8 +77,86 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     // Set up PNG exporter for output manager
     outputManager.setPNGExporter(() => scene.exportPNGBlob())
 
+    // --- Camera viewfinder preview ---
+    let previewRenderer: THREE.WebGLRenderer | null = null
+    let previewCamera: THREE.PerspectiveCamera | null = null
+    let previewUnsub: (() => void) | null = null
+
+    if (previewRef.current) {
+      const pw = 200
+      const ph = 150
+      previewRenderer = new THREE.WebGLRenderer({ antialias: true })
+      previewRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      previewRenderer.setSize(pw, ph)
+      previewRenderer.domElement.style.width = '100%'
+      previewRenderer.domElement.style.height = '100%'
+      previewRenderer.domElement.style.borderRadius = '6px'
+      previewRef.current.appendChild(previewRenderer.domElement)
+
+      previewCamera = new THREE.PerspectiveCamera(50, pw / ph, 0.1, 500)
+
+      // Render preview every frame
+      previewUnsub = scene.onFrame(() => {
+        if (!previewRenderer || !previewCamera) return
+        const state = store.getState()
+        const selCamId = state.selectedCameraId
+        if (selCamId) {
+          const cam = state.project.cameras.find(c => c.id === selCamId)
+          if (cam) {
+            previewCamera.position.set(cam.position.x, cam.position.y, cam.position.z)
+            previewCamera.rotation.set(
+              THREE.MathUtils.degToRad(cam.rotation.pitch),
+              THREE.MathUtils.degToRad(cam.rotation.yaw),
+              THREE.MathUtils.degToRad(cam.rotation.roll),
+              'YXZ'
+            )
+            const fov = 2 * Math.atan(cam.sensorH / (2 * cam.focal)) * 180 / Math.PI
+            if (Math.abs(previewCamera.fov - fov) > 0.1) {
+              previewCamera.fov = fov
+              previewCamera.updateProjectionMatrix()
+            }
+          }
+        }
+        previewRenderer.render(scene.scene, previewCamera)
+      })
+    }
+
     // Ray picker → store sync
     rayPicker.onPick((result) => {
+      const state = store.getState()
+      const tool = state.tool
+
+      // Path tool mode: click ground to add path keyframe
+      if (tool === 'path' && result.target === 'ground' && result.groundPoint) {
+        const selCamId = state.selectedCameraId
+        const selActorId = state.selectedActorId
+
+        if (selActorId) {
+          // Add actor keyframe at clicked position
+          const actor = state.project.actors.find(a => a.id === selActorId)
+          if (actor) {
+            state.addActorKeyframe(selActorId, {
+              id: generateId(),
+              time: state.project.timeline.currentTime,
+              position: { x: result.groundPoint.x, y: 0, z: result.groundPoint.z },
+              rotation: { ...actor.rotation },
+              action: 'stand',
+            })
+          }
+        } else if (selCamId) {
+          // Add camera path point
+          state.addPathPoint({
+            id: generateId(),
+            position: { x: result.groundPoint.x, y: 1.6, z: result.groundPoint.z },
+            rotation: { yaw: 0, pitch: 0, roll: 0 },
+            cameraId: selCamId,
+            t: 0,
+          })
+        }
+        return
+      }
+
+      // Normal selection / drag mode
       if (result.target === 'camera' && result.id) {
         store.getState().selectCamera(result.id)
         outputManager.emit('camera:select', result.id)
@@ -122,9 +206,19 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       pathSystem,
       rayPicker,
       actorRig,
+      previewRenderer,
+      previewCamera,
+      previewUnsub,
     }
 
     return () => {
+      if (previewUnsub) previewUnsub()
+      if (previewRenderer) {
+        previewRenderer.dispose()
+        if (previewRenderer.domElement.parentElement) {
+          previewRenderer.domElement.parentElement.removeChild(previewRenderer.domElement)
+        }
+      }
       scene.dispose()
       engineRef.current = null
     }
@@ -218,9 +312,12 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     // Sync actor selection
     engine.actorRig.selectActor(selectedActorId)
 
+    // Sync path → PathSystem
+    engine.pathSystem.importKeyframes(project.path)
+
     // Sync lighting
     engine.lightSystem.update(project.scene.lighting)
-  }, [project.cameras, project.actors, project.scene.lighting, selectedCameraId, selectedActorId])
+  }, [project.cameras, project.actors, project.path, project.scene.lighting, selectedCameraId, selectedActorId])
 
   // Sync grid/axes visibility
   const showGrid = store(s => s.showGrid)
@@ -241,11 +338,52 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     engineRef.current?.actorRig.updatePlayback(timelineTime)
   }, [timelineTime])
 
+  // Cursor style based on tool
+  const tool = store(s => s.tool)
+
   return (
     <div
       ref={containerRef}
       className={css.cameraPlannerViewport}
-      style={{ width: '100%', height: '100%', minHeight: '400px' }}
-    />
+      style={{
+        width: '100%',
+        height: '100%',
+        minHeight: '400px',
+        cursor: tool === 'path' ? 'crosshair' : 'default',
+        position: 'relative',
+      }}
+    >
+      {/* Camera viewfinder preview (picture-in-picture) */}
+      <div
+        ref={previewRef}
+        style={{
+          position: 'absolute',
+          bottom: '12px',
+          right: '12px',
+          width: '200px',
+          height: '150px',
+          border: '2px solid rgba(78, 205, 196, 0.4)',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          zIndex: 10,
+          background: '#000',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+        }}
+      >
+        <div style={{
+          position: 'absolute',
+          top: 4,
+          left: 6,
+          color: '#4ecdc4',
+          fontSize: 10,
+          fontWeight: 600,
+          zIndex: 11,
+          pointerEvents: 'none',
+          textShadow: '0 0 4px rgba(0,0,0,0.8)',
+        }}>
+          VIEWFINDER
+        </div>
+      </div>
+    </div>
   )
 }
