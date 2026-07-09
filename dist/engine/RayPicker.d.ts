@@ -5,7 +5,7 @@
  * Supports: click-to-select, hover highlight, drag-to-move on the ground plane.
  */
 import * as THREE from 'three';
-export type PickTarget = 'camera' | 'object' | 'ground' | null;
+export type PickTarget = 'camera' | 'object' | 'actor' | 'ground' | null;
 export interface PickResult {
     target: PickTarget;
     id: string | null;
@@ -26,11 +26,14 @@ export declare class RayPicker {
     private dragOffset;
     private cameraGroups;
     private objectMeshes;
+    private actorGroups;
     constructor(camera: THREE.Camera, scene: THREE.Scene);
     /** Set the camera groups that can be picked */
     setCameraGroups(groups: THREE.Group[]): void;
     /** Set the object meshes that can be picked */
     setObjectMeshes(meshes: THREE.Object3D[]): void;
+    /** Set the actor groups that can be picked */
+    setActorGroups(groups: THREE.Group[]): void;
     /** Enable picking on a canvas element */
     enable(canvas: HTMLElement): void;
     /** Disable picking */

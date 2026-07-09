@@ -1,4 +1,5 @@
-import { DOFResult } from '../types/camera';
+import { DOFResult, Position3D, Rotation3D } from '../types/camera';
+import { ActorKeyframe } from '../types/actor';
 /**
  * Calculate Field of View (vertical) in degrees.
  * Formula: 2 * atan(sensorHeight / (2 * focalLength)) * 180 / PI
@@ -42,3 +43,13 @@ export declare function lerp(a: number, b: number, t: number): number;
  * Ease in-out cubic for smooth animation.
  */
 export declare function easeInOutCubic(t: number): number;
+/**
+ * Sample an actor's position/rotation at a given time based on keyframes.
+ * Uses easeInOutCubic interpolation between keyframes.
+ * Pure function — no Three.js dependency.
+ */
+export declare function sampleActorAtTime(keyframes: ActorKeyframe[], time: number): {
+    position: Position3D;
+    rotation: Rotation3D;
+    action: string;
+} | null;

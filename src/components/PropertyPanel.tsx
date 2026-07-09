@@ -5,7 +5,6 @@
 import React from 'react'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { outputManager } from './CameraPlanner'
-import { SENSOR_PRESETS } from '../presets/sensors'
 import { MOVEMENT_PRESETS } from '../presets/movements'
 import { Camera } from '../types/camera'
 import { Actor, ActorRole } from '../types/actor'
@@ -184,12 +183,6 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
     outputManager.emit('camera:change', { ...camera, rotation: newRotation } as Camera)
   }
 
-  const handleSensorChange = (sensorName: string) => {
-    const sensor = SENSOR_PRESETS.find(s => s.name === sensorName)
-    if (!sensor) return
-    onUpdate(camera.id, { sensorW: sensor.w, sensorH: sensor.h })
-  }
-
   return (
     <div className={css.cpPropertyPanel}>
       <div className={css.cpPanelSection}>
@@ -212,20 +205,6 @@ const CameraProperties: React.FC<CameraPropsProps> = ({ camera, onUpdate }) => {
             onChange={e => handleChange('focal', Number(e.target.value))}
           />
           <span className={css.cpFieldValue}>{camera.focal}mm</span>
-        </div>
-
-        <div className={css.cpField}>
-          <label>传感器</label>
-          <select
-            value={SENSOR_PRESETS.find(s =>
-              Math.abs(s.w - camera.sensorW) < 0.1 && Math.abs(s.h - camera.sensorH) < 0.1
-            )?.name || ''}
-            onChange={e => handleSensorChange(e.target.value)}
-          >
-            {SENSOR_PRESETS.map(s => (
-              <option key={s.name} value={s.name}>{s.label}</option>
-            ))}
-          </select>
         </div>
 
         <div className={css.cpField}>

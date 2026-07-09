@@ -1,4 +1,5 @@
-import { Camera, MovementConfig } from '../types/camera';
+import { Camera, MovementConfig, Position3D } from '../types/camera';
+import { Actor, ActorKeyframe } from '../types/actor';
 import { SceneConfig, SceneObject, LightingConfig } from '../types/scene';
 import { ProjectData, PathPoint } from '../types/project';
 export type EditorMode = 'select' | 'place' | 'move' | 'rotate';
@@ -13,6 +14,7 @@ export interface PlannerState {
     bottomTab: BottomTab;
     selectedCameraId: string | null;
     selectedObjectId: string | null;
+    selectedActorId: string | null;
     showGrid: boolean;
     showAxes: boolean;
     showFovCones: boolean;
@@ -27,6 +29,15 @@ export interface PlannerState {
     selectObject: (id: string | null) => void;
     setSceneConfig: (config: Partial<SceneConfig>) => void;
     setLighting: (config: Partial<LightingConfig>) => void;
+    addActor: (actor: Actor) => void;
+    updateActor: (id: string, params: Partial<Actor>) => void;
+    deleteActor: (id: string) => void;
+    selectActor: (id: string | null) => void;
+    addActorKeyframe: (actorId: string, keyframe: ActorKeyframe) => void;
+    updateActorKeyframe: (actorId: string, keyframeId: string, params: Partial<ActorKeyframe>) => void;
+    removeActorKeyframe: (actorId: string, keyframeId: string) => void;
+    setActorPosition: (id: string, position: Position3D) => void;
+    snapshot: () => void;
     setPath: (points: PathPoint[]) => void;
     addPathPoint: (point: PathPoint) => void;
     removePathPoint: (id: string) => void;

@@ -6,7 +6,6 @@
  */
 
 import React, { useEffect, useRef } from 'react'
-import * as THREE from 'three'
 import {
   SceneEngine,
   CameraRig,
@@ -27,7 +26,6 @@ interface ViewportProps {
 
 export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const previewRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<{
     scene: SceneEngine
     cameraRig: CameraRig
@@ -36,9 +34,6 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     pathSystem: PathSystem
     rayPicker: RayPicker
     actorRig: ActorRig
-    previewRenderer: THREE.WebGLRenderer | null
-    previewCamera: THREE.PerspectiveCamera | null
-    previewUnsub: (() => void) | null
   } | null>(null)
 
   // Track actor drag state: { id, historyPushed }
@@ -76,50 +71,6 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
 
     // Set up PNG exporter for output manager
     outputManager.setPNGExporter(() => scene.exportPNGBlob())
-
-    // --- Camera viewfinder preview ---
-    let previewRenderer: THREE.WebGLRenderer | null = null
-    let previewCamera: THREE.PerspectiveCamera | null = null
-    let previewUnsub: (() => void) | null = null
-
-    if (previewRef.current) {
-      const pw = 200
-      const ph = 150
-      previewRenderer = new THREE.WebGLRenderer({ antialias: true })
-      previewRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      previewRenderer.setSize(pw, ph)
-      previewRenderer.domElement.style.width = '100%'
-      previewRenderer.domElement.style.height = '100%'
-      previewRenderer.domElement.style.borderRadius = '6px'
-      previewRef.current.appendChild(previewRenderer.domElement)
-
-      previewCamera = new THREE.PerspectiveCamera(50, pw / ph, 0.1, 500)
-
-      // Render preview every frame
-      previewUnsub = scene.onFrame(() => {
-        if (!previewRenderer || !previewCamera) return
-        const state = store.getState()
-        const selCamId = state.selectedCameraId
-        if (selCamId) {
-          const cam = state.project.cameras.find(c => c.id === selCamId)
-          if (cam) {
-            previewCamera.position.set(cam.position.x, cam.position.y, cam.position.z)
-            previewCamera.rotation.set(
-              THREE.MathUtils.degToRad(cam.rotation.pitch),
-              THREE.MathUtils.degToRad(cam.rotation.yaw),
-              THREE.MathUtils.degToRad(cam.rotation.roll),
-              'YXZ'
-            )
-            const fov = 2 * Math.atan(cam.sensorH / (2 * cam.focal)) * 180 / Math.PI
-            if (Math.abs(previewCamera.fov - fov) > 0.1) {
-              previewCamera.fov = fov
-              previewCamera.updateProjectionMatrix()
-            }
-          }
-        }
-        previewRenderer.render(scene.scene, previewCamera)
-      })
-    }
 
     // Ray picker → store sync
     rayPicker.onPick((result) => {
@@ -206,19 +157,9 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       pathSystem,
       rayPicker,
       actorRig,
-      previewRenderer,
-      previewCamera,
-      previewUnsub,
     }
 
     return () => {
-      if (previewUnsub) previewUnsub()
-      if (previewRenderer) {
-        previewRenderer.dispose()
-        if (previewRenderer.domElement.parentElement) {
-          previewRenderer.domElement.parentElement.removeChild(previewRenderer.domElement)
-        }
-      }
       scene.dispose()
       engineRef.current = null
     }
@@ -350,40 +291,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
         height: '100%',
         minHeight: '400px',
         cursor: tool === 'path' ? 'crosshair' : 'default',
-        position: 'relative',
       }}
-    >
-      {/* Camera viewfinder preview (picture-in-picture) */}
-      <div
-        ref={previewRef}
-        style={{
-          position: 'absolute',
-          bottom: '12px',
-          right: '12px',
-          width: '200px',
-          height: '150px',
-          border: '2px solid rgba(78, 205, 196, 0.4)',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          zIndex: 10,
-          background: '#000',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-        }}
-      >
-        <div style={{
-          position: 'absolute',
-          top: 4,
-          left: 6,
-          color: '#4ecdc4',
-          fontSize: 10,
-          fontWeight: 600,
-          zIndex: 11,
-          pointerEvents: 'none',
-          textShadow: '0 0 4px rgba(0,0,0,0.8)',
-        }}>
-          VIEWFINDER
-        </div>
-      </div>
-    </div>
+    />
   )
 }

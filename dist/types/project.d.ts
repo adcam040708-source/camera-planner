@@ -1,8 +1,10 @@
 import { Camera } from './camera';
+import { Actor } from './actor';
 import { SceneConfig } from './scene';
 export interface ProjectData {
     version: string;
     cameras: Camera[];
+    actors: Actor[];
     scene: SceneConfig;
     path: PathPoint[];
     storyboard: StoryboardConfig;
