@@ -211,7 +211,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     <div class="btm-p" id="bp3"><div class="analyze-panel"><div class="drop-zone" onclick="toast('上传视频功能开发中')"><div class="dz-icon">📁</div><div style="font-size:11px;">拖拽上传参考视频</div><div style="font-size:9px;color:#444;margin-top:3px;">自动拆解分镜、景别、运镜参数</div></div></div></div>
   </div>
 </div>
-<div class="modal-overlay" id="exp-modal"><div class="modal"><button class="modal-close" onclick="closeModal('exp-modal')">✕</button><h3>导出项目</h3><div class="exp-grid"><div class="exp-card" onclick="exportJSON()"><div class="ec-icon">📄</div><div class="ec-name">项目 JSON</div><div class="ec-desc">完整项目数据</div></div><div class="exp-card" onclick="exportPNG()"><div class="ec-icon">🖼</div><div class="ec-name">视口截图</div><div class="ec-desc">当前视角 PNG</div></div><div class="exp-card" onclick="exportCSV()"><div class="ec-icon">📊</div><div class="ec-name">机位表 CSV</div><div class="ec-desc">所有机位参数</div></div><div class="exp-card" onclick="exportStoryboard()"><div class="ec-icon">🎞</div><div class="ec-name">分镜图</div><div class="ec-desc">宫格缩略图</div></div><div class="exp-card" onclick="exportProdDoc()"><div class="ec-icon">📋</div><div class="ec-name">制片文档</div><div class="ec-desc">含剧本的完整文档</div></div><div class="exp-card" onclick="closeModal('exp-modal')"><div class="ec-icon">✕</div><div class="ec-name">取消</div><div class="ec-desc"></div></div></div></div></div>
+<div class="modal-overlay" id="exp-modal"><div class="modal"><button class="modal-close" onclick="closeModal('exp-modal')">✕</button><h3>导出项目</h3><div class="exp-grid"><div class="exp-card" onclick="exportJSON()"><div class="ec-icon">📄</div><div class="ec-name">项目 JSON</div><div class="ec-desc">完整项目数据</div></div><div class="exp-card" onclick="exportPNG()"><div class="ec-icon">🖼</div><div class="ec-name">视口截图</div><div class="ec-desc">当前视角 PNG</div></div><div class="exp-card" onclick="exportCSV()"><div class="ec-icon">📊</div><div class="ec-name">机位表 CSV</div><div class="ec-desc">所有机位参数</div></div><div class="exp-card" onclick="exportStoryboard()"><div class="ec-icon">🎞</div><div class="ec-name">分镜图</div><div class="ec-desc">宫格缩略图</div></div><div class="exp-card" onclick="exportOpenPoseJSON()"><div class="ec-icon">🦴</div><div class="ec-name">AIGC 骨骼数据</div><div class="ec-desc">ControlNet 用 JSON</div></div><div class="exp-card" onclick="exportProdDoc()"><div class="ec-icon">📋</div><div class="ec-name">制片文档</div><div class="ec-desc">含剧本的完整文档</div></div><div class="exp-card" onclick="closeModal('exp-modal')"><div class="ec-icon">✕</div><div class="ec-name">取消</div><div class="ec-desc"></div></div></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 const COLORS=[0x7c83ff,0x4ecdc4,0xffd93d,0xff6b6b,0xa855f7,0x06b6d4,0xec4899,0x84cc16,0xf97316];
@@ -287,9 +287,105 @@ function onClick(e){
 function addObject(t){S.tool='obj';S.pObj=t;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tool-obj').classList.add('active');toast('点击地面放置 '+t);}
 function placeObj(t,x,z){
   let g,y=.5,cl=0x4a4a6a;
-  switch(t){case'box':g=new THREE.BoxGeometry(1,1,1);break;case'sphere':g=new THREE.SphereGeometry(.5,16,16);break;case'cone':g=new THREE.ConeGeometry(.5,1,8);break;case'cylinder':g=new THREE.CylinderGeometry(.4,.4,1,12);break;case'torus':g=new THREE.TorusGeometry(.4,.15,8,16);y=.6;break;case'plane':g=new THREE.PlaneGeometry(2,2);y=.01;break;case'person':g=new THREE.CylinderGeometry(.2,.2,1.7,8);y=.85;cl=0x6a6a8a;break;case'building':g=new THREE.BoxGeometry(2,4,2);y=2;cl=0x3a3a5a;break;case'car':g=new THREE.BoxGeometry(2,1,4);y=.5;cl=0x5a3a3a;break;case'tree':g=new THREE.ConeGeometry(1,2.5,6);y=1.8;cl=0x2a5a2a;break;default:g=new THREE.BoxGeometry(.5,.5,.5);}
-  const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:cl,roughness:.6}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;if(t==='plane')m.rotation.x=-Math.PI/2;
+  switch(t){
+    case'box':g=new THREE.BoxGeometry(1,1,1);break;
+    case'sphere':g=new THREE.SphereGeometry(.5,16,16);break;
+    case'cone':g=new THREE.ConeGeometry(.5,1,8);break;
+    case'cylinder':g=new THREE.CylinderGeometry(.4,.4,1,12);break;
+    case'torus':g=new THREE.TorusGeometry(.4,.15,8,16);y=.6;break;
+    case'plane':g=new THREE.PlaneGeometry(2,2);y=.01;break;
+    case'person':y=.85;cl=0x6a6a8a;break;
+    case'building':g=new THREE.BoxGeometry(2,4,2);y=2;cl=0x3a3a5a;break;
+    case'car':g=new THREE.BoxGeometry(2,1,4);y=.5;cl=0x5a3a3a;break;
+    case'tree':g=new THREE.ConeGeometry(1,2.5,6);y=1.8;cl=0x2a5a2a;break;
+    default:g=new THREE.BoxGeometry(.5,.5,.5);
+  }
+  if(t==='person'){
+    m=mkPerson(x,y,z,cl);
+  }else{
+    m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:cl,roughness:.6}));
+    m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;
+    if(t==='plane')m.rotation.x=-Math.PI/2;
+  }
   objGrp.add(m);S.objs.push({type:t,mesh:m});S.oCnt++;setTool('select');toast('已放置: '+t);
+}
+
+// —— AIGC bone system ————————————————————————————————————————
+// OpenPose 18-joint 顺序（spec 要求完全一致）
+const OPENPOSE_JOINTS = [
+  'nose','neck',
+  'right_shoulder','right_elbow','right_wrist',
+  'left_shoulder','left_elbow','left_wrist',
+  'right_hip','right_knee','right_ankle',
+  'left_hip','left_knee','left_ankle',
+  'right_eye','left_eye','right_ear','left_ear'
+];
+// 人偶本地坐标偏移（米）。约定：origin = 脚底中心，y 向上，z 向前，x 向右
+// 这是一具"标准站姿"假人：身高约 1.75m
+const POSE_BONE_LOCAL = {
+  // —— 头颈 ——
+  nose:         { y: 1.66, c: 0xffd93d, r: 0.06 },
+  neck:         { y: 1.55, c: 0xffe066, r: 0.05 },
+  right_eye:    { y: 1.70, x:  0.04, c: 0x4ecdc4, r: 0.04 },
+  left_eye:     { y: 1.70, x: -0.04, c: 0x4ecdc4, r: 0.04 },
+  right_ear:    { y: 1.68, x:  0.10, c: 0xff6b6b, r: 0.04 },
+  left_ear:     { y: 1.68, x: -0.10, c: 0xff6b6b, r: 0.04 },
+  // —— 上肢 ——
+  right_shoulder:{ y: 1.45, x:  0.20, c: 0x7c83ff, r: 0.05 },
+  left_shoulder: { y: 1.45, x: -0.20, c: 0x7c83ff, r: 0.05 },
+  right_elbow:   { y: 1.10, x:  0.28, c: 0x4ecdc4, r: 0.05 },
+  left_elbow:    { y: 1.10, x: -0.28, c: 0x4ecdc4, r: 0.05 },
+  right_wrist:   { y: 0.75, x:  0.30, c: 0xff6b6b, r: 0.045 },
+  left_wrist:    { y: 0.75, x: -0.30, c: 0xff6b6b, r: 0.045 },
+  // —— 下肢 ——
+  right_hip:     { y: 0.95, x:  0.10, c: 0xa855f7, r: 0.05 },
+  left_hip:      { y: 0.95, x: -0.10, c: 0xa855f7, r: 0.05 },
+  right_knee:    { y: 0.50, x:  0.10, c: 0x06b6d4, r: 0.05 },
+  left_knee:     { y: 0.50, x: -0.10, c: 0x06b6d4, r: 0.05 },
+  right_ankle:   { y: 0.05, x:  0.10, c: 0x84cc16, r: 0.045 },
+  left_ankle:    { y: 0.05, x: -0.10, c: 0x84cc16, r: 0.045 }
+};
+
+function mkPerson(x,y,z,cl){
+  // 根 Group，所有 bone anchor 都是它的子节点 → 用 getWorldPosition 即可拿到正确世界坐标
+  const root = new THREE.Group();
+  root.position.set(x, y, z);
+  // 简易躯干可视化（保留原"人物"形状感）
+  const torso = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.20, 0.22, 0.80, 12),
+    new THREE.MeshStandardMaterial({color: cl||0x6a6a8a, roughness:.6})
+  );
+  torso.position.y = 1.20; torso.castShadow=true; torso.receiveShadow=true;
+  root.add(torso);
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.13, 16, 12),
+    new THREE.MeshStandardMaterial({color: 0xc8c8d4, roughness:.5})
+  );
+  head.position.y = 1.70; head.castShadow=true;
+  root.add(head);
+
+  // 骨骼 anchor：纯 Object3D（不渲染），local pos 根据 POSE_BONE_LOCAL
+  const bones = {};
+  OPENPOSE_JOINTS.forEach(k=>{
+    const o = new THREE.Object3D();
+    o.name = 'bone_' + k;
+    const cfg = POSE_BONE_LOCAL[k];
+    o.position.set(cfg.x||0, cfg.y, 0);
+    root.add(o);
+    bones[k] = o;
+    // 加一个小球 marker 方便对位调试
+    const m = new THREE.Mesh(
+      new THREE.SphereGeometry(cfg.r, 12, 8),
+      new THREE.MeshBasicMaterial({color: cfg.c})
+    );
+    m.position.set(0,0,0);
+    o.add(m);
+  });
+
+  // 暴露 bones，供 exportAIGCPoseData 使用
+  root.userData.isAIGCPerson = true;
+  root.userData.bones = bones;
+  return root;
 }
 
 function setTool(t){S.tool=t;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));const b=document.getElementById('tool-'+t);if(b)b.classList.add('active');}
@@ -371,8 +467,156 @@ function dl(content,fn,mime){const b=new Blob([content],{type:mime}),l=document.
 function exportJSON(){dl(JSON.stringify({version:'2.0',scene:S.scene,cameras:S.cams.map(c=>({name:c.name,body:c.body,focal:c.focal,fstop:c.fstop,fd:c.fd,pos:{x:c.x,y:c.y,z:c.z},rot:{pitch:c.pitch,yaw:c.yaw,roll:c.roll},fov:c.fov,script:c.script}))},null,2),'camera-planner.json','application/json');closeModal('exp-modal');toast('已导出 JSON');}
 function exportPNG(){ren.render(scene,cam);const l=document.createElement('a');l.download='viewport.png';l.href=ren.domElement.toDataURL('image/png');l.click();closeModal('exp-modal');toast('已导出截图');}
 function exportCSV(){let csv='Name,Body,Focal,Fstop,FD,X,Y,Z,Yaw,Pitch,Shot,Size,Dur\n';S.cams.forEach(c=>{csv+=`${c.name},${c.body},${c.focal},${c.fstop},${c.fd},${c.x},${c.y},${c.z},${c.yaw},${c.pitch},${c.script.shot},${c.script.size},${c.script.dur}\n`;});dl(csv,'cameras.csv','text/csv');closeModal('exp-modal');toast('已导出 CSV');}
+
+// —— OpenPose / ControlNet AIGC 投影导出 ————————————————————————————
+// spec:
+//   1) 取每个关节点世界坐标：object.getWorldPosition(new THREE.Vector3())
+//   2) vector.clone().project(activeCamera)  → NDC（-1 ~ 1）
+//   3) 剔除 vector.z > 1（相机后方的点跳过不记录）
+//   4) NDC → 屏幕百分比：x = (vector.x + 1) / 2；y = (1 - vector.y) / 2（Y 翻转）
+//   5) 组装成 OpenPose 规范 JSON
+function exportOpenPoseData(activeCamera, sceneObj){
+  if(!activeCamera){ activeCamera = cam; }
+  if(!sceneObj)    { sceneObj = scene; }
+  // 必须先把所有物体的世界矩阵更新到最新
+  sceneObj.updateMatrixWorld(true);
+
+  const people = [];
+
+  // 遍历场景中标记为"角色"的 Group（兼容多种识别方式）
+  const personRoots = collectPersonRoots(sceneObj);
+
+  personRoots.forEach((root, idx) => {
+    const joints = (root.userData && root.userData.bones)
+                   || collectBonesFromGroup(root, OPENPOSE_JOINTS);
+    if(!joints) return;
+
+    const pose_keypoints_2d = {};
+    const worldPositions = {};
+
+    OPENPOSE_JOINTS.forEach(name => {
+      const node = joints[name];
+      if(!node){ pose_keypoints_2d[name] = null; return; }
+
+      // 步骤 1：世界坐标
+      const v = new THREE.Vector3();
+      node.getWorldPosition(v);
+      worldPositions[name] = { x: v.x, y: v.y, z: v.z };
+
+      // 步骤 2：投影到 NDC（clone 避免污染原坐标）
+      const ndc = v.clone().project(activeCamera);
+
+      // 步骤 3：剔除相机后方的点（z > 1 表示已穿过远裁剪面位于摄像机后方）
+      if(ndc.z > 1){
+        pose_keypoints_2d[name] = null;
+        return;
+      }
+
+      // 步骤 4：NDC → 0~1 屏幕百分比（Y 翻转）
+      const x = (ndc.x + 1) / 2;
+      const y = (1 - ndc.y) / 2;
+
+      pose_keypoints_2d[name] = [ x, y ];
+    });
+
+    // 至少要有 1 个有效关节才计入
+    const validCount = OPENPOSE_JOINTS.filter(n => pose_keypoints_2d[n]).length;
+    if(validCount === 0) return;
+
+    people.push({
+      person_id: people.length,
+      object_index: idx,
+      pose_keypoints_2d,
+      world_positions: worldPositions  // 附带 3D 信息，方便下游对照
+    });
+  });
+
+  return {
+    version: 1.0,
+    type: 'openpose',
+    camera: {
+      fov_deg: +activeCamera.fov.toFixed(2),
+      near: activeCamera.near,
+      far:  activeCamera.far
+    },
+    joints_order: OPENPOSE_JOINTS,  // 显式给出关节顺序
+    coord_space: 'normalized_0_to_1', // x/y ∈ [0,1]，Y 向下（图像坐标）
+    people
+  };
+}
+
+// —— 场景角色查找（mock/遍历逻辑）————————————————————————————————
+// 1) 优先按 userData.isAIGCPerson 标记
+// 2) 其次按 name 含 'person' / 'character' / 'rig' / 'avatar'
+// 3) 再次按 type === 'person' 的 S.objs 引用
+function collectPersonRoots(sceneObj){
+  const out = [];
+  // 方式 1：场景里 type==='person' 的对象（最可靠，因为本应用就是这种方式创建人偶）
+  if(typeof S !== 'undefined' && S.objs && S.objs.length){
+    S.objs.forEach(o => {
+      if(o && o.type === 'person' && o.mesh){ out.push(o.mesh); }
+    });
+    if(out.length) return out;
+  }
+  // 方式 2/3：兜底遍历场景树
+  sceneObj.traverse(obj => {
+    if(!obj) return;
+    const tag = (obj.userData && (obj.userData.isAIGCPerson || obj.userData.isPerson)) || false;
+    const nm = (obj.name || '').toLowerCase();
+    if(tag || /person|character|rig|avatar/.test(nm)){
+      out.push(obj);
+    }
+  });
+  return out;
+}
+
+// 容错：从 Group 中按 name='bone_<joint>' 找回 anchor
+function collectBonesFromGroup(root, jointNames){
+  const out = {};
+  let found = false;
+  root.traverse(ch => {
+    if(ch.name && ch.name.indexOf('bone_') === 0){
+      const key = ch.name.slice(5);
+      out[key] = ch;
+      found = true;
+    }
+  });
+  // 如果找不到 anchor，尝试按 y 高度 mock（占位人偶，没有 anchor 时按 POSE_BONE_LOCAL 估算）
+  if(!found && jointNames){
+    jointNames.forEach(name => {
+      const cfg = POSE_BONE_LOCAL[name];
+      if(!cfg) return;
+      const dummy = new THREE.Object3D();
+      dummy.name = 'bone_' + name;
+      dummy.position.set((cfg.x||0) + root.position.x, cfg.y + root.position.y, root.position.z);
+      dummy.updateMatrixWorld(true);
+      out[name] = dummy;
+    });
+  }
+  return out;
+}
 function exportStoryboard(){const cv=document.createElement('canvas'),n=S.sbGrid,sz=200;cv.width=n*sz;cv.height=n*sz;const ctx=cv.getContext('2d');ctx.fillStyle='#0e0e1a';ctx.fillRect(0,0,cv.width,cv.height);S.cams.forEach((c,i)=>{if(i>=n*n)return;const col=i%n,row=Math.floor(i/n);ctx.fillStyle='#1a1a2e';ctx.fillRect(col*sz+4,row*sz+4,sz-8,sz-8);ctx.fillStyle='#'+c.color.toString(16).padStart(6,'0');ctx.font='bold 14px sans-serif';ctx.fillText(c.name,col*sz+12,row*sz+24);ctx.fillStyle='#888';ctx.font='11px sans-serif';ctx.fillText(c.focal+'mm | '+(c.script.size||'WS'),col*sz+12,row*sz+42);});const l=document.createElement('a');l.download='storyboard.png';l.href=cv.toDataURL('image/png');l.click();closeModal('exp-modal');toast('已导出分镜图');}
 function exportProdDoc(){dl(JSON.stringify({version:'2.0',title:'Production Document',scene:S.scene,cameras:S.cams.map(c=>({name:c.name,body:c.body,focal:c.focal,fstop:c.fstop,pos:{x:c.x,y:c.y,z:c.z},fov:c.fov,script:c.script}))},null,2),'production-doc.json','application/json');closeModal('exp-modal');toast('已导出制片文档');}
+
+// AIGC 骨骼数据导出（OpenPose 18-joint, 0~1 归一化坐标，给 ControlNet 直接使用）
+function exportOpenPoseJSON(){
+  const activeCam = cam;  // 当前主视图相机（若以后想按选中机位切，再改）
+  const hasPerson = S.objs && S.objs.some(o => o.type === 'person');
+  if(!hasPerson){
+    toast('场景中没有人物对象，请先放置一个「人物」');
+    return;
+  }
+  const data = exportOpenPoseData(activeCam, scene);
+  if(!data.people || !data.people.length){
+    toast('未找到任何骨骼节点');
+    return;
+  }
+  dl(JSON.stringify(data, null, 2), 'openpose_data.json', 'application/json');
+  closeModal('exp-modal');
+  const v = data.people[0].pose_keypoints_2d;
+  const validCount = OPENPOSE_JOINTS.filter(k => v[k]).length;
+  toast('已导出 openpose_data.json (' + data.people.length + ' 人, ' + validCount + ' 关节)');
+}
 function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2000);}
 
 function animate(){requestAnimationFrame(animate);ctrl.update();updPath();updTLPlay();ren.render(scene,cam);}
