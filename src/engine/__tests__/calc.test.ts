@@ -6,7 +6,7 @@
  *   npx tsx src/engine/__tests__/calc.test.ts
  */
 
-import { calcFOV, calcDOF, deg2rad, rad2deg, clamp, lerp, easeInOutCubic, generateId } from '../calc'
+import { calcFOV, calcDOF, deg2rad, rad2deg, clamp, lerp, easeInOutCubic, generateId, sampleCameraPathAtTime } from '../calc'
 
 // Simple test runner
 let passed = 0
@@ -192,6 +192,73 @@ test('generateId returns non-empty strings', () => {
   const id = generateId()
   assertTrue(id.length > 0, 'ID should not be empty')
   assertTrue(typeof id === 'string', 'ID should be a string')
+})
+
+
+// ============================================================
+// Camera path sampling
+// ============================================================
+
+console.log('\ncamera path sampling:')
+
+test('sampleCameraPathAtTime returns null when no path for camera', () => {
+  const result = sampleCameraPathAtTime([], 'cam-1', 0.5)
+  assertEqual(result, null)
+})
+
+test('sampleCameraPathAtTime returns single keyframe position', () => {
+  const result = sampleCameraPathAtTime([
+    {
+      id: 'p1',
+      cameraId: 'cam-1',
+      position: { x: 1, y: 1.6, z: 2 },
+      rotation: { yaw: 45, pitch: 0, roll: 0 },
+      t: 0.5,
+    },
+  ], 'cam-1', 0.2)
+  assertEqual(result?.position.x, 1)
+  assertEqual(result?.position.z, 2)
+})
+
+test('sampleCameraPathAtTime interpolates between two keyframes at midpoint', () => {
+  const result = sampleCameraPathAtTime([
+    {
+      id: 'p1',
+      cameraId: 'cam-1',
+      position: { x: 0, y: 1.6, z: 0 },
+      rotation: { yaw: 0, pitch: 0, roll: 0 },
+      t: 0,
+    },
+    {
+      id: 'p2',
+      cameraId: 'cam-1',
+      position: { x: 10, y: 1.6, z: 0 },
+      rotation: { yaw: 90, pitch: 0, roll: 0 },
+      t: 1,
+    },
+  ], 'cam-1', 0.5)
+  assertClose(result?.position.x ?? 0, 5, 0.01, 'x at midpoint')
+  assertClose(result?.rotation.yaw ?? 0, 45, 0.01, 'yaw at midpoint')
+})
+
+test('sampleCameraPathAtTime clamps before first keyframe', () => {
+  const result = sampleCameraPathAtTime([
+    {
+      id: 'p1',
+      cameraId: 'cam-1',
+      position: { x: 3, y: 1.6, z: 4 },
+      rotation: { yaw: 10, pitch: 0, roll: 0 },
+      t: 0.4,
+    },
+    {
+      id: 'p2',
+      cameraId: 'cam-1',
+      position: { x: 8, y: 1.6, z: 4 },
+      rotation: { yaw: 20, pitch: 0, roll: 0 },
+      t: 0.8,
+    },
+  ], 'cam-1', 0.1)
+  assertEqual(result?.position.x, 3)
 })
 
 

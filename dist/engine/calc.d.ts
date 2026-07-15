@@ -1,5 +1,6 @@
 import { DOFResult, Position3D, Rotation3D } from '../types/camera';
 import { ActorKeyframe } from '../types/actor';
+import { PathPoint } from '../types/project';
 /**
  * Calculate Field of View (vertical) in degrees.
  * Formula: 2 * atan(sensorHeight / (2 * focalLength)) * 180 / PI
@@ -52,4 +53,12 @@ export declare function sampleActorAtTime(keyframes: ActorKeyframe[], time: numb
     position: Position3D;
     rotation: Rotation3D;
     action: string;
+} | null;
+/**
+ * Sample a camera's position/rotation along its path at normalized time (0-1).
+ * Filters path points by cameraId and interpolates between keyframes.
+ */
+export declare function sampleCameraPathAtTime(pathPoints: PathPoint[], cameraId: string, normalizedTime: number): {
+    position: Position3D;
+    rotation: Rotation3D;
 } | null;

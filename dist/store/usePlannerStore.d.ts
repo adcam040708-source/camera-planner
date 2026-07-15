@@ -1,6 +1,6 @@
-import { Camera, MovementConfig, Position3D } from '../types/camera';
+import { Camera, MovementConfig, Position3D, Rotation3D } from '../types/camera';
 import { Actor, ActorKeyframe } from '../types/actor';
-import { SceneConfig, SceneObject, LightingConfig } from '../types/scene';
+import { SceneConfig, SceneObject, LightingConfig, ObjectType } from '../types/scene';
 import { ProjectData, PathPoint } from '../types/project';
 export type EditorMode = 'select' | 'place' | 'move' | 'rotate';
 export type ToolMode = 'camera' | 'object' | 'light' | 'path';
@@ -15,6 +15,8 @@ export interface PlannerState {
     selectedCameraId: string | null;
     selectedObjectId: string | null;
     selectedActorId: string | null;
+    /** Selected palette type; next ground click places it (tool=object) */
+    pendingObjectType: ObjectType | null;
     showGrid: boolean;
     showAxes: boolean;
     showFovCones: boolean;
@@ -23,10 +25,12 @@ export interface PlannerState {
     deleteCamera: (id: string) => void;
     selectCamera: (id: string | null) => void;
     setCameraMovement: (id: string, movement: MovementConfig) => void;
+    setCameraTransform: (id: string, position: Position3D, rotation: Rotation3D) => void;
     addObject: (obj: SceneObject) => void;
     updateObject: (id: string, params: Partial<SceneObject>) => void;
     deleteObject: (id: string) => void;
     selectObject: (id: string | null) => void;
+    setPendingObjectType: (type: ObjectType | null) => void;
     setSceneConfig: (config: Partial<SceneConfig>) => void;
     setLighting: (config: Partial<LightingConfig>) => void;
     addActor: (actor: Actor) => void;

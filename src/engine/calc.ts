@@ -5,6 +5,7 @@
 
 import { DOFResult, Position3D, Rotation3D } from '../types/camera'
 import { ActorKeyframe } from '../types/actor'
+import { PathPoint } from '../types/project'
 import { SENSOR_PRESETS } from '../presets/sensors'
 
 /**
@@ -155,5 +156,69 @@ export function sampleActorAtTime(
       roll: lerp(a.rotation.roll, b.rotation.roll, eased),
     },
     action: localT < 0.5 ? a.action : b.action,
+  }
+}
+
+/**
+ * Sample a camera's position/rotation along its path at normalized time (0-1).
+ * Filters path points by cameraId and interpolates between keyframes.
+ */
+export function sampleCameraPathAtTime(
+  pathPoints: PathPoint[],
+  cameraId: string,
+  normalizedTime: number
+): { position: Position3D; rotation: Rotation3D } | null {
+  const kfs = pathPoints
+    .filter(p => p.cameraId === cameraId)
+    .sort((a, b) => a.t - b.t)
+
+  if (kfs.length === 0) return null
+  if (kfs.length === 1) {
+    return {
+      position: { ...kfs[0].position },
+      rotation: { ...kfs[0].rotation },
+    }
+  }
+
+  const t = clamp(normalizedTime, 0, 1)
+
+  if (t <= kfs[0].t) {
+    return {
+      position: { ...kfs[0].position },
+      rotation: { ...kfs[0].rotation },
+    }
+  }
+
+  const last = kfs[kfs.length - 1]
+  if (t >= last.t) {
+    return {
+      position: { ...last.position },
+      rotation: { ...last.rotation },
+    }
+  }
+
+  let i = 0
+  for (; i < kfs.length - 1; i++) {
+    if (kfs[i + 1].t >= t) break
+  }
+  i = Math.min(i, kfs.length - 2)
+
+  const a = kfs[i]
+  const b = kfs[i + 1]
+  const span = b.t - a.t
+  const localT = span > 0 ? (t - a.t) / span : 0
+  const eased = easeInOutCubic(localT)
+
+  return {
+    position: {
+      x: lerp(a.position.x, b.position.x, eased),
+      y: lerp(a.position.y, b.position.y, eased),
+      z: lerp(a.position.z, b.position.z, eased),
+    },
+    rotation: {
+      yaw: lerp(a.rotation.yaw, b.rotation.yaw, eased),
+      pitch: lerp(a.rotation.pitch, b.rotation.pitch, eased),
+      roll: lerp(a.rotation.roll, b.rotation.roll, eased),
+    },
   }
 }

@@ -11,7 +11,8 @@
 
 import * as THREE from 'three'
 import { Camera, Position3D, Rotation3D } from '../types/camera'
-import { calcFOV, calcDOF, deg2rad, generateId } from './calc'
+import { PathPoint } from '../types/project'
+import { calcFOV, calcDOF, deg2rad, generateId, sampleCameraPathAtTime } from './calc'
 import { SENSOR_PRESETS } from '../presets/sensors'
 
 const DEFAULT_CAMERA_COLOR = 0x7c83ff
@@ -164,11 +165,22 @@ export class CameraRig {
     const data = this.cameras.get(id)
     if (!data) return
     data.camera.rotation = rotation
+    data.group.rotation.order = 'YXZ'
     data.group.rotation.set(
       deg2rad(rotation.pitch),
       deg2rad(rotation.yaw),
       deg2rad(rotation.roll)
     )
+  }
+
+  /** Timeline playback: move cameras along their path keyframes */
+  updatePlayback(pathPoints: PathPoint[], normalizedTime: number): void {
+    for (const [id] of this.cameras) {
+      const sample = sampleCameraPathAtTime(pathPoints, id, normalizedTime)
+      if (!sample) continue
+      this.setCameraPosition(id, sample.position)
+      this.setCameraRotation(id, sample.rotation)
+    }
   }
 
   /** Clear all cameras */
@@ -183,6 +195,8 @@ export class CameraRig {
   private createCameraMesh(camera: Camera): THREE.Group {
     const group = new THREE.Group()
     group.userData = { cameraId: camera.id }
+    // Match PerspectiveCamera / viewfinder: look down local -Z, Euler YXZ
+    group.rotation.order = 'YXZ'
 
     // Camera body (small box)
     const bodyGeo = new THREE.BoxGeometry(0.3, 0.2, 0.4)
@@ -196,7 +210,7 @@ export class CameraRig {
     body.userData = { cameraId: camera.id, part: 'body' }
     group.add(body)
 
-    // Lens (small cylinder)
+    // Lens (points local -Z, same as Three.js camera forward)
     const lensGeo = new THREE.CylinderGeometry(0.08, 0.12, 0.2, 16)
     const lensMat = new THREE.MeshStandardMaterial({
       color: 0x222222,
@@ -205,44 +219,10 @@ export class CameraRig {
     })
     const lens = new THREE.Mesh(lensGeo, lensMat)
     lens.rotation.x = Math.PI / 2
-    lens.position.z = 0.3
+    lens.position.z = -0.3
     lens.userData = { cameraId: camera.id, part: 'lens' }
     group.add(lens)
 
-    // FOV cone (frustum visualization)
-    const fovRad = deg2rad(camera.fov / 2)
-    const coneLength = 3 // meters, visualization depth
-    const coneRadius = coneLength * Math.tan(fovRad)
-
-    const coneGeo = new THREE.ConeGeometry(coneRadius, coneLength, 4, 1, true)
-    const coneMat = new THREE.MeshBasicMaterial({
-      color: camera.color,
-      transparent: true,
-      opacity: 0.08,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-    })
-    const cone = new THREE.Mesh(coneGeo, coneMat)
-    cone.rotation.x = Math.PI / 2
-    cone.position.z = coneLength / 2 + 0.3
-    cone.userData = { cameraId: camera.id, part: 'cone' }
-    group.add(cone)
-
-    // Cone wireframe
-    const wireGeo = new THREE.ConeGeometry(coneRadius, coneLength, 4, 1, true)
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: camera.color,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.3,
-    })
-    const wire = new THREE.Mesh(wireGeo, wireMat)
-    wire.rotation.x = Math.PI / 2
-    wire.position.z = coneLength / 2 + 0.3
-    wire.userData = { cameraId: camera.id, part: 'wire' }
-    group.add(wire)
-
-    // Set position and rotation
     group.position.set(camera.position.x, camera.position.y, camera.position.z)
     group.rotation.set(
       deg2rad(camera.rotation.pitch),
@@ -261,9 +241,6 @@ export class CameraRig {
     data.group.traverse((child) => {
       if (child instanceof THREE.Mesh && child.userData.part === 'body') {
         (child.material as THREE.MeshStandardMaterial).color.setHex(color)
-      }
-      if (child instanceof THREE.Mesh && (child.userData.part === 'cone' || child.userData.part === 'wire')) {
-        (child.material as THREE.MeshBasicMaterial).color.setHex(color)
       }
     })
   }

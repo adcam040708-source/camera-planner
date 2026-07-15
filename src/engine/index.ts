@@ -11,6 +11,7 @@ export { RayPicker, type PickResult, type PickTarget } from './RayPicker'
 export {
   calcFOV, calcDOF, calcFOVByPreset,
   deg2rad, rad2deg, generateId, clamp, lerp, easeInOutCubic,
-  sampleActorAtTime,
+  sampleActorAtTime, sampleCameraPathAtTime,
 } from './calc'
 export { ActorRig } from './ActorRig'
+export { Viewfinder, type ViewfinderMode, type ViewfinderRenderContext } from './Viewfinder'

@@ -39,7 +39,6 @@ export class PathSystem {
     const idx = this.keyframes.findIndex(p => p.id === id)
     if (idx < 0) return false
     this.keyframes.splice(idx, 1)
-    this.recalcT()
     this.refreshVisualization()
     return true
   }
@@ -90,9 +89,11 @@ export class PathSystem {
   }
 
   /** Import keyframes from array */
-  importKeyframes(points: PathPoint[]): void {
-    this.keyframes = points.map(p => ({ ...p }))
-    this.recalcT()
+  importKeyframes(points: PathPoint[], cameraId?: string | null): void {
+    const filtered = cameraId
+      ? points.filter(p => p.cameraId === cameraId)
+      : points
+    this.keyframes = filtered.map(p => ({ ...p })).sort((a, b) => a.t - b.t)
     this.refreshVisualization()
   }
 
@@ -148,6 +149,13 @@ export class PathSystem {
       this.line = new THREE.Line(lineGeo, lineMat)
       this.scene.add(this.line)
     }
+  }
+
+  /** Visual objects to hide in viewfinder */
+  getVisualObjects(): THREE.Object3D[] {
+    const out: THREE.Object3D[] = [...this.markers]
+    if (this.line) out.push(this.line)
+    return out
   }
 
   /** Clean up */

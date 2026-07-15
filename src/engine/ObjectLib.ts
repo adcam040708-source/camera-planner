@@ -31,7 +31,7 @@ export class ObjectLib {
     }
 
     const mesh = this.createMesh(data)
-    mesh.userData = { objectId: id, objectType: data.type }
+    this.tagObjectId(mesh, id, data.type)
     this.scene.add(mesh)
     this.objects.set(id, { data, mesh })
 
@@ -48,11 +48,21 @@ export class ObjectLib {
     // Rebuild mesh
     this.scene.remove(entry.mesh)
     const newMesh = this.createMesh(entry.data)
-    newMesh.userData = { objectId: id, objectType: entry.data.type }
+    this.tagObjectId(newMesh, id, entry.data.type)
     this.scene.add(newMesh)
     entry.mesh = newMesh
 
     return entry.data
+  }
+
+  /** Tag root + child meshes so RayPicker can resolve objectId on hit */
+  private tagObjectId(root: THREE.Object3D, id: string, type: ObjectType): void {
+    root.userData = { ...root.userData, objectId: id, objectType: type }
+    root.traverse(child => {
+      if (child !== root) {
+        child.userData = { ...child.userData, objectId: id, objectType: type }
+      }
+    })
   }
 
   /** Delete an object */

@@ -16,6 +16,8 @@ export declare class ObjectLib {
     }): SceneObject;
     /** Update an existing object */
     updateObject(id: string, params: Partial<SceneObject>): SceneObject | null;
+    /** Tag root + child meshes so RayPicker can resolve objectId on hit */
+    private tagObjectId;
     /** Delete an object */
     deleteObject(id: string): boolean;
     /** Get all objects */

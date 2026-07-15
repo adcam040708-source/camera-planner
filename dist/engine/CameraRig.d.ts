@@ -1,4 +1,5 @@
 import { Camera, Position3D, Rotation3D } from '../types/camera';
+import { PathPoint } from '../types/project';
 /**
  * CameraRig — Camera cone visualization and management.
  *
@@ -37,6 +38,8 @@ export declare class CameraRig {
     setCameraPosition(id: string, position: Position3D): void;
     /** Set camera rotation (e.g., from property panel) */
     setCameraRotation(id: string, rotation: Rotation3D): void;
+    /** Timeline playback: move cameras along their path keyframes */
+    updatePlayback(pathPoints: PathPoint[], normalizedTime: number): void;
     /** Clear all cameras */
     clearAll(): void;
     private createCameraMesh;

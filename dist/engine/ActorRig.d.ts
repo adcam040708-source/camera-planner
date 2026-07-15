@@ -38,6 +38,8 @@ export declare class ActorRig {
     getMeshGroup(id: string): THREE.Group | null;
     /** 获取所有Mesh Groups */
     getAllMeshGroups(): THREE.Group[];
+    /** 路径线 / 路点标记 / 骨骼锚点 — 取景器渲染时临时隐藏 */
+    getHelperObjects(): THREE.Object3D[];
     /** 添加关键帧 */
     addKeyframe(actorId: string, kf: Partial<ActorKeyframe> & {
         position: Position3D;

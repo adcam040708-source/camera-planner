@@ -7,9 +7,9 @@
  */
 
 import { create } from 'zustand'
-import { Camera, MovementConfig, Position3D } from '../types/camera'
+import { Camera, MovementConfig, Position3D, Rotation3D } from '../types/camera'
 import { Actor, ActorKeyframe } from '../types/actor'
-import { SceneConfig, SceneObject, LightingConfig } from '../types/scene'
+import { SceneConfig, SceneObject, LightingConfig, ObjectType } from '../types/scene'
 import { ProjectData, PathPoint, StoryboardConfig, TimelineConfig } from '../types/project'
 import { createEmptyProject } from '../types/project'
 
@@ -30,6 +30,8 @@ export interface PlannerState {
   selectedCameraId: string | null
   selectedObjectId: string | null
   selectedActorId: string | null
+  /** Selected palette type; next ground click places it (tool=object) */
+  pendingObjectType: ObjectType | null
 
   // UI state
   showGrid: boolean
@@ -42,12 +44,14 @@ export interface PlannerState {
   deleteCamera: (id: string) => void
   selectCamera: (id: string | null) => void
   setCameraMovement: (id: string, movement: MovementConfig) => void
+  setCameraTransform: (id: string, position: Position3D, rotation: Rotation3D) => void
 
   // --- Object actions ---
   addObject: (obj: SceneObject) => void
   updateObject: (id: string, params: Partial<SceneObject>) => void
   deleteObject: (id: string) => void
   selectObject: (id: string | null) => void
+  setPendingObjectType: (type: ObjectType | null) => void
 
   // --- Scene actions ---
   setSceneConfig: (config: Partial<SceneConfig>) => void
@@ -110,6 +114,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   selectedCameraId: null,
   selectedObjectId: null,
   selectedActorId: null,
+  pendingObjectType: null,
   showGrid: true,
   showAxes: true,
   showFovCones: true,
@@ -159,6 +164,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     },
   })),
 
+  setCameraTransform: (id, position, rotation) => set((s) => ({
+    project: {
+      ...s.project,
+      cameras: s.project.cameras.map(c =>
+        c.id === id ? { ...c, position, rotation } : c
+      ),
+    },
+  })),
+
   // --- Object actions ---
   addObject: (obj) => set((s) => {
     pushHistory(s.project)
@@ -196,7 +210,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     selectedObjectId: s.selectedObjectId === id ? null : s.selectedObjectId,
   })),
 
-  selectObject: (id) => set({ selectedObjectId: id, selectedCameraId: null }),
+  selectObject: (id) => set({
+    selectedObjectId: id,
+    selectedCameraId: null,
+    selectedActorId: null,
+  }),
+  setPendingObjectType: (type) => set({ pendingObjectType: type }),
 
   // --- Scene actions ---
   setSceneConfig: (config) => set((s) => ({

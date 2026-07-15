@@ -168,6 +168,19 @@ export class ActorRig {
     return Array.from(this.actors.values()).map(e => e.group)
   }
 
+  /** 路径线 / 路点标记 / 骨骼锚点 — 取景器渲染时临时隐藏 */
+  getHelperObjects(): THREE.Object3D[] {
+    const out: THREE.Object3D[] = []
+    for (const entry of this.actors.values()) {
+      if (entry.pathLine) out.push(entry.pathLine)
+      out.push(...entry.pathMarkers)
+      entry.group.traverse(o => {
+        if (o.name && o.name.startsWith('bone_')) out.push(o)
+      })
+    }
+    return out
+  }
+
   /** 添加关键帧 */
   addKeyframe(actorId: string, kf: Partial<ActorKeyframe> & { position: Position3D }): ActorKeyframe | null {
     const entry = this.actors.get(actorId)

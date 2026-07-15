@@ -38,6 +38,8 @@ export declare class SceneEngine {
     setGridVisible(visible: boolean): void;
     /** Toggle axes visibility */
     setAxesVisible(visible: boolean): void;
+    /** Helper objects for aux views (viewfinder) to temporarily hide */
+    getHelperObjects(): THREE.Object3D[];
     /** Export current viewport as PNG data URL */
     exportPNG(): string;
     /** Export current viewport as PNG Blob */

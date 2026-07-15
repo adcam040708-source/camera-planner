@@ -5,7 +5,7 @@
  * Connects engine state to the Zustand store.
  */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   SceneEngine,
   CameraRig,
@@ -15,9 +15,11 @@ import {
   RayPicker,
   ActorRig,
 } from '../engine'
-import { generateId } from '../engine/calc'
+import { generateId, sampleCameraPathAtTime } from '../engine/calc'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
+import { defaultObjectY } from './ObjectPalette'
+import { ViewfinderOverlay } from './ViewfinderOverlay'
 import css from '../styles.module.css'
 
 interface ViewportProps {
@@ -41,6 +43,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   // - On subsequent picks (pointermove during drag): update position
   // - History is pushed only once, on the first actual movement
   const dragRef = useRef<{ id: string; historyPushed: boolean } | null>(null)
+  const [engineReady, setEngineReady] = useState(false)
 
   const store = usePlannerStore
 
@@ -77,6 +80,31 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       const state = store.getState()
       const tool = state.tool
 
+      // Object tool: click ground to place pending palette type
+      if (tool === 'object' && state.pendingObjectType && result.target === 'ground' && result.groundPoint) {
+        const type = state.pendingObjectType
+        const newObj = {
+          id: generateId(),
+          type,
+          position: {
+            x: result.groundPoint.x,
+            y: defaultObjectY(type),
+            z: result.groundPoint.z,
+          },
+          rotation: {
+            yaw: 0,
+            pitch: type === 'plane' ? -90 : 0,
+            roll: 0,
+          },
+          scale: { x: 1, y: 1, z: 1 },
+          color: 0x888888,
+        }
+        state.addObject(newObj)
+        state.selectObject(newObj.id)
+        outputManager.emit('object:add', newObj.id)
+        return
+      }
+
       // Path tool mode: click ground to add path keyframe
       if (tool === 'path' && result.target === 'ground' && result.groundPoint) {
         const selCamId = state.selectedCameraId
@@ -95,13 +123,15 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
             })
           }
         } else if (selCamId) {
-          // Add camera path point
+          const cam = state.project.cameras.find(c => c.id === selCamId)
+          const duration = state.project.timeline.duration
+          const pathT = duration > 0 ? state.project.timeline.currentTime / duration : 0
           state.addPathPoint({
             id: generateId(),
             position: { x: result.groundPoint.x, y: 1.6, z: result.groundPoint.z },
-            rotation: { yaw: 0, pitch: 0, roll: 0 },
+            rotation: cam ? { ...cam.rotation } : { yaw: 0, pitch: 0, roll: 0 },
             cameraId: selCamId,
-            t: 0,
+            t: pathT,
           })
         }
         return
@@ -158,8 +188,10 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       rayPicker,
       actorRig,
     }
+    setEngineReady(true)
 
     return () => {
+      setEngineReady(false)
       scene.dispose()
       engineRef.current = null
     }
@@ -195,13 +227,28 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     // Update changed cameras
     for (const cam of storeCameras) {
       const existing = engine.cameraRig.getCamera(cam.id)
-      if (existing && (
+      if (!existing) continue
+
+      const opticsChanged =
         existing.focal !== cam.focal ||
+        existing.sensorW !== cam.sensorW ||
+        existing.sensorH !== cam.sensorH ||
+        existing.fstop !== cam.fstop ||
+        existing.focusDist !== cam.focusDist
+
+      const transformChanged =
         existing.position.x !== cam.position.x ||
         existing.position.y !== cam.position.y ||
-        existing.position.z !== cam.position.z
-      )) {
+        existing.position.z !== cam.position.z ||
+        existing.rotation.yaw !== cam.rotation.yaw ||
+        existing.rotation.pitch !== cam.rotation.pitch ||
+        existing.rotation.roll !== cam.rotation.roll
+
+      if (opticsChanged) {
         engine.cameraRig.updateCamera(cam.id, cam)
+      } else if (transformChanged) {
+        engine.cameraRig.setCameraPosition(cam.id, cam.position)
+        engine.cameraRig.setCameraRotation(cam.id, cam.rotation)
       }
     }
 
@@ -253,12 +300,54 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     // Sync actor selection
     engine.actorRig.selectActor(selectedActorId)
 
-    // Sync path → PathSystem
-    engine.pathSystem.importKeyframes(project.path)
+    // Sync scene objects → ObjectLib (palette / templates write store only)
+    const storeObjects = project.scene.objects
+    const engineObjects = engine.objectLib.getAllObjects()
+    const engineObjIds = new Set(engineObjects.map(o => o.id))
+    const storeObjIds = new Set(storeObjects.map(o => o.id))
+
+    let objectsChanged = false
+    for (const obj of storeObjects) {
+      if (!engineObjIds.has(obj.id)) {
+        engine.objectLib.addObject(obj)
+        objectsChanged = true
+      } else {
+        const existing = engine.objectLib.getObject(obj.id)
+        if (
+          existing &&
+          (existing.type !== obj.type ||
+            existing.color !== obj.color ||
+            existing.position.x !== obj.position.x ||
+            existing.position.y !== obj.position.y ||
+            existing.position.z !== obj.position.z ||
+            existing.rotation.yaw !== obj.rotation.yaw ||
+            existing.rotation.pitch !== obj.rotation.pitch ||
+            existing.rotation.roll !== obj.rotation.roll ||
+            existing.scale.x !== obj.scale.x ||
+            existing.scale.y !== obj.scale.y ||
+            existing.scale.z !== obj.scale.z)
+        ) {
+          engine.objectLib.updateObject(obj.id, obj)
+          objectsChanged = true
+        }
+      }
+    }
+    for (const id of engineObjIds) {
+      if (!storeObjIds.has(id)) {
+        engine.objectLib.deleteObject(id)
+        objectsChanged = true
+      }
+    }
+    if (objectsChanged) {
+      engine.rayPicker.setObjectMeshes(engine.objectLib.getAllMeshes())
+    }
+
+    // Sync path → PathSystem (show selected camera's path only)
+    engine.pathSystem.importKeyframes(project.path, selectedCameraId)
 
     // Sync lighting
     engine.lightSystem.update(project.scene.lighting)
-  }, [project.cameras, project.actors, project.path, project.scene.lighting, selectedCameraId, selectedActorId])
+  }, [project.cameras, project.actors, project.path, project.scene.objects, project.scene.lighting, selectedCameraId, selectedActorId])
 
   // Sync grid/axes visibility
   const showGrid = store(s => s.showGrid)
@@ -272,26 +361,61 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     engineRef.current?.scene.setAxesVisible(showAxes)
   }, [showAxes])
 
-  // Timeline playback: update actor positions based on current time
+  // Timeline playback: update actor + camera positions based on current time
   const timelineTime = store(s => s.project.timeline.currentTime)
+  const timelineDuration = store(s => s.project.timeline.duration)
+  const pathPoints = store(s => s.project.path)
 
   useEffect(() => {
-    engineRef.current?.actorRig.updatePlayback(timelineTime)
-  }, [timelineTime])
+    const engine = engineRef.current
+    if (!engine) return
+
+    engine.actorRig.updatePlayback(timelineTime)
+
+    const normalizedTime = timelineDuration > 0 ? timelineTime / timelineDuration : 0
+    engine.cameraRig.updatePlayback(pathPoints, normalizedTime)
+
+    const cameras = store.getState().project.cameras
+    const setCameraTransform = store.getState().setCameraTransform
+    for (const cam of cameras) {
+      const sample = sampleCameraPathAtTime(pathPoints, cam.id, normalizedTime)
+      if (sample) {
+        setCameraTransform(cam.id, sample.position, sample.rotation)
+      }
+    }
+  }, [timelineTime, timelineDuration, pathPoints])
 
   // Cursor style based on tool
   const tool = store(s => s.tool)
+  const engine = engineRef.current
 
   return (
     <div
-      ref={containerRef}
-      className={css.cameraPlannerViewport}
+      className={css.cpViewportInner}
       style={{
         width: '100%',
         height: '100%',
         minHeight: '400px',
-        cursor: tool === 'path' ? 'crosshair' : 'default',
+        position: 'relative',
       }}
-    />
+    >
+      <div
+        ref={containerRef}
+        className={css.cameraPlannerViewport}
+        style={{
+          width: '100%',
+          height: '100%',
+          cursor: tool === 'path' || tool === 'object' ? 'crosshair' : 'default',
+        }}
+      />
+      {engineReady && engine && (
+        <ViewfinderOverlay
+          scene={engine.scene}
+          cameraRig={engine.cameraRig}
+          actorRig={engine.actorRig}
+          pathSystem={engine.pathSystem}
+        />
+      )}
+    </div>
   )
 }

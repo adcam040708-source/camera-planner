@@ -40,9 +40,11 @@ export declare class PathSystem {
         };
     } | null;
     /** Import keyframes from array */
-    importKeyframes(points: PathPoint[]): void;
+    importKeyframes(points: PathPoint[], cameraId?: string | null): void;
     private recalcT;
     private refreshVisualization;
+    /** Visual objects to hide in viewfinder */
+    getVisualObjects(): THREE.Object3D[];
     /** Clean up */
     dispose(): void;
 }

@@ -140,6 +140,14 @@ export class SceneEngine {
     if (this.axesHelper) this.axesHelper.visible = visible
   }
 
+  /** Helper objects for aux views (viewfinder) to temporarily hide */
+  getHelperObjects(): THREE.Object3D[] {
+    const out: THREE.Object3D[] = []
+    if (this.gridHelper) out.push(this.gridHelper)
+    if (this.axesHelper) out.push(this.axesHelper)
+    return out
+  }
+
   /** Export current viewport as PNG data URL */
   exportPNG(): string {
     this.renderer.render(this.scene, this.camera)
