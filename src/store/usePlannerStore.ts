@@ -12,6 +12,7 @@ import { Actor, ActorKeyframe } from '../types/actor'
 import { SceneConfig, SceneObject, LightingConfig, ObjectType } from '../types/scene'
 import { ProjectData, PathPoint, StoryboardConfig, TimelineConfig } from '../types/project'
 import { createEmptyProject } from '../types/project'
+import { calcFOV, calcDOF } from '../engine/calc'
 
 export type EditorMode = 'select' | 'place' | 'move' | 'rotate'
 export type ToolMode = 'camera' | 'object' | 'light' | 'path'
@@ -135,9 +136,14 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     return {
       project: {
         ...s.project,
-        cameras: s.project.cameras.map(c =>
-          c.id === id ? { ...c, ...params } : c
-        ),
+        cameras: s.project.cameras.map(c => {
+          if (c.id !== id) return c
+          const next = { ...c, ...params }
+          // Keep optics in sync so property panel + viewfinder react to focal/fstop/etc.
+          next.fov = calcFOV(next.sensorH, next.focal)
+          next.dof = calcDOF(next.focal, next.fstop, next.focusDist, next.sensorH)
+          return next
+        }),
       },
     }
   }),

@@ -7,7 +7,7 @@
 
 import * as THREE from 'three'
 import { Camera } from '../types/camera'
-import { deg2rad } from './calc'
+import { deg2rad, calcFOV } from './calc'
 
 export type ViewfinderMode = 'rgb' | 'depth'
 
@@ -94,7 +94,8 @@ export class Viewfinder {
   }
 
   private syncCamera(c: Camera): void {
-    this.camera.fov = c.fov || 50
+    // Prefer store FOV; if stale, derive from focal so focal slider always affects PiP
+    this.camera.fov = c.fov > 0 ? c.fov : calcFOV(c.sensorH || 24, c.focal || 50)
     this.camera.aspect = 16 / 9
     this.camera.near = 0.1
     this.camera.far = 200
