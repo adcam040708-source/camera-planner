@@ -18,18 +18,6 @@ export const BottomPanel: React.FC = () => {
   const bottomTab = usePlannerStore(s => s.bottomTab)
   const setBottomTab = usePlannerStore(s => s.setBottomTab)
   const pathPoints = usePlannerStore(s => s.project.path)
-  const selectedPathPointId = usePlannerStore(s => s.selectedPathPointId)
-  const selectedActorId = usePlannerStore(s => s.selectedActorId)
-  const actors = usePlannerStore(s => s.project.actors)
-  const timelineDuration = usePlannerStore(s => s.project.timeline.duration)
-  const selectPathPoint = usePlannerStore(s => s.selectPathPoint)
-  const removePathPoint = usePlannerStore(s => s.removePathPoint)
-  const setTimelineTime = usePlannerStore(s => s.setTimelineTime)
-  const selectedActor = actors.find(actor => actor.id === selectedActorId)
-
-  const seekTo = (time: number) => {
-    setTimelineTime(Math.max(0, Math.min(timelineDuration, time)))
-  }
 
   return (
     <div className={css.cpBottomPanel}>
@@ -50,51 +38,21 @@ export const BottomPanel: React.FC = () => {
         {bottomTab === 'keyframes' && (
           <div className={css.cpKeyframes}>
             <div className={css.cpKeyframesHeader}>
-              <span>机位关键帧 ({pathPoints.length})</span>
-              <span className={css.cpKeyframesHint}>K 记录当前选中对象</span>
+              关键帧 ({pathPoints.length})
             </div>
             {pathPoints.length === 0 ? (
-              <div className={css.cpEmpty}>暂无机位关键帧。选中机位后按 K 记录。</div>
+              <div className={css.cpEmpty}>暂无关键帧。在路径工具模式下点击场景添加。</div>
             ) : (
               <div className={css.cpKeyframesList}>
-                {pathPoints.map((p, i) => {
-                  const time = p.t * timelineDuration
-                  const selected = selectedPathPointId === p.id
-                  return (
-                    <div
-                      key={p.id}
-                      className={`${css.cpKeyframeItem} ${selected ? css.selected : ''}`}
-                      onClick={() => {
-                        selectPathPoint(p.id)
-                        seekTo(time)
-                      }}
-                    >
-                      <span className={css.cpKfIndex}>#{i + 1}</span>
-                      <span className={css.cpKfPos}>
-                        ({p.position.x.toFixed(1)}, {p.position.y.toFixed(1)}, {p.position.z.toFixed(1)})
-                      </span>
-                      <span className={css.cpKfTime}>t={time.toFixed(1)}s</span>
-                      <button
-                        className={css.cpKfDelete}
-                        onClick={e => {
-                          e.stopPropagation()
-                          removePathPoint(p.id)
-                        }}
-                        title="删除关键帧"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-            {selectedActor && (
-              <div className={css.cpActorKeyframesSummary}>
-                <span>角色“{selectedActor.name}”关键帧 ({selectedActor.keyframes.length})</span>
-                {selectedActor.keyframes.length > 0 && (
-                  <span>{selectedActor.keyframes.map(k => `${k.time.toFixed(1)}s`).join(' · ')}</span>
-                )}
+                {pathPoints.map((p, i) => (
+                  <div key={p.id} className={css.cpKeyframeItem}>
+                    <span className={css.cpKfIndex}>#{i + 1}</span>
+                    <span className={css.cpKfPos}>
+                      ({p.position.x.toFixed(1)}, {p.position.y.toFixed(1)}, {p.position.z.toFixed(1)})
+                    </span>
+                    <span className={css.cpKfTime}>t={p.t.toFixed(2)}</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>

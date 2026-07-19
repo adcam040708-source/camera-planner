@@ -14,12 +14,14 @@ import {
   PathSystem,
   RayPicker,
   ActorRig,
+  type PickResult,
 } from '../engine'
 import { generateId } from '../engine/calc'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
 import { defaultObjectY } from './ObjectPalette'
 import { ViewfinderOverlay } from './ViewfinderOverlay'
+import { ContextMenu, ContextMenuAction } from './ContextMenu'
 import css from '../styles.module.css'
 
 interface ViewportProps {
@@ -44,6 +46,11 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   // - History is pushed only once, on the first actual movement
   const dragRef = useRef<{ id: string; historyPushed: boolean } | null>(null)
   const [engineReady, setEngineReady] = useState(false)
+  const [contextMenu, setContextMenu] = useState<{
+    x: number
+    y: number
+    actions: ContextMenuAction[]
+  } | null>(null)
 
   const store = usePlannerStore
 
@@ -381,6 +388,171 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   const tool = store(s => s.tool)
   const engine = engineRef.current
 
+  // Right-click context menu handler
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!engine) return
+
+    const rect = (e.target as HTMLElement).getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    // Perform raycast to determine context
+    const pickResult = engine.rayPicker.pickAtEvent(e.nativeEvent)
+    const actions = buildContextMenuActions(pickResult, e.clientX, e.clientY)
+
+    if (actions.length > 0) {
+      setContextMenu({
+        x: e.clientX,
+        y: e.clientY,
+        actions,
+      })
+    }
+  }
+
+  const buildContextMenuActions = (
+    result: PickResult,
+    screenX: number,
+    screenY: number
+  ): ContextMenuAction[] => {
+    const state = store.getState()
+
+    // Camera context
+    if (result.target === 'camera' && result.id) {
+      const camera = state.project.cameras.find(c => c.id === result.id)
+      return [
+        {
+          label: `选中机位 "${camera?.name || 'CAM'}"`,
+          icon: '📷',
+          onClick: () => {
+            store.getState().selectCamera(result.id!)
+            outputManager.emit('camera:select', result.id!)
+          },
+        },
+        {
+          label: '记录关键帧 (K)',
+          icon: '◆',
+          onClick: () => {
+            store.getState().selectCamera(result.id!)
+            store.getState().recordKeyframe()
+          },
+        },
+        {
+          label: '删除机位',
+          icon: '🗑️',
+          danger: true,
+          onClick: () => {
+            store.getState().deleteCamera(result.id!)
+            outputManager.emit('camera:delete', result.id!)
+          },
+        },
+      ]
+    }
+
+    // Actor context
+    if (result.target === 'actor' && result.id) {
+      const actor = state.project.actors.find(a => a.id === result.id)
+      return [
+        {
+          label: `选中角色 "${actor?.name || '角色'}"`,
+          icon: '🏃',
+          onClick: () => {
+            store.getState().selectActor(result.id!)
+          },
+        },
+        {
+          label: '记录角色动作关键帧',
+          icon: '◆',
+          onClick: () => {
+            store.getState().selectActor(result.id!)
+            store.getState().recordKeyframe()
+          },
+        },
+        {
+          label: '删除角色',
+          icon: '🗑️',
+          danger: true,
+          onClick: () => {
+            store.getState().deleteActor(result.id!)
+          },
+        },
+      ]
+    }
+
+    // Object context
+    if (result.target === 'object' && result.id) {
+      return [
+        {
+          label: '选中该物体',
+          icon: '📦',
+          onClick: () => {
+            store.getState().selectObject(result.id!)
+          },
+        },
+        {
+          label: '删除该物体',
+          icon: '🗑️',
+          danger: true,
+          onClick: () => {
+            store.getState().deleteObject(result.id!)
+          },
+        },
+      ]
+    }
+
+    // Ground / empty context
+    if (result.target === 'ground' && result.groundPoint) {
+      const gp = result.groundPoint
+      return [
+        {
+          label: '在此处新增摄像机',
+          icon: '➕',
+          onClick: () => {
+            const newCam = {
+              id: generateId(),
+              name: `CAM ${state.project.cameras.length + 1}`,
+              body: 'FF35' as const,
+              focal: 50,
+              fstop: 2.8,
+              focusDist: 3.0,
+              sensorW: 36,
+              sensorH: 24,
+              fov: 27.0,
+              dof: { near: 2.5, far: 3.8, range: 1.3 },
+              height: 1.6,
+              color: 0x7c83ff,
+              position: { x: gp.x, y: 1.6, z: gp.z },
+              rotation: { yaw: 0, pitch: 0, roll: 0 },
+            }
+            store.getState().addCamera(newCam)
+            store.getState().selectCamera(newCam.id)
+            outputManager.emit('camera:add', newCam)
+          },
+        },
+        {
+          label: '在此处放置角色',
+          icon: '➕',
+          onClick: () => {
+            const newActor = {
+              id: generateId(),
+              name: `角色${state.project.actors.length + 1}`,
+              role: 'principal' as const,
+              height: 1.75,
+              color: 0x6a6a8a,
+              position: { x: gp.x, y: 0, z: gp.z },
+              rotation: { yaw: 0, pitch: 0, roll: 0 },
+              keyframes: [],
+            }
+            store.getState().addActor(newActor)
+            store.getState().selectActor(newActor.id)
+          },
+        },
+      ]
+    }
+
+    return []
+  }
+
   return (
     <div
       className={css.cpViewportInner}
@@ -399,6 +571,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
           height: '100%',
           cursor: tool === 'object' ? 'crosshair' : 'default',
         }}
+        onContextMenu={handleContextMenu}
       />
       {engineReady && engine && (
         <ViewfinderOverlay
@@ -406,6 +579,14 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
           cameraRig={engine.cameraRig}
           actorRig={engine.actorRig}
           pathSystem={engine.pathSystem}
+        />
+      )}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          actions={contextMenu.actions}
+          onClose={() => setContextMenu(null)}
         />
       )}
     </div>

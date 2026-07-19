@@ -82,6 +82,12 @@ export class RayPicker {
     this.onHoverCallback = callback
   }
 
+  /** Public helper to perform a raycast at a specific mouse/pointer event */
+  pickAtEvent(event: MouseEvent | PointerEvent): PickResult {
+    this.updateMouse(event as PointerEvent)
+    return this.raycast()
+  }
+
   private onPointerDown = (event: PointerEvent): void => {
     this.updateMouse(event)
     const result = this.raycast()
