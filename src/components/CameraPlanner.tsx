@@ -83,6 +83,13 @@ export const CameraPlanner: React.FC<CameraPlannerProps> = ({
         e.preventDefault()
         usePlannerStore.getState().redo()
       }
+      if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.toLowerCase() === 'k') {
+        const target = e.target as HTMLElement | null
+        if (target?.tagName === 'INPUT' || target?.tagName === 'TEXTAREA' || target?.isContentEditable) return
+        e.preventDefault()
+        const result = usePlannerStore.getState().recordKeyframe()
+        if (!result.ok) window.dispatchEvent(new CustomEvent('camera-planner:notice', { detail: result.message }))
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)

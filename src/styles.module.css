@@ -209,6 +209,26 @@
   color: #fff;
 }
 
+.cpRecordBtn {
+  width: auto;
+  gap: 6px;
+  padding: 0 9px;
+  background: #2b1d1a;
+  border-color: #6d3829;
+  color: #ff9a73;
+}
+
+.cpRecordBtn:hover {
+  background: #5b2d20;
+  border-color: #ff6b35;
+  color: #fff;
+}
+
+.cpRecordLabel {
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .cpIcon {
   font-size: 16px;
   line-height: 1;
@@ -769,9 +789,19 @@
 /* ===== Keyframes ===== */
 
 .cpKeyframesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   font-weight: 600;
   font-size: 12px;
   margin-bottom: 8px;
+}
+
+.cpKeyframesHint {
+  color: #666;
+  font-size: 10px;
+  font-weight: 400;
 }
 
 .cpKeyframesList {
@@ -786,7 +816,39 @@
   align-items: center;
   padding: 4px 8px;
   background: #14142a;
+  border: 1px solid transparent;
   border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cpKeyframeItem:hover,
+.cpKeyframeItem.selected {
+  background: #24203a;
+  border-color: #ff6b35;
+}
+
+.cpKfDelete {
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: #777;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 12px;
+}
+
+.cpKfDelete:hover {
+  color: #ff6b35;
+}
+
+.cpActorKeyframesSummary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  color: #888;
   font-size: 11px;
 }
 

@@ -15,7 +15,7 @@ import {
   RayPicker,
   ActorRig,
 } from '../engine'
-import { generateId, sampleCameraPathAtTime } from '../engine/calc'
+import { generateId } from '../engine/calc'
 import { usePlannerStore } from '../store/usePlannerStore'
 import { OutputManager } from '../io/OutputManager'
 import { defaultObjectY } from './ObjectPalette'
@@ -70,6 +70,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     rayPicker.setCameraGroups(cameraRig.getAllMeshGroups())
     rayPicker.setObjectMeshes(objectLib.getAllMeshes())
     rayPicker.setActorGroups(actorRig.getAllMeshGroups())
+    rayPicker.setPathGroups(pathSystem.getMarkerGroups())
     rayPicker.enable(scene.getCanvas())
 
     // Set up PNG exporter for output manager
@@ -105,35 +106,38 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
         return
       }
 
-      // Path tool mode: click ground to add path keyframe
-      if (tool === 'path' && result.target === 'ground' && result.groundPoint) {
-        const selCamId = state.selectedCameraId
-        const selActorId = state.selectedActorId
-
-        if (selActorId) {
-          // Add actor keyframe at clicked position
-          const actor = state.project.actors.find(a => a.id === selActorId)
-          if (actor) {
-            state.addActorKeyframe(selActorId, {
-              id: generateId(),
-              time: state.project.timeline.currentTime,
-              position: { x: result.groundPoint.x, y: 0, z: result.groundPoint.z },
-              rotation: { ...actor.rotation },
-              action: 'stand',
-            })
+      // Path keyframe ghost: select + drag (keeps Y, moves XZ)
+      if (result.target === 'path' && result.id) {
+        if (!dragRef.current || dragRef.current.id !== result.id) {
+          dragRef.current = { id: result.id, historyPushed: false }
+          store.getState().selectPathPoint(result.id)
+          store.getState().setBottomTab('keyframes')
+        } else if (result.point) {
+          const pt = store.getState().project.path.find(p => p.id === result.id)
+          if (pt) {
+            const dx = result.point.x - pt.position.x
+            const dz = result.point.z - pt.position.z
+            if (Math.abs(dx) > 0.01 || Math.abs(dz) > 0.01) {
+              if (!dragRef.current.historyPushed) {
+                store.getState().snapshot()
+                dragRef.current.historyPushed = true
+              }
+              store.getState().updatePathPoint(result.id, {
+                position: {
+                  x: result.point.x,
+                  y: pt.position.y,
+                  z: result.point.z,
+                },
+              })
+            }
           }
-        } else if (selCamId) {
-          const cam = state.project.cameras.find(c => c.id === selCamId)
-          const duration = state.project.timeline.duration
-          const pathT = duration > 0 ? state.project.timeline.currentTime / duration : 0
-          state.addPathPoint({
-            id: generateId(),
-            position: { x: result.groundPoint.x, y: 1.6, z: result.groundPoint.z },
-            rotation: cam ? { ...cam.rotation } : { yaw: 0, pitch: 0, roll: 0 },
-            cameraId: selCamId,
-            t: pathT,
-          })
         }
+        return
+      }
+
+      // Path tool: ground click no longer plants keyframes (use 记录关键帧 / K)
+      if (tool === 'path' && result.target === 'ground') {
+        dragRef.current = null
         return
       }
 
@@ -145,23 +149,19 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
         store.getState().selectObject(result.id)
       } else if (result.target === 'actor' && result.id) {
         if (!dragRef.current || dragRef.current.id !== result.id) {
-          // First pick (pointerdown) — select and prepare for potential drag
           dragRef.current = { id: result.id, historyPushed: false }
           store.getState().selectActor(result.id)
         } else {
-          // Same actor — this is a drag move
           if (result.groundPoint) {
             const actor = store.getState().project.actors.find(a => a.id === result.id)
             if (actor) {
               const dx = result.groundPoint.x - actor.position.x
               const dz = result.groundPoint.z - actor.position.z
               if (Math.abs(dx) > 0.01 || Math.abs(dz) > 0.01) {
-                // First actual movement — push history once for the whole drag
                 if (!dragRef.current.historyPushed) {
                   store.getState().snapshot()
                   dragRef.current.historyPushed = true
                 }
-                // Update position without history (live drag)
                 store.getState().setActorPosition(result.id, {
                   x: result.groundPoint.x,
                   y: 0,
@@ -172,7 +172,6 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
           }
         }
       } else {
-        // Clicked on ground or nothing — reset drag state
         dragRef.current = null
       }
     })
@@ -201,6 +200,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
   const project = store(s => s.project)
   const selectedCameraId = store(s => s.selectedCameraId)
   const selectedActorId = store(s => s.selectedActorId)
+  const selectedPathPointId = store(s => s.selectedPathPointId)
 
   useEffect(() => {
     const engine = engineRef.current
@@ -254,7 +254,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
 
     // Sync selection
     engine.cameraRig.selectCamera(selectedCameraId)
-
+    engine.rayPicker.setCameraGroups(engine.cameraRig.getAllMeshGroups())
 
     // Sync actors
     const storeActors = project.actors
@@ -292,15 +292,13 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       }
     }
 
-    // Refresh rayPicker's actor groups so new/deleted actors are pickable
     if (actorsChanged) {
       engine.rayPicker.setActorGroups(engine.actorRig.getAllMeshGroups())
     }
 
-    // Sync actor selection
     engine.actorRig.selectActor(selectedActorId)
 
-    // Sync scene objects → ObjectLib (palette / templates write store only)
+    // Sync scene objects → ObjectLib
     const storeObjects = project.scene.objects
     const engineObjects = engine.objectLib.getAllObjects()
     const engineObjIds = new Set(engineObjects.map(o => o.id))
@@ -342,12 +340,14 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
       engine.rayPicker.setObjectMeshes(engine.objectLib.getAllMeshes())
     }
 
-    // Sync path → PathSystem (show selected camera's path only)
+    // Sync path ghosts → PathSystem + RayPicker
     engine.pathSystem.importKeyframes(project.path, selectedCameraId)
+    engine.pathSystem.setSelectedId(selectedPathPointId)
+    engine.rayPicker.setPathGroups(engine.pathSystem.getMarkerGroups())
 
     // Sync lighting
     engine.lightSystem.update(project.scene.lighting)
-  }, [project.cameras, project.actors, project.path, project.scene.objects, project.scene.lighting, selectedCameraId, selectedActorId])
+  }, [project.cameras, project.actors, project.path, project.scene.objects, project.scene.lighting, selectedCameraId, selectedActorId, selectedPathPointId])
 
   // Sync grid/axes visibility
   const showGrid = store(s => s.showGrid)
@@ -373,16 +373,8 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
     engine.actorRig.updatePlayback(timelineTime)
 
     const normalizedTime = timelineDuration > 0 ? timelineTime / timelineDuration : 0
+    // Only move 3D meshes during scrub — avoid writing store every frame
     engine.cameraRig.updatePlayback(pathPoints, normalizedTime)
-
-    const cameras = store.getState().project.cameras
-    const setCameraTransform = store.getState().setCameraTransform
-    for (const cam of cameras) {
-      const sample = sampleCameraPathAtTime(pathPoints, cam.id, normalizedTime)
-      if (sample) {
-        setCameraTransform(cam.id, sample.position, sample.rotation)
-      }
-    }
   }, [timelineTime, timelineDuration, pathPoints])
 
   // Cursor style based on tool
@@ -405,7 +397,7 @@ export const Viewport: React.FC<ViewportProps> = ({ outputManager }) => {
         style={{
           width: '100%',
           height: '100%',
-          cursor: tool === 'path' || tool === 'object' ? 'crosshair' : 'default',
+          cursor: tool === 'object' ? 'crosshair' : 'default',
         }}
       />
       {engineReady && engine && (

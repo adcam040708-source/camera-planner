@@ -35,6 +35,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({ onExport }) => {
   const toggleAxes = usePlannerStore(s => s.toggleAxes)
   const undo = usePlannerStore(s => s.undo)
   const redo = usePlannerStore(s => s.redo)
+  const recordKeyframe = usePlannerStore(s => s.recordKeyframe)
 
   return (
     <div className={css.cpToolbar}>
@@ -71,6 +72,14 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({ onExport }) => {
       <div className={css.cpToolbarSep} />
 
       <div className={css.cpToolbarGroup}>
+        <button
+          className={[css.cpToolbarBtn, css.cpRecordBtn].join(' ')}
+          onClick={() => recordKeyframe()}
+          title="记录关键帧 (K)"
+        >
+          <span className={css.cpIcon}>◆</span>
+          <span className={css.cpRecordLabel}>记录关键帧</span>
+        </button>
         <button className={css.cpToolbarBtn} onClick={undo} title="撤销 (Ctrl+Z)">↩</button>
         <button className={css.cpToolbarBtn} onClick={redo} title="重做 (Ctrl+Y)">↪</button>
       </div>

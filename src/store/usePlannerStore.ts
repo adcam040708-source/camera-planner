@@ -12,7 +12,7 @@ import { Actor, ActorKeyframe } from '../types/actor'
 import { SceneConfig, SceneObject, LightingConfig, ObjectType } from '../types/scene'
 import { ProjectData, PathPoint, StoryboardConfig, TimelineConfig } from '../types/project'
 import { createEmptyProject } from '../types/project'
-import { calcFOV, calcDOF } from '../engine/calc'
+import { calcFOV, calcDOF, generateId } from '../engine/calc'
 
 export type EditorMode = 'select' | 'place' | 'move' | 'rotate'
 export type ToolMode = 'camera' | 'object' | 'light' | 'path'
@@ -31,6 +31,7 @@ export interface PlannerState {
   selectedCameraId: string | null
   selectedObjectId: string | null
   selectedActorId: string | null
+  selectedPathPointId: string | null
   /** Selected palette type; next ground click places it (tool=object) */
   pendingObjectType: ObjectType | null
 
@@ -72,7 +73,11 @@ export interface PlannerState {
   // --- Path actions ---
   setPath: (points: PathPoint[]) => void
   addPathPoint: (point: PathPoint) => void
+  updatePathPoint: (id: string, params: Partial<PathPoint>) => void
   removePathPoint: (id: string) => void
+  selectPathPoint: (id: string | null) => void
+  /** Record current camera/actor 6DOF pose at timeline time as a keyframe */
+  recordKeyframe: () => { ok: boolean; message: string }
 
   // --- Timeline actions ---
   setTimelineTime: (time: number) => void
@@ -115,6 +120,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   selectedCameraId: null,
   selectedObjectId: null,
   selectedActorId: null,
+  selectedPathPointId: null,
   pendingObjectType: null,
   showGrid: true,
   showAxes: true,
@@ -159,7 +165,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   }),
 
-  selectCamera: (id) => set({ selectedCameraId: id, selectedObjectId: null }),
+  selectCamera: (id) => set({
+    selectedCameraId: id,
+    selectedObjectId: null,
+    selectedActorId: null,
+    selectedPathPointId: null,
+  }),
 
   setCameraMovement: (id, movement) => set((s) => ({
     project: {
@@ -220,6 +231,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     selectedObjectId: id,
     selectedCameraId: null,
     selectedActorId: null,
+    selectedPathPointId: null,
   }),
   setPendingObjectType: (type) => set({ pendingObjectType: type }),
 
@@ -270,7 +282,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   }),
 
-  selectActor: (id) => set({ selectedActorId: id, selectedCameraId: null, selectedObjectId: null }),
+  selectActor: (id) => set({
+    selectedActorId: id,
+    selectedCameraId: null,
+    selectedObjectId: null,
+    selectedPathPointId: null,
+  }),
 
   addActorKeyframe: (actorId, keyframe) => set((s) => {
     pushHistory(s.project)
@@ -338,13 +355,71 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   addPathPoint: (point) => set((s) => {
     pushHistory(s.project)
-    return { project: { ...s.project, path: [...s.project.path, point] } }
+    return {
+      project: { ...s.project, path: [...s.project.path, point] },
+      selectedPathPointId: point.id,
+      bottomTab: 'keyframes' as BottomTab,
+    }
   }),
+
+  updatePathPoint: (id, params) => set((s) => ({
+    project: {
+      ...s.project,
+      path: s.project.path
+        .map(p => (p.id === id ? { ...p, ...params } : p))
+        .sort((a, b) => a.t - b.t),
+    },
+  })),
 
   removePathPoint: (id) => set((s) => {
     pushHistory(s.project)
-    return { project: { ...s.project, path: s.project.path.filter(p => p.id !== id) } }
+    return {
+      project: { ...s.project, path: s.project.path.filter(p => p.id !== id) },
+      selectedPathPointId: s.selectedPathPointId === id ? null : s.selectedPathPointId,
+    }
   }),
+
+  selectPathPoint: (id) => set({
+    selectedPathPointId: id,
+    selectedObjectId: null,
+  }),
+
+  recordKeyframe: () => {
+    const s = get()
+    const { currentTime, duration } = s.project.timeline
+    const t = duration > 0 ? currentTime / duration : 0
+
+    // Prefer actor when selected → actor motion keyframe
+    if (s.selectedActorId) {
+      const actor = s.project.actors.find(a => a.id === s.selectedActorId)
+      if (!actor) return { ok: false, message: '未找到选中角色' }
+      get().addActorKeyframe(actor.id, {
+        id: generateId(),
+        time: currentTime,
+        position: { ...actor.position },
+        rotation: { ...actor.rotation },
+        action: 'stand',
+      })
+      set({ bottomTab: 'keyframes' })
+      return { ok: true, message: `已记录角色关键帧 @ ${currentTime.toFixed(1)}s` }
+    }
+
+    // Camera path keyframe (full 6DOF from current pose)
+    const camId = s.selectedCameraId
+    if (!camId) return { ok: false, message: '请先选中机位或角色' }
+    const cam = s.project.cameras.find(c => c.id === camId)
+    if (!cam) return { ok: false, message: '未找到选中机位' }
+
+    const point: PathPoint = {
+      id: generateId(),
+      position: { ...cam.position },
+      rotation: { ...cam.rotation },
+      cameraId: camId,
+      t,
+    }
+    get().addPathPoint(point)
+    return { ok: true, message: `已记录机位关键帧 @ ${currentTime.toFixed(1)}s` }
+  },
 
   // --- Timeline actions ---
   setTimelineTime: (time) => set((s) => ({
@@ -400,6 +475,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     selectedCameraId: null,
     selectedObjectId: null,
     selectedActorId: null,
+    selectedPathPointId: null,
   }),
 
   getProjectData: () => get().project,
